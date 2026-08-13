@@ -1,0 +1,98 @@
+---
+import { Image } from "astro:assets";
+import type { SmallPlate } from "../data/series";
+
+interface Props {
+  plate: SmallPlate;
+}
+
+const { plate } = Astro.props;
+---
+
+<div class="plate-small">
+  <div class="plate-small__ref">{plate.ref}</div>
+  <div class="plate-small__content">
+    <Image
+      src={plate.image}
+      alt={plate.alt}
+      inferSize
+      class="plate-small__img"
+      style={plate.objectPosition ? `object-position:${plate.objectPosition}` : undefined}
+    />
+    <div class="plate-small__caption">
+      <div class="plate-small__meta">
+        {plate.location}<br />
+        {plate.date}
+      </div>
+      <div class="plate-small__context">{plate.caption}</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .plate-small {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    margin-top: 38px;
+  }
+
+  .plate-small__ref {
+    padding-left: 20px;
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .plate-small__content {
+    padding: 0 40px 0 0;
+  }
+
+  .plate-small__img {
+    display: block;
+    width: 520px;
+    max-width: 100%;
+    height: 330px;
+    object-fit: cover;
+  }
+
+  .plate-small__caption {
+    margin-top: 9px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    max-width: 56em;
+  }
+
+  .plate-small__meta {
+    font: 400 12.5px/1.7 "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+  }
+
+  .plate-small__context {
+    font: 400 14.5px/1.55 Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  @media (max-width: 700px) {
+    .plate-small {
+      grid-template-columns: 1fr;
+    }
+
+    .plate-small__ref {
+      padding: 0 20px 8px;
+    }
+
+    .plate-small__content {
+      padding: 0 20px;
+    }
+
+    .plate-small__img {
+      width: 100%;
+      height: 260px;
+    }
+
+    .plate-small__caption {
+      grid-template-columns: 1fr;
+      row-gap: 8px;
+    }
+  }
+</style>

@@ -1,0 +1,81 @@
+---
+import type { Book } from "../data/books";
+
+interface Props {
+  book: Book;
+  first?: boolean;
+  last?: boolean;
+}
+
+const { book, first, last } = Astro.props;
+---
+
+<div class="book-row" data-first={first ? "true" : undefined} data-last={last ? "true" : undefined}>
+  <div class="book-row__refyear">{book.ref}<br />{book.year}</div>
+  <div>
+    <div class="book-row__title">{book.title}</div>
+    <p class="book-row__desc">{book.description}</p>
+  </div>
+  <div class="book-row__facts">
+    {book.facts.map((line) => <>{line}<br /></>)}
+    <span class="book-row__action">{book.action}</span>
+  </div>
+</div>
+
+<style>
+  .book-row {
+    border-top: 1px solid var(--rule-cream-40);
+    padding: 20px 0;
+    display: grid;
+    grid-template-columns: 64px 1fr 190px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .book-row[data-first] {
+    border-top: 2px solid var(--cream);
+  }
+
+  .book-row[data-last] {
+    border-bottom: 2px solid var(--cream);
+  }
+
+  .book-row__refyear {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--cream-70);
+  }
+
+  .book-row__title {
+    font: 800 40px/1 Archivo, sans-serif;
+    font-stretch: 62%;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .book-row__desc {
+    margin: 10px 0 0;
+    max-width: 28em;
+    font: 400 17px/1.5 Archivo, sans-serif;
+    color: var(--cream);
+  }
+
+  .book-row__facts {
+    font: 400 13.5px/1.7 "IBM Plex Mono", monospace;
+    color: var(--cream-80);
+  }
+
+  .book-row__action {
+    border-bottom: 1px solid var(--cream);
+  }
+
+  @media (max-width: 700px) {
+    .book-row {
+      grid-template-columns: 1fr;
+      row-gap: 12px;
+    }
+
+    .book-row__title {
+      font-size: 30px;
+    }
+  }
+</style>

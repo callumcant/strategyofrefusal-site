@@ -1,0 +1,61 @@
+/* Strategy of Refusal — design tokens (see design_handoff_strategy_of_refusal/README.md) */
+
+:root {
+  --ground-accent: #1a3ed0;
+  --cream: #f4f2ec;
+  --cream-80: rgba(244, 242, 236, 0.85);
+  --cream-70: rgba(244, 242, 236, 0.7);
+  --rule-cream-40: rgba(244, 242, 236, 0.4);
+
+  --paper: #fafaf8;
+  --ink: #16181a;
+  --ink-60: #5f6469;
+  --ink-40: #9a9ea2;
+  --rule-ink: rgba(0, 0, 0, 0.12);
+  --rule-ink-strong: rgba(0, 0, 0, 0.18);
+
+  --page-pad: 40px;
+  --label-col: 112px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  font-family: Archivo, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  border-radius: 0;
+}
+
+/* No rounded corners, no shadows anywhere on the site — enforced globally. */
+* {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ground-accent);
+  outline-offset: 2px;
+}
+
+.shell :focus-visible,
+[data-ground="shell"] :focus-visible {
+  outline-color: var(--cream);
+}

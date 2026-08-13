@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  countLabel: string;
+}
+
+const { title, countLabel } = Astro.props;
+---
+
+<div class="section-head">
+  <div class="section-head__title">{title}</div>
+  <div class="section-head__count">{countLabel}</div>
+</div>
+
+<style>
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--cream);
+    padding-bottom: 8px;
+  }
+
+  .section-head__title {
+    font: 800 30px/1 Archivo, sans-serif;
+    font-stretch: 62%;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .section-head__count {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--cream);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 700px) {
+    .section-head__title {
+      font-size: 22px;
+    }
+  }
+</style>

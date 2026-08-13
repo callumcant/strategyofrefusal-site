@@ -1,0 +1,35 @@
+---
+interface Props {
+  left: string;
+  right: string;
+}
+
+const { left, right } = Astro.props;
+---
+
+<div class="shell-footer">
+  <span>{left}</span><span class="shell-footer__right">{right}</span>
+</div>
+
+<style>
+  .shell-footer {
+    padding: 6px var(--page-pad) 26px;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    font: 500 12px/1.7 "IBM Plex Mono", monospace;
+    color: var(--cream-70);
+    background: var(--ground-accent);
+  }
+
+  .shell-footer__right {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 700px) {
+    .shell-footer {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>

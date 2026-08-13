@@ -1,0 +1,44 @@
+---
+---
+
+<div class="index-table">
+  <div class="index-table__head">
+    <div>REF</div>
+    <div>SERIES</div>
+    <div>PLACE</div>
+    <div>EMPLOYER</div>
+    <div class="index-table__head-right">OUTCOME</div>
+  </div>
+  <slot />
+</div>
+
+<style>
+  .index-table {
+    background: var(--cream);
+    padding: 26px var(--page-pad) 30px;
+  }
+
+  .index-table__head {
+    display: grid;
+    grid-template-columns: 60px 1fr 130px 120px 84px;
+    gap: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--ink);
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+  }
+
+  .index-table__head-right {
+    text-align: right;
+  }
+
+  @media (max-width: 700px) {
+    .index-table {
+      padding: 20px 20px 24px;
+    }
+
+    .index-table__head {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+interface Props {
+  ref: string;
+  title: string;
+  form: string;
+  year: string;
+  last?: boolean;
+}
+
+const { ref, title, form, year, last } = Astro.props;
+---
+
+<div class="writing-row" data-last={last ? "true" : undefined}>
+  <div class="writing-row__ref">{ref}</div>
+  <div class="writing-row__title">{title}</div>
+  <div class="writing-row__form">{form}</div>
+  <div class="writing-row__year">{year}</div>
+</div>
+
+<style>
+  .writing-row {
+    display: grid;
+    grid-template-columns: 52px 1fr 200px 76px;
+    gap: 16px;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule-cream-40);
+  }
+
+  .writing-row[data-last] {
+    border-bottom: 2px solid var(--cream);
+  }
+
+  .writing-row__ref {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--cream-70);
+  }
+
+  .writing-row__title {
+    font: 400 17px/1.35 Archivo, sans-serif;
+    color: var(--cream);
+  }
+
+  .writing-row__form {
+    font: 400 13px Archivo, sans-serif;
+    color: var(--cream-80);
+  }
+
+  .writing-row__year {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--cream-80);
+    text-align: right;
+  }
+
+  @media (max-width: 700px) {
+    .writing-row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "title title" "ref year" "form form";
+      row-gap: 4px;
+    }
+
+    .writing-row__ref {
+      grid-area: ref;
+    }
+
+    .writing-row__title {
+      grid-area: title;
+    }
+
+    .writing-row__form {
+      grid-area: form;
+    }
+
+    .writing-row__year {
+      grid-area: year;
+    }
+  }
+</style>

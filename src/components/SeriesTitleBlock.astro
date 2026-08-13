@@ -1,0 +1,74 @@
+---
+interface Props {
+  title: string;
+  standfirst: string;
+}
+
+const { title, standfirst } = Astro.props;
+---
+
+<div class="title-block">
+  <div class="title-block__label">TITLE</div>
+  <div class="title-block__content">
+    <h1 class="title-block__h1">{title}</h1>
+    <p class="title-block__standfirst">{standfirst}</p>
+  </div>
+</div>
+
+<style>
+  .title-block {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    border-bottom: 1px solid var(--rule-ink);
+  }
+
+  .title-block__label {
+    padding: 30px 0 30px 20px;
+    font: 500 11px/1.6 "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .title-block__content {
+    padding: 30px 40px 30px 0;
+  }
+
+  .title-block__h1 {
+    margin: 0;
+    max-width: 20em;
+    font: 700 44px/1.04 Archivo, sans-serif;
+    font-stretch: 78%;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .title-block__standfirst {
+    margin: 16px 0 0;
+    max-width: 32em;
+    font: 400 21px/1.52 "Source Serif 4", serif;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 700px) {
+    .title-block {
+      grid-template-columns: 1fr;
+    }
+
+    .title-block__label {
+      padding: 20px 20px 8px;
+    }
+
+    .title-block__content {
+      padding: 0 20px 24px;
+    }
+
+    .title-block__h1 {
+      font-size: 32px;
+    }
+
+    .title-block__standfirst {
+      font-size: 18px;
+    }
+  }
+</style>

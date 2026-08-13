@@ -1,0 +1,85 @@
+---
+import type { SeriesRecord } from "../data/series";
+
+interface Props {
+  item: SeriesRecord;
+  last?: boolean;
+}
+
+const { item, last } = Astro.props;
+---
+
+<a href={`/series/${item.slug}`} class="series-row" data-last={last ? "true" : undefined}>
+  <div class="series-row__ref">{item.ref}</div>
+  <div class="series-row__title">{item.title}</div>
+  <div class="series-row__place">{item.place} · {item.employer}</div>
+  <div class="series-row__date">{item.dateLabel} · {item.frames}</div>
+</a>
+
+<style>
+  .series-row {
+    display: grid;
+    grid-template-columns: 44px 1fr 150px 90px;
+    gap: 16px;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule-cream-40);
+  }
+
+  .series-row[data-last] {
+    border-bottom: 2px solid var(--cream);
+  }
+
+  .series-row__ref {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--cream-70);
+  }
+
+  .series-row__title {
+    font: 800 30px/1.02 Archivo, sans-serif;
+    font-stretch: 62%;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .series-row:hover .series-row__title {
+    text-decoration: 1px underline var(--cream);
+    text-underline-offset: 3px;
+  }
+
+  .series-row__place {
+    font: 400 13.5px/1.4 Archivo, sans-serif;
+    color: var(--cream-80);
+  }
+
+  .series-row__date {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--cream-80);
+    text-align: right;
+  }
+
+  @media (max-width: 700px) {
+    .series-row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "title title" "ref date" "place place";
+      row-gap: 4px;
+    }
+
+    .series-row__ref {
+      grid-area: ref;
+    }
+
+    .series-row__title {
+      grid-area: title;
+      font-size: 22px;
+    }
+
+    .series-row__place {
+      grid-area: place;
+    }
+
+    .series-row__date {
+      grid-area: date;
+    }
+  }
+</style>

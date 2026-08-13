@@ -1,0 +1,46 @@
+---
+interface Props {
+  label: string;
+  accent?: boolean;
+  href?: string;
+}
+
+const { label, accent, href } = Astro.props;
+---
+
+<div class="field-row">
+  <div class="field-row__label">{label}</div>
+  <div class:list={["field-row__value", { "field-row__value--accent": accent }]}>
+    {href ? <a href={href}><slot /></a> : <slot />}
+  </div>
+</div>
+
+<style>
+  .field-row {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--rule-ink);
+  }
+
+  .field-row__label {
+    font: 400 11.5px "IBM Plex Mono", monospace;
+    color: var(--ink-40);
+  }
+
+  .field-row__value {
+    font: 400 14px Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  .field-row__value--accent {
+    color: var(--ground-accent);
+  }
+
+  @media (max-width: 700px) {
+    .field-row {
+      grid-template-columns: 76px 1fr;
+    }
+  }
+</style>

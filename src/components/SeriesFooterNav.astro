@@ -1,0 +1,64 @@
+---
+interface Props {
+  nextRef: string;
+  nextTitle: string;
+  nextHref: string;
+}
+
+const { nextRef, nextTitle, nextHref } = Astro.props;
+---
+
+<div class="footer-nav">
+  <div class="footer-nav__label">NEXT</div>
+  <div class="footer-nav__content">
+    <a href={nextHref}>{nextRef} {nextTitle}</a>
+    <a href="/series">Series index</a>
+  </div>
+</div>
+
+<style>
+  .footer-nav {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    margin-top: 40px;
+    border-top: 1px solid var(--ground-accent);
+  }
+
+  .footer-nav__label {
+    padding: 16px 0 30px 20px;
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .footer-nav__content {
+    padding: 16px 40px 30px 0;
+    display: flex;
+    justify-content: space-between;
+    font: 400 15px Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  .footer-nav__content a:last-child {
+    color: var(--ink-60);
+  }
+
+  .footer-nav__content a:hover {
+    color: var(--ground-accent);
+  }
+
+  @media (max-width: 700px) {
+    .footer-nav {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-nav__label {
+      padding: 20px 20px 8px;
+    }
+
+    .footer-nav__content {
+      padding: 0 20px 24px;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+</style>

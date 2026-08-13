@@ -1,0 +1,60 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShellFrame from "../../components/ShellFrame.astro";
+import TopBar from "../../components/TopBar.astro";
+import DisplayHeading from "../../components/DisplayHeading.astro";
+import IndexTable from "../../components/IndexTable.astro";
+import IndexTableRow from "../../components/IndexTableRow.astro";
+import PhotoRecord from "../../components/PhotoRecord.astro";
+import { series } from "../../data/series";
+import { seriesIndexFeaturedFrame } from "../../data/featuredFrames";
+
+const totalFrames = series.reduce((sum, s) => sum + s.frames, 0);
+---
+
+<BaseLayout title="Series — Strategy of Refusal">
+  <ShellFrame>
+    <TopBar variant="shell" label="STRATEGY OF REFUSAL / SERIES" labelHref="/" active="series" />
+
+    <div class="intro">
+      <DisplayHeading lines={["Four", "disputes,", `${totalFrames} frames`]} size={96} lineHeight=".88" />
+      <p class="intro__para">
+        Each series covers one employer and one dispute. Sequences run in the order the frames were made. Sort by
+        place, employer, union or outcome.
+      </p>
+    </div>
+
+    <IndexTable>
+      {series.map((item, i) => <IndexTableRow item={item} last={i === series.length - 1} />)}
+    </IndexTable>
+
+    <PhotoRecord
+      image={seriesIndexFeaturedFrame.image}
+      alt={seriesIndexFeaturedFrame.alt}
+      height={seriesIndexFeaturedFrame.height}
+      plateRef={seriesIndexFeaturedFrame.ref}
+      location={seriesIndexFeaturedFrame.location}
+      date={seriesIndexFeaturedFrame.date}
+      caption={seriesIndexFeaturedFrame.caption}
+    />
+  </ShellFrame>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding: 40px var(--page-pad) 34px;
+  }
+
+  .intro__para {
+    margin: 24px 0 0;
+    max-width: 30em;
+    font: 400 19px/1.45 Archivo, sans-serif;
+    color: var(--cream);
+  }
+
+  @media (max-width: 700px) {
+    .intro {
+      padding: 24px 20px 24px;
+    }
+  }
+</style>

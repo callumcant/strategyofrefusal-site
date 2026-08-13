@@ -1,0 +1,17 @@
+---
+import type { Plate } from "../data/series";
+import PlateFull from "./PlateFull.astro";
+import PlatePaired from "./PlatePaired.astro";
+import PlateSmall from "./PlateSmall.astro";
+
+interface Props {
+  plate: Plate;
+  marginTop?: string;
+}
+
+const { plate, marginTop } = Astro.props;
+---
+
+{plate.kind === "full" && <PlateFull plate={plate} marginTop={marginTop} />}
+{plate.kind === "paired" && <PlatePaired plate={plate} />}
+{plate.kind === "small" && <PlateSmall plate={plate} />}

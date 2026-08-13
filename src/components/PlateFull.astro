@@ -1,0 +1,85 @@
+---
+import { Image } from "astro:assets";
+import type { FullBleedPlate } from "../data/series";
+
+interface Props {
+  plate: FullBleedPlate;
+  marginTop?: string;
+}
+
+const { plate, marginTop = "30px" } = Astro.props;
+---
+
+<div class="plate-full" style={`margin-top:${marginTop}`}>
+  <Image
+    src={plate.image}
+    alt={plate.alt}
+    inferSize
+    class="plate-full__img"
+    style={`height:${plate.height}px${plate.objectPosition ? `;object-position:${plate.objectPosition}` : ""}`}
+  />
+  <div class="plate-full__caption">
+    <div class="plate-full__ref">{plate.ref}</div>
+    <div class="plate-full__body">
+      <div class="plate-full__meta">
+        {plate.location}<br />
+        {plate.date}
+        {plate.time ? <><br />{plate.time}</> : null}
+      </div>
+      <div class="plate-full__context">{plate.caption}</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .plate-full__img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .plate-full__caption {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    padding: 12px 40px 0 0;
+  }
+
+  .plate-full__ref {
+    padding-left: 20px;
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .plate-full__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+  }
+
+  .plate-full__meta {
+    font: 400 12.5px/1.7 "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+  }
+
+  .plate-full__context {
+    font: 400 15px/1.55 Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  @media (max-width: 700px) {
+    .plate-full__caption {
+      grid-template-columns: 1fr;
+      padding: 10px 20px 0;
+      row-gap: 8px;
+    }
+
+    .plate-full__ref {
+      padding-left: 0;
+    }
+
+    .plate-full__body {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+</style>

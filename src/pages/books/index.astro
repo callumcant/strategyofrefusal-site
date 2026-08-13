@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShellFrame from "../../components/ShellFrame.astro";
+import TopBar from "../../components/TopBar.astro";
+import DisplayHeading from "../../components/DisplayHeading.astro";
+import BookRow from "../../components/BookRow.astro";
+import PhotoRecord from "../../components/PhotoRecord.astro";
+import { books } from "../../data/books";
+import { booksFeaturedFrame } from "../../data/featuredFrames";
+---
+
+<BaseLayout title="Books — Strategy of Refusal">
+  <ShellFrame>
+    <TopBar variant="shell" label="STRATEGY OF REFUSAL / BOOKS" labelHref="/" active="books" />
+
+    <div class="intro">
+      <DisplayHeading lines={["Three", "books"]} size={100} lineHeight=".88" />
+    </div>
+
+    <div class="book-list">
+      {
+        books.map((b, i) => (
+          <BookRow book={b} first={i === 0} last={i === books.length - 1} />
+        ))
+      }
+    </div>
+
+    <PhotoRecord
+      image={booksFeaturedFrame.image}
+      alt={booksFeaturedFrame.alt}
+      height={booksFeaturedFrame.height}
+      objectPosition={booksFeaturedFrame.objectPosition}
+      plateRef={booksFeaturedFrame.ref}
+      location={booksFeaturedFrame.location}
+      date={booksFeaturedFrame.date}
+      caption={booksFeaturedFrame.caption}
+    />
+  </ShellFrame>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding: 40px var(--page-pad) 30px;
+  }
+
+  .book-list {
+    padding: 0 var(--page-pad) 34px;
+  }
+
+  @media (max-width: 700px) {
+    .intro {
+      padding: 24px 20px 20px;
+    }
+
+    .book-list {
+      padding: 0 20px 24px;
+    }
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+interface Props {
+  left: string;
+  right: string;
+}
+
+const { left, right } = Astro.props;
+---
+
+<div class="scope-line">
+  <span>{left}</span><span class="scope-line__right">{right}</span>
+</div>
+
+<style>
+  .scope-line {
+    margin-top: 18px;
+    border-top: 2px solid var(--cream);
+    padding-top: 9px;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    font: 500 12.5px/1.7 "IBM Plex Mono", monospace;
+    color: var(--cream);
+  }
+
+  .scope-line__right {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 700px) {
+    .scope-line {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>

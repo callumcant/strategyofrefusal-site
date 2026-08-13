@@ -1,0 +1,28 @@
+---
+interface Props {
+  lines: string[];
+  size: number;
+  lineHeight?: string;
+}
+
+const { lines, size, lineHeight = ".86" } = Astro.props;
+const html = lines.join("<br />");
+---
+
+<div class="display-heading" style={`--dh-size:${size}px;--dh-lh:${lineHeight}`} set:html={html} />
+
+<style>
+  .display-heading {
+    font: 800 var(--dh-size) / var(--dh-lh) Archivo, sans-serif;
+    font-stretch: 62%;
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    color: var(--cream);
+  }
+
+  @media (max-width: 700px) {
+    .display-heading {
+      font-size: clamp(40px, 14vw, var(--dh-size));
+    }
+  }
+</style>

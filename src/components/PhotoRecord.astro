@@ -1,0 +1,106 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  height: number;
+  objectPosition?: string;
+  plateRef: string;
+  location: string;
+  date: string;
+  extra?: string;
+  caption: string;
+  captionAccentRef?: string;
+}
+
+const { image, alt, height, objectPosition, plateRef, location, date, extra, caption, captionAccentRef } =
+  Astro.props;
+---
+
+<div class="photo-record" style={`--plate-h:${height}px`}>
+  <Image
+    src={image}
+    alt={alt}
+    inferSize
+    class="photo-record__img"
+    style={objectPosition ? `object-position:${objectPosition}` : undefined}
+  />
+  <div class="photo-record__caption">
+    <div class="photo-record__ref">{plateRef}</div>
+    <div class="photo-record__body">
+      <div class="photo-record__meta">
+        {location}<br />
+        {date}
+        {extra ? <><br />{extra}</> : null}
+      </div>
+      <div class="photo-record__context">
+        {caption}
+        {captionAccentRef ? <> <span class="photo-record__accent">{captionAccentRef}</span>.</> : null}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .photo-record {
+    background: var(--cream);
+  }
+
+  .photo-record__img {
+    display: block;
+    width: 100%;
+    height: var(--plate-h);
+    object-fit: cover;
+  }
+
+  .photo-record__caption {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    padding: 12px var(--page-pad) 26px 0;
+  }
+
+  .photo-record__ref {
+    padding-left: 20px;
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .photo-record__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+  }
+
+  .photo-record__meta {
+    font: 400 12.5px/1.7 "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+  }
+
+  .photo-record__context {
+    font: 400 15px/1.55 Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  .photo-record__accent {
+    color: var(--ground-accent);
+  }
+
+  @media (max-width: 700px) {
+    .photo-record__caption {
+      grid-template-columns: 1fr;
+      padding: 12px 20px 24px;
+      row-gap: 8px;
+    }
+
+    .photo-record__ref {
+      padding-left: 0;
+    }
+
+    .photo-record__body {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+</style>

@@ -1,0 +1,94 @@
+---
+import { Image } from "astro:assets";
+import type { PairedPlate } from "../data/series";
+
+interface Props {
+  plate: PairedPlate;
+}
+
+const { plate } = Astro.props;
+---
+
+<div class="plate-paired">
+  <div class="plate-paired__ref">{plate.ref}</div>
+  <div class="plate-paired__content">
+    <div class="plate-paired__image-col">
+      <Image src={plate.image} alt={plate.alt} inferSize class="plate-paired__img" />
+      <div class="plate-paired__meta">
+        {plate.location}<br />
+        {plate.date}
+      </div>
+      <div class="plate-paired__caption">{plate.caption}</div>
+    </div>
+    <p class="plate-paired__passage">{plate.passage}</p>
+  </div>
+</div>
+
+<style>
+  .plate-paired {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    margin-top: 38px;
+  }
+
+  .plate-paired__ref {
+    padding-left: 20px;
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .plate-paired__content {
+    padding: 0 40px 0 0;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  .plate-paired__img {
+    display: block;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .plate-paired__meta {
+    margin-top: 9px;
+    font: 400 12px/1.7 "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+  }
+
+  .plate-paired__caption {
+    margin-top: 6px;
+    font: 400 14.5px/1.5 Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  .plate-paired__passage {
+    margin: 0;
+    font: 400 21px/1.55 "Source Serif 4", serif;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 700px) {
+    .plate-paired {
+      grid-template-columns: 1fr;
+      margin-top: 30px;
+    }
+
+    .plate-paired__ref {
+      padding: 0 20px 8px;
+    }
+
+    .plate-paired__content {
+      padding: 0 20px;
+      grid-template-columns: 1fr;
+      row-gap: 18px;
+    }
+
+    .plate-paired__img {
+      height: 300px;
+    }
+  }
+</style>

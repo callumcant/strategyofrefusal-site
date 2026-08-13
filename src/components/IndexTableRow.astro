@@ -1,0 +1,96 @@
+---
+import type { SeriesRecord } from "../data/series";
+
+interface Props {
+  item: SeriesRecord;
+  last?: boolean;
+}
+
+const { item, last } = Astro.props;
+---
+
+<a href={`/series/${item.slug}`} class="index-row" data-last={last ? "true" : undefined}>
+  <div class="index-row__ref">{item.ref}</div>
+  <div>
+    <div class="index-row__title">{item.title}</div>
+    <div class="index-row__desc">{item.indexDescription}</div>
+  </div>
+  <div class="index-row__cell index-row__place">{item.place}</div>
+  <div class="index-row__cell index-row__employer">{item.employer}</div>
+  <div class="index-row__outcome">{item.outcome}</div>
+</a>
+
+<style>
+  .index-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 130px 120px 84px;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule-ink);
+    align-items: start;
+  }
+
+  .index-row[data-last] {
+    border-bottom: none;
+  }
+
+  .index-row__ref {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .index-row__title {
+    font: 600 18px/1.25 Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  .index-row:hover .index-row__title {
+    color: var(--ground-accent);
+  }
+
+  .index-row__desc {
+    margin-top: 3px;
+    font: 400 14px/1.5 Archivo, sans-serif;
+    color: var(--ink-60);
+  }
+
+  .index-row__cell {
+    font: 400 13px Archivo, sans-serif;
+    color: var(--ink-60);
+  }
+
+  .index-row__outcome {
+    font: 400 12px "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+    text-align: right;
+  }
+
+  @media (max-width: 700px) {
+    .index-row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "title title" "ref outcome" "place employer";
+      row-gap: 4px;
+      padding: 16px 0;
+    }
+
+    .index-row__ref {
+      grid-area: ref;
+    }
+
+    .index-row > div:nth-child(2) {
+      grid-area: title;
+    }
+
+    .index-row__place {
+      grid-area: place;
+    }
+
+    .index-row__employer {
+      grid-area: employer;
+    }
+
+    .index-row__outcome {
+      grid-area: outcome;
+    }
+  }
+</style>

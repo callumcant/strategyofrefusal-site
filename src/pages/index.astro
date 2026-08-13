@@ -1,0 +1,130 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ShellFrame from "../components/ShellFrame.astro";
+import TopBar from "../components/TopBar.astro";
+import DisplayHeading from "../components/DisplayHeading.astro";
+import ScopeLine from "../components/ScopeLine.astro";
+import ShellSectionHead from "../components/ShellSectionHead.astro";
+import SeriesRow from "../components/SeriesRow.astro";
+import PublicationRow from "../components/PublicationRow.astro";
+import WritingRow from "../components/WritingRow.astro";
+import PhotoRecord from "../components/PhotoRecord.astro";
+import Footer from "../components/Footer.astro";
+import { series } from "../data/series";
+import { books } from "../data/books";
+import { journal, journalTotal } from "../data/journal";
+import { writing, writingTotal } from "../data/writing";
+import { homeFeaturedFrame } from "../data/featuredFrames";
+
+const totalFrames = series.reduce((sum, s) => sum + s.frames, 0);
+---
+
+<BaseLayout title="Strategy of Refusal — an archive of British labour disputes">
+  <ShellFrame>
+    <TopBar variant="shell" label="STRATEGYOFREFUSAL.COM" labelHref="/" />
+
+    <div class="masthead">
+      <DisplayHeading lines={["Strategy", "of refusal"]} size={96} />
+      <ScopeLine
+        left="AN ARCHIVE OF BRITISH LABOUR DISPUTES — PHOTOGRAPHS, BOOKS, JOURNAL, WRITING"
+        right="68 RECORDS · 2019 —"
+      />
+    </div>
+
+    <section class="section section--series">
+      <ShellSectionHead title="Series" countLabel={`0${series.length} RECORDS · ${totalFrames} FRAMES →`} />
+      {series.map((item, i) => <SeriesRow item={item} last={i === series.length - 1} />)}
+    </section>
+
+    <PhotoRecord
+      image={homeFeaturedFrame.image}
+      alt={homeFeaturedFrame.alt}
+      height={homeFeaturedFrame.height}
+      plateRef={homeFeaturedFrame.ref}
+      location={homeFeaturedFrame.location}
+      date={homeFeaturedFrame.date}
+      extra={homeFeaturedFrame.extra}
+      caption={homeFeaturedFrame.caption}
+      captionAccentRef={homeFeaturedFrame.captionAccentRef}
+    />
+
+    <section class="section section--books">
+      <ShellSectionHead title="Books" countLabel={`0${books.length} RECORDS →`} />
+      {
+        books.map((b, i) => (
+          <PublicationRow
+            ref={b.ref}
+            title={b.title}
+            description={b.summary}
+            factsLine={b.factsLine}
+            year={b.year}
+            last={i === books.length - 1}
+          />
+        ))
+      }
+    </section>
+
+    <section class="section section--journal">
+      <ShellSectionHead title="Journal" countLabel={`0${journalTotal} ISSUES →`} />
+      {
+        journal.map((j, i) => (
+          <PublicationRow
+            ref={j.ref}
+            title={j.title}
+            description={j.description}
+            factsLine={j.factsLine}
+            year={j.year}
+            last={i === journal.length - 1}
+          />
+        ))
+      }
+    </section>
+
+    <section class="section section--writing">
+      <ShellSectionHead title="Writing" countLabel={`${writingTotal} RECORDS →`} />
+      {
+        writing.map((w, i) => (
+          <WritingRow ref={w.ref} title={w.title} form={w.form} year={w.year} last={i === writing.length - 1} />
+        ))
+      }
+    </section>
+
+    <Footer left="KEPT BY ELLEN HARTNOLL, UNION ORGANISER · HELLO@STRATEGYOFREFUSAL.COM" right="FREE TO UNIONS AND CAMPAIGNS" />
+  </ShellFrame>
+</BaseLayout>
+
+<style>
+  .masthead {
+    padding: 30px var(--page-pad) 26px;
+  }
+
+  .section {
+    padding: 8px var(--page-pad) 44px;
+  }
+
+  .section--books {
+    padding: 34px var(--page-pad) 20px;
+  }
+
+  .section--journal {
+    padding: 14px var(--page-pad) 20px;
+  }
+
+  .section--writing {
+    padding: 14px var(--page-pad) 34px;
+  }
+
+  @media (max-width: 700px) {
+    .masthead {
+      padding: 24px 20px 20px;
+    }
+
+    .section,
+    .section--books,
+    .section--journal,
+    .section--writing {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+</style>

@@ -5,6 +5,10 @@ import { z } from "astro/zod";
 // One markdown file per record, in src/content/<collection>/.
 // The filename is the id: series/s-02.md is served at /series/s-02.
 //
+// Frontmatter (above the ---) holds the fields. The body (below it) holds the
+// record's lead prose: a series' standfirst, a book's description. Leave the
+// body empty and the page falls back to the short frontmatter summary.
+//
 // Photographs are referenced by a path relative to the markdown file and
 // resolved by image(), which is what hands them to Astro's optimiser.
 
@@ -26,10 +30,10 @@ const series = defineCollection({
       dateLabel: z.string(),
       frames: z.number(),
       indexDescription: z.string(),
-      // Optional: a series without it still builds a page, from the fields above.
+      // Optional: a series without it still builds a page, from the fields
+      // above. The standfirst is the markdown body, not a field here.
       detail: z
         .object({
-          standfirst: z.string(),
           record: z.object({
             place: z.string(),
             dates: z.string(),
@@ -88,7 +92,7 @@ const books = defineCollection({
     year: z.string(),
     title: z.string(),
     summary: z.string(), // short row description, used on the home page
-    description: z.string(), // longer paragraph, used on the books page
+    // The longer description shown on the books page is the markdown body.
     factsLine: z.string(), // e.g. "Verso · 288pp · £14.99" — used on the home page
     facts: z.array(z.string()), // multi-line mono block used on the books page
     action: z.string(), // "ORDER" | "DOWNLOAD PDF"

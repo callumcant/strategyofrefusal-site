@@ -15,7 +15,7 @@ const book = entry.data;
   <div class="book-row__refyear">{book.ref}<br />{book.year}</div>
   <div>
     <div class="book-row__title">{book.title}</div>
-    <p class="book-row__desc">{book.description}</p>
+    <div class="book-row__desc"><slot /></div>
   </div>
   <div class="book-row__facts">
     {book.facts.map((line) => <>{line}<br /></>)}
@@ -56,8 +56,17 @@ const book = entry.data;
   .book-row__desc {
     margin: 10px 0 0;
     max-width: 28em;
+  }
+
+  /* From the markdown body, so outside this component's scoping. */
+  .book-row__desc :global(p) {
+    margin: 0;
     font: 400 17px/1.5 Archivo, sans-serif;
     color: var(--cream);
+  }
+
+  .book-row__desc :global(p + p) {
+    margin-top: 0.6em;
   }
 
   .book-row__facts {

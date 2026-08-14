@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TopBar from "../../components/TopBar.astro";
 import SeriesTitleBlock from "../../components/SeriesTitleBlock.astro";
@@ -20,37 +20,42 @@ export async function getStaticPaths() {
 
 const { entry, next } = Astro.props;
 const s = entry.data;
+
+// The standfirst is the markdown body. A record that has not been written up
+// yet has an empty body, and falls back to its one-line index description.
+const { Content } = await render(entry);
+const hasStandfirst = Boolean(entry.body?.trim());
 ---
 
 <BaseLayout title={`${s.title} — Strategy of Refusal`}>
   <div class="series-page">
     <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / SERIES / ${s.ref}`} labelHref="/series" active="series" />
 
+    <SeriesTitleBlock title={s.title}>
+      {hasStandfirst ? <Content /> : <p>{s.indexDescription}</p>}
+    </SeriesTitleBlock>
+
     {
       s.detail ? (
         <>
-          <SeriesTitleBlock title={s.title} standfirst={s.detail.standfirst} />
           <SeriesRecordBlock record={s.detail.record} note={s.detail.note} />
           {s.detail.plates.map((plate, i) => (
             <Plate plate={plate} marginTop={plate.kind === "full" && i !== 0 ? "38px" : undefined} />
           ))}
         </>
       ) : (
-        <>
-          <SeriesTitleBlock title={s.title} standfirst={s.indexDescription} />
-          <SeriesRecordBlock
-            record={{
-              place: s.place,
-              dates: s.dateLabel,
-              employer: s.employer,
-              union: s.union,
-              dispute: s.dispute,
-              framesNote: `${s.frames}`,
-              related: [],
-            }}
-            note="Plates for this series are still being catalogued and will be added shortly."
-          />
-        </>
+        <SeriesRecordBlock
+          record={{
+            place: s.place,
+            dates: s.dateLabel,
+            employer: s.employer,
+            union: s.union,
+            dispute: s.dispute,
+            framesNote: `${s.frames}`,
+            related: [],
+          }}
+          note="Plates for this series are still being catalogued and will be added shortly."
+        />
       )
     }
 

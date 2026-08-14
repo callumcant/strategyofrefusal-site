@@ -44,6 +44,12 @@ Every collection has a schema in `src/content.config.ts` declaring its fields.
 A record that doesn't match fails the build with the file, the field and the
 reason. Adding a field means adding it to the schema first.
 
+**The markdown body is the record's lead prose** — a series' standfirst, a
+book's description. Both are rendered with `render(entry)` and passed into the
+component as a slot, so they take paragraphs and markdown formatting. A series
+with an empty body falls back to its one-line `indexDescription`, which is what
+`S-01`, `S-03` and `S-04` currently do.
+
 Things that will catch you out:
 
 1. **Two counts are still stated by hand, on purpose.** `src/data/archive.ts`
@@ -131,11 +137,11 @@ Netlify builds on push to `main`.
   sample records in every collection.
 - `tokens.css` cites `design_handoff_strategy_of_refusal/README.md` as the
   source of the design. That folder is not in the repo.
-- **The markdown bodies are empty.** Records are entirely frontmatter, so prose
-  like `standfirst` and the plate captions are still YAML fields. Moving the
-  lead paragraph into the body is the natural next step and would change the
-  rendered markup, which is why it wasn't done in the same pass as the
-  migration.
+- **Plate captions, the record note and the journal descriptions are still
+  frontmatter**, because each is a fragment composed with other text rather than
+  a standalone paragraph — the home page's featured caption, for instance, runs
+  straight into an accented series reference. Only the lead prose moved to the
+  body.
 - The series index and books page still hardcode their headline word count —
   `["Four", "disputes,"]` and `["Three", "books"]`. Nothing computes them.
 - The site footer credits "Ellen Hartnoll, union organiser" and

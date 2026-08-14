@@ -5,10 +5,15 @@ import TopBar from "../../components/TopBar.astro";
 import DisplayHeading from "../../components/DisplayHeading.astro";
 import BookRow from "../../components/BookRow.astro";
 import PhotoRecord from "../../components/PhotoRecord.astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 
 const books = (await getCollection("books")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
 const booksFeaturedFrame = (await getEntry("frames", "books"))!.data;
+
+// The description is the markdown body, so each entry has to be rendered.
+const bookRows = await Promise.all(
+  books.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+);
 ---
 
 <BaseLayout title="Books — Strategy of Refusal">
@@ -21,8 +26,10 @@ const booksFeaturedFrame = (await getEntry("frames", "books"))!.data;
 
     <div class="book-list">
       {
-        books.map((b, i) => (
-          <BookRow entry={b} first={i === 0} last={i === books.length - 1} />
+        bookRows.map(({ entry, Content }, i) => (
+          <BookRow entry={entry} first={i === 0} last={i === bookRows.length - 1}>
+            <Content />
+          </BookRow>
         ))
       }
     </div>

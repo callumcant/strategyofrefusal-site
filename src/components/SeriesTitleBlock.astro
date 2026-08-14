@@ -1,17 +1,16 @@
 ---
 interface Props {
   title: string;
-  standfirst: string;
 }
 
-const { title, standfirst } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <div class="title-block">
   <div class="title-block__label">TITLE</div>
   <div class="title-block__content">
     <h1 class="title-block__h1">{title}</h1>
-    <p class="title-block__standfirst">{standfirst}</p>
+    <div class="title-block__standfirst"><slot /></div>
   </div>
 </div>
 
@@ -45,9 +44,19 @@ const { title, standfirst } = Astro.props;
   .title-block__standfirst {
     margin: 16px 0 0;
     max-width: 32em;
+  }
+
+  /* The paragraphs arrive from the markdown body, so Astro's scoping does not
+     reach them — :global() does. */
+  .title-block__standfirst :global(p) {
+    margin: 0;
     font: 400 21px/1.52 "Source Serif 4", serif;
     color: var(--ink);
     text-wrap: pretty;
+  }
+
+  .title-block__standfirst :global(p + p) {
+    margin-top: 0.7em;
   }
 
   @media (max-width: 700px) {
@@ -67,7 +76,7 @@ const { title, standfirst } = Astro.props;
       font-size: 32px;
     }
 
-    .title-block__standfirst {
+    .title-block__standfirst :global(p) {
       font-size: 18px;
     }
   }

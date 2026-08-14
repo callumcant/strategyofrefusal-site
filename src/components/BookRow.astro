@@ -1,13 +1,14 @@
 ---
-import type { Book } from "../data/books";
+import type { BookEntry } from "../data/schema";
 
 interface Props {
-  book: Book;
+  entry: BookEntry;
   first?: boolean;
   last?: boolean;
 }
 
-const { book, first, last } = Astro.props;
+const { entry, first, last } = Astro.props;
+const book = entry.data;
 ---
 
 <div class="book-row" data-first={first ? "true" : undefined} data-last={last ? "true" : undefined}>

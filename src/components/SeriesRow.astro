@@ -1,19 +1,20 @@
 ---
-import type { SeriesRecord } from "../data/series";
+import type { SeriesEntry } from "../data/schema";
 
 interface Props {
-  item: SeriesRecord;
+  item: SeriesEntry;
   last?: boolean;
 }
 
 const { item, last } = Astro.props;
+const s = item.data;
 ---
 
-<a href={`/series/${item.slug}`} class="series-row" data-last={last ? "true" : undefined}>
-  <div class="series-row__ref">{item.ref}</div>
-  <div class="series-row__title">{item.title}</div>
-  <div class="series-row__place">{item.place} · {item.employer}</div>
-  <div class="series-row__date">{item.dateLabel} · {item.frames}</div>
+<a href={`/series/${item.id}`} class="series-row" data-last={last ? "true" : undefined}>
+  <div class="series-row__ref">{s.ref}</div>
+  <div class="series-row__title">{s.title}</div>
+  <div class="series-row__place">{s.place} · {s.employer}</div>
+  <div class="series-row__date">{s.dateLabel} · {s.frames}</div>
 </a>
 
 <style>

@@ -1,59 +1,60 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TopBar from "../../components/TopBar.astro";
 import SeriesTitleBlock from "../../components/SeriesTitleBlock.astro";
 import SeriesRecordBlock from "../../components/SeriesRecordBlock.astro";
 import Plate from "../../components/Plate.astro";
 import SeriesFooterNav from "../../components/SeriesFooterNav.astro";
-import { series, findSeries } from "../../data/series";
 
-export function getStaticPaths() {
-  return series.map((item) => ({ params: { slug: item.slug }, props: { item } }));
+export async function getStaticPaths() {
+  const series = (await getCollection("series")).sort((a, b) => a.data.ref.localeCompare(b.data.ref));
+
+  // The footer link is derived from position in the series order and wraps at
+  // the end, so it stays correct when a series is inserted or removed.
+  return series.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: series[(i + 1) % series.length] },
+  }));
 }
 
-const { item } = Astro.props;
-
-const idx = series.findIndex((s) => s.slug === item.slug);
-const nextItem = series[(idx + 1) % series.length];
+const { entry, next } = Astro.props;
+const s = entry.data;
 ---
 
-<BaseLayout title={`${item.title} — Strategy of Refusal`}>
+<BaseLayout title={`${s.title} — Strategy of Refusal`}>
   <div class="series-page">
-    <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / SERIES / ${item.ref}`} labelHref="/series" active="series" />
+    <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / SERIES / ${s.ref}`} labelHref="/series" active="series" />
 
     {
-      item.detail ? (
+      s.detail ? (
         <>
-          <SeriesTitleBlock title={item.title} standfirst={item.detail.standfirst} />
-          <SeriesRecordBlock record={item.detail.record} note={item.detail.note} />
-          {item.detail.plates.map((plate) => (
-            <Plate plate={plate} marginTop={plate.kind === "full" && plate.ref !== "01 / 04" ? "38px" : undefined} />
+          <SeriesTitleBlock title={s.title} standfirst={s.detail.standfirst} />
+          <SeriesRecordBlock record={s.detail.record} note={s.detail.note} />
+          {s.detail.plates.map((plate, i) => (
+            <Plate plate={plate} marginTop={plate.kind === "full" && i !== 0 ? "38px" : undefined} />
           ))}
-          <SeriesFooterNav
-            nextRef={item.detail.next.ref}
-            nextTitle={item.detail.next.title}
-            nextHref={item.detail.next.href}
-          />
         </>
       ) : (
         <>
-          <SeriesTitleBlock title={item.title} standfirst={item.indexDescription} />
+          <SeriesTitleBlock title={s.title} standfirst={s.indexDescription} />
           <SeriesRecordBlock
             record={{
-              place: item.place,
-              dates: item.dateLabel,
-              employer: item.employer,
-              union: item.union,
-              dispute: item.dispute,
-              framesNote: `${item.frames}`,
+              place: s.place,
+              dates: s.dateLabel,
+              employer: s.employer,
+              union: s.union,
+              dispute: s.dispute,
+              framesNote: `${s.frames}`,
               related: [],
             }}
             note="Plates for this series are still being catalogued and will be added shortly."
           />
-          <SeriesFooterNav nextRef={nextItem.ref} nextTitle={nextItem.title} nextHref={`/series/${nextItem.slug}`} />
         </>
       )
     }
+
+    <SeriesFooterNav nextRef={next.data.ref} nextTitle={next.data.title} nextHref={`/series/${next.id}`} />
   </div>
 </BaseLayout>
 

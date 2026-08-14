@@ -1,9 +1,9 @@
 ---
 import FieldRow from "./FieldRow.astro";
-import type { SeriesDetail } from "../data/series";
+import type { SeriesRecordFields } from "../data/schema";
 
 interface Props {
-  record: SeriesDetail["record"];
+  record: SeriesRecordFields;
   note: string;
 }
 

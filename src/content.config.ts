@@ -110,6 +110,19 @@ const journal = defineCollection({
   }),
 });
 
+// Podcast episodes. Same shape as journal, and rendered with the same row.
+// Refs are EP-nn; S-02 already cross-references EP-64.
+const audio = defineCollection({
+  loader: glob({ base: "./src/content/audio", pattern: "**/*.md" }),
+  schema: z.object({
+    ref: z.string(),
+    year: z.string(),
+    title: z.string(),
+    description: z.string(),
+    factsLine: z.string(), // e.g. "48 MIN · RECORDED AT THE GATE"
+  }),
+});
+
 const writing = defineCollection({
   loader: glob({ base: "./src/content/writing", pattern: "**/*.md" }),
   schema: z.object({
@@ -139,4 +152,4 @@ const frames = defineCollection({
     }),
 });
 
-export const collections = { series, books, journal, writing, frames };
+export const collections = { series, books, journal, audio, writing, frames };

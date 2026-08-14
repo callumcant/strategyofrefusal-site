@@ -1,0 +1,2 @@
+# Episodes land here as ep-64.md and so on. Git needs this file to keep an
+# otherwise empty directory, and the glob loader needs the directory to exist.

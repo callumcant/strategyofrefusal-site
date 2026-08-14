@@ -1,0 +1,77 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShellFrame from "../../components/ShellFrame.astro";
+import TopBar from "../../components/TopBar.astro";
+import DisplayHeading from "../../components/DisplayHeading.astro";
+import PublicationRow from "../../components/PublicationRow.astro";
+
+const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
+---
+
+<BaseLayout title="Audio — Strategy of Refusal">
+  <ShellFrame>
+    <TopBar variant="shell" label="STRATEGY OF REFUSAL / AUDIO" labelHref="/" active="audio" />
+
+    <div class="intro">
+      <DisplayHeading lines={["Audio"]} size={100} lineHeight=".88" />
+      <p class="intro__para">
+        Conversations recorded at gates, in cabs and on picket lines. Newest first.
+      </p>
+    </div>
+
+    <div class="episode-list">
+      {
+        audio.length > 0 ? (
+          audio.map((e, i) => (
+            <PublicationRow
+              ref={e.data.ref}
+              title={e.data.title}
+              description={e.data.description}
+              factsLine={e.data.factsLine}
+              year={e.data.year}
+              last={i === audio.length - 1}
+            />
+          ))
+        ) : (
+          <p class="episode-list__empty">Episodes are still being catalogued and will be added shortly.</p>
+        )
+      }
+    </div>
+  </ShellFrame>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding: 40px var(--page-pad) 30px;
+  }
+
+  .intro__para {
+    margin: 24px 0 0;
+    max-width: 30em;
+    font: 400 19px/1.45 Archivo, sans-serif;
+    color: var(--cream);
+  }
+
+  .episode-list {
+    padding: 0 var(--page-pad) 44px;
+  }
+
+  .episode-list__empty {
+    margin: 0;
+    padding: 20px 0;
+    border-top: 2px solid var(--cream);
+    font: 400 17px/1.5 Archivo, sans-serif;
+    color: var(--cream-80);
+  }
+
+  @media (max-width: 700px) {
+    .intro {
+      padding: 24px 20px 20px;
+    }
+
+    .episode-list {
+      padding: 0 20px 30px;
+    }
+  }
+</style>

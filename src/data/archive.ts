@@ -4,9 +4,14 @@
 //
 // These are the ones that go stale. Everything countable — the series and
 // books totals, the frame count — is derived at build time instead.
-export const journalTotal = 7;
-export const writingTotal = 11;
-export const scopeRecordTotal = 68;
+//
+// Target sizes as of August 2026, from Callum:
+//   series 15 · books 3 · journal 11 · audio 22 · writing ~10 (to be confirmed)
+// Delete each of these the moment its collection holds every real record, and
+// count the files instead. See INVENTORY.md for what has actually landed.
+export const journalTotal = 11;
+export const writingTotal = 10; // to be confirmed
+export const scopeRecordTotal = 61; // sum of the five collection totals above
 export const scopeSince = "2019";
 
 // Two-digit count: 4 → "04", 12 → "12".

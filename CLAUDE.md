@@ -36,7 +36,8 @@ public/           favicons; files here are copied through untouched
 ## The data model
 
 **The archive lives in `src/content/` as markdown files, one per record**, in
-Astro content collections: `series`, `books`, `journal`, `writing` and `frames`.
+Astro content collections: `series`, `books`, `journal`, `audio`, `writing` and
+`frames`.
 Adding a record means adding a file. The filename is the id, so
 `series/s-02.md` is served at `/series/s-02` — there is no separate slug field.
 
@@ -72,14 +73,21 @@ Things that will catch you out:
    `kind` to `PlateFull` / `PlatePaired` / `PlateSmall`. Adding a plate shape
    means a new branch in the schema, a new component and a new branch in the
    dispatcher.
-5. **Photographs are referenced by relative path from the markdown file** —
+5. **Photographs must have their EXIF metadata stripped before they enter the
+   repo.** This is a safety requirement. These are photographs of workers in
+   live disputes, and EXIF carries GPS coordinates, capture times and camera
+   serial numbers — enough to place a person at a workplace on a date. The four
+   sample images have been stripped already. **Never add a step that preserves
+   or restores EXIF**, and don't propose reading capture dates out of the files
+   to save typing: the dates are typed by hand on purpose.
+6. **Photographs are referenced by relative path from the markdown file** —
    `image: ../../assets/photographs/4-DSCF8458.jpg` — and resolved by the
    schema's `image()` helper. That is what lets Astro optimise them; the build
    converts the four JPEGs to WebP at roughly half the file size. A photograph
    dropped into `public/` would be served exactly as-is, at full weight, which
    is why none are there. They live in one shared folder rather than beside the
    markdown because several records reuse the same frame.
-6. **The types in `src/data/schema.ts` are derived from the schemas**, not
+7. **The types in `src/data/schema.ts` are derived from the schemas**, not
    written by hand. Components import `SeriesEntry`, `Plate`, `BookEntry` and so
    on from there. Change `content.config.ts` and the types follow.
 
@@ -130,11 +138,17 @@ Netlify builds on push to `main`.
 
 ## Known gaps
 
-- **Four of the six nav items go nowhere.** `TopBar.astro` lists Journal,
-  Writing, Audio and Index with no `href`, so they render as dead text. Journal
-  and Writing already have collections waiting; Audio and Index have nothing.
+- **Three of the six nav items go nowhere.** `TopBar.astro` lists Journal,
+  Writing and Index with no `href`, so they render as dead text. Journal and
+  Writing have collections but no page; Index has neither.
 - **The content is placeholder.** Four photographs, one series with plates,
-  sample records in every collection.
+  sample records in every collection, and the `audio` collection is empty.
+  `INVENTORY.md` in the repo root tracks what is real and what is still
+  sample data — keep it current, it is what survives between sessions.
+- **`getCollection("audio")` warns on every build** while the collection is
+  empty ("does not exist or is empty"). The build still succeeds and the page
+  renders a "still being catalogued" line. The warning goes when the first
+  episode lands.
 - `tokens.css` cites `design_handoff_strategy_of_refusal/README.md` as the
   source of the design. That folder is not in the repo.
 - **Plate captions, the record note and the journal descriptions are still
@@ -144,7 +158,6 @@ Netlify builds on push to `main`.
   body.
 - The series index and books page still hardcode their headline word count —
   `["Four", "disputes,"]` and `["Three", "books"]`. Nothing computes them.
-- The site footer credits "Ellen Hartnoll, union organiser" and
-  `hello@strategyofrefusal.com`. Unconfirmed whether that's the intended byline
-  or placeholder — ask before treating it as either.
+- The masthead scope line lists "PHOTOGRAPHS, BOOKS, JOURNAL, WRITING" and does
+  not mention audio, now that audio exists. Callum's copy to change.
 - No custom domain, no analytics, no sitemap or RSS.

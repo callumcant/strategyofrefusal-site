@@ -2,8 +2,8 @@
 
 A static archive site — photographs, books, journal issues and writing, all
 organised around British labour disputes. Each dispute is a *series* with a
-reference (`S-01`), a record block (place, employer, union, dispute, outcome)
-and a set of photographic *plates*.
+reference (`S-01`), a record block (place, employer, union, dispute) and a set
+of photographic *plates*.
 
 Built with **Astro 7**: components and data files are turned into plain HTML
 files at build time, so what deploys is static files with no server behind them.

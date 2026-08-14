@@ -46,7 +46,6 @@ export interface SeriesDetail {
     employer: string;
     union: string;
     dispute: string;
-    outcome: string;
     framesNote: string;
     related: { ref: string; href?: string }[];
   };
@@ -65,7 +64,6 @@ export interface SeriesRecord {
   dispute: string;
   dateLabel: string;
   frames: number;
-  outcome: string;
   indexDescription: string;
   detail?: SeriesDetail;
 }
@@ -81,7 +79,6 @@ export const series: SeriesRecord[] = [
     dispute: "Pay parity with directly employed porters",
     dateLabel: "2021",
     frames: 24,
-    outcome: "WON",
     indexDescription:
       "Cleaners paid below the porters beside them; gate meeting before the early shift. 24 frames.",
   },
@@ -95,7 +92,6 @@ export const series: SeriesRecord[] = [
     dispute: "Unpaid handover; agency parity",
     dateLabel: "2022–24",
     frames: 41,
-    outcome: "LOST 51",
     indexDescription:
       "Eight unpaid minutes between barrier and sorter; two winters of nights. 41 frames.",
     detail: {
@@ -107,7 +103,6 @@ export const series: SeriesRecord[] = [
         employer: "Parcel hub; two agencies",
         union: "CWU, Tower Hamlets",
         dispute: "Unpaid handover; agency parity",
-        outcome: "Ballot lost by 51, Mar 2024",
         framesNote: "41 · four shown",
         related: [{ ref: "B-03" }, { ref: "EP-64" }],
       },
@@ -175,7 +170,6 @@ export const series: SeriesRecord[] = [
     dispute: "Per-drop rate cut 24% without notice",
     dateLabel: "2023",
     frames: 18,
-    outcome: "PART",
     indexDescription:
       "Per-drop rate cut 24% without notice; four days out and one ride-out. 18 frames.",
   },
@@ -189,7 +183,6 @@ export const series: SeriesRecord[] = [
     dispute: "No welfare cabin since June",
     dateLabel: "2024 —",
     frames: 22,
-    outcome: "OPEN",
     indexDescription:
       "Three labour providers on one gate; no welfare cabin since June. 22 frames, open.",
   },

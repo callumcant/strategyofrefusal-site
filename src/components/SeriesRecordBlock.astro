@@ -19,7 +19,6 @@ const { record, note } = Astro.props;
       <FieldRow label="EMPLOYER">{record.employer}</FieldRow>
       <FieldRow label="UNION">{record.union}</FieldRow>
       <FieldRow label="DISPUTE">{record.dispute}</FieldRow>
-      <FieldRow label="OUTCOME">{record.outcome}</FieldRow>
       <FieldRow label="FRAMES">{record.framesNote}</FieldRow>
       <FieldRow label="RELATED" accent>
         {record.related.map((r, i) => (

@@ -17,13 +17,12 @@ const { item, last } = Astro.props;
   </div>
   <div class="index-row__cell index-row__place">{item.place}</div>
   <div class="index-row__cell index-row__employer">{item.employer}</div>
-  <div class="index-row__outcome">{item.outcome}</div>
 </a>
 
 <style>
   .index-row {
     display: grid;
-    grid-template-columns: 60px 1fr 130px 120px 84px;
+    grid-template-columns: 60px 1fr 130px 120px;
     gap: 14px;
     padding: 14px 0;
     border-bottom: 1px solid var(--rule-ink);
@@ -59,16 +58,10 @@ const { item, last } = Astro.props;
     color: var(--ink-60);
   }
 
-  .index-row__outcome {
-    font: 400 12px "IBM Plex Mono", monospace;
-    color: var(--ink-60);
-    text-align: right;
-  }
-
   @media (max-width: 700px) {
     .index-row {
       grid-template-columns: 1fr auto;
-      grid-template-areas: "title title" "ref outcome" "place employer";
+      grid-template-areas: "title title" "ref ref" "place employer";
       row-gap: 4px;
       padding: 16px 0;
     }
@@ -87,10 +80,6 @@ const { item, last } = Astro.props;
 
     .index-row__employer {
       grid-area: employer;
-    }
-
-    .index-row__outcome {
-      grid-area: outcome;
     }
   }
 </style>

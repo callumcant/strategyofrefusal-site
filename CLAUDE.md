@@ -88,6 +88,13 @@ Things that will catch you out:
      left then right, four plates apart. Mirroring two portraits across
      *consecutive* plates was tried and rejected, because they read as two
      plates rather than as a pair; spaced apart it reads as variation.
+     **It lays out as three columns on one row** — frame, meta and caption,
+     then passage — reversed for `align: right`. Stacking the passage under
+     the meta was tried and rejected: the prose ran on underneath the date
+     and time. Because the frame is placed in an explicit grid column, every
+     one of the three carries an explicit `grid-row: 1`; without it, grid
+     auto-placement (which only ever moves forward) drops the meta and the
+     passage onto rows below a right-aligned frame.
    - `diptych` takes exactly two images and sets them side by side as one
      plate, with one reference covering both (`06–07 / 10`). This is the way
      to pair frames. The pair is capped at 380px each rather than stretched
@@ -98,7 +105,9 @@ Things that will catch you out:
      location, date and time are present, and a plate with neither caption nor
      passage renders as the photograph and its reference alone.
    - **Every shape takes a `passage`** — required on `paired`, optional on the
-     other four — set below the frame in the same serif. The distinction
+     other four — set in the same serif below the frame, except on `portrait`,
+     where it runs *beside* the frame under the caption, in the text column.
+     A 340px image left a hole beside it otherwise. The distinction
      between the shapes is the size and arrangement of the image, not whether
      prose is allowed: `caption` is the short note in sans, `passage` is the
      long-form prose in serif, and a plate can have either, both or neither.
@@ -131,9 +140,15 @@ Things that will catch you out:
 
 ## Adding a series
 
-This is the live work: fourteen more series to go. `S-05` is the worked
+This is the live work: twelve more series to go. `S-05` is the worked
 example — read `src/content/series/s-05.md` before starting a new one.
 `INVENTORY.md` tracks what has landed.
+
+**Build the page before the words exist.** Every field except `note` is
+optional inside `detail`, so the way this actually goes is: photographs in,
+alt text written from the frames, shapes chosen, page on screen. Callum then
+sends the captions, locations, dates and times back as one block keyed by
+filename, and they get typed in. Don't wait on his prose to put something up.
 
 1. **Photographs first.** They go in `src/assets/photographs/` named
    `s06-01.jpg` upward, in the order Callum gives them. **Run `npm run photos`
@@ -146,7 +161,9 @@ example — read `src/content/series/s-05.md` before starting a new one.
    when the sequence is reordered. `S-02` follows the same convention with four
    plates selected from forty-one. A diptych takes both numbers: `06–07 / 10`.
 4. **A single-day sequence states `location` and `date` on plate 01 only.**
-   Repeating them down the page is noise.
+   Repeating them down the page is noise. A series shot across several days
+   restates them on the first plate of each — `S-01` does this three times,
+   on plates 01, 10 and 12, one per strike.
 5. **Expect several rounds on the shapes.** Callum reads the page and comes
    back with "02 should be small", "swap 03 and 04", "delete all captions". The
    shapes are cheap to change — it is one field — so build it, let him look,
@@ -234,9 +251,9 @@ Netlify builds on push to `main`.
 - **Three of the six nav items go nowhere.** `TopBar.astro` lists Journal,
   Writing and Index with no `href`, so they render as dead text. Journal and
   Writing have collections but no page; Index has neither.
-- **Almost all the content is still placeholder.** `S-05` is the only real
-  record in the archive. `S-01` to `S-04` are sample data and are due to be
-  replaced, as are the books, journal and writing records; `audio` is empty.
+- **Most of the content is still placeholder.** `S-01`, `S-05` and `S-06` are
+  real. `S-02` to `S-04` are sample data and are due to be replaced, as are the
+  books, journal and writing records; `audio` is empty.
   `INVENTORY.md` in the repo root tracks what is real and what is still
   sample data — keep it current, it is what survives between sessions.
 - **`getCollection("audio")` warns on every build** while the collection is

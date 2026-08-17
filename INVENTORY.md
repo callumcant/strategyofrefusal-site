@@ -8,22 +8,22 @@ Target sizes given by Callum, August 2026.
 
 | Collection | Target | Landed | Real? | Status |
 | --- | --- | --- | --- | --- |
-| Series   | 15 | 6 | 2 real | S-05 Too Hot to Work is complete. S-06 The Death of a University has all 18 plates; 9 of them carry notes, the other 9 are still photograph-and-reference only. S-01 to S-04 are placeholder and need replacing |
+| Series   | 15 | 6 | 3 real | S-05 Too Hot to Work is complete. S-06 The Death of a University has all 18 plates; 9 of them carry notes, the other 9 are still photograph-and-reference only. S-01 Chasing the Wildcat has all 17 plates but no prose at all — no standfirst and no passages. S-02 to S-04 are placeholder and need replacing |
 | Books    | 3  | 3 | no  | Right number, wrong books — replace all three |
 | Journal  | 11 | 2 | no  | Placeholder records |
 | Audio    | 22 | 0 | —   | Collection and page built, empty |
 | Writing  | 10 | 3 | no  | Placeholder records; target to be confirmed |
 | Frames   | 3  | 3 | no  | Featured photograph per shell page |
 
-Everything in `src/content/` other than S-05 and S-06 is sample data from the
-original build and should be treated as disposable.
+Everything in `src/content/` other than S-01, S-05 and S-06 is sample data from
+the original build and should be treated as disposable.
 
 ## Order of work
 
 Callum's order — series first, because it is the spine of the archive.
 
 1. **Series records** — 9 fields each. Gets all fifteen disputes onto the site
-   with working pages, before any photograph exists. Replaces S-01 to S-04.
+   with working pages, before any photograph exists. Replaces S-02 to S-04.
 2. **Series detail and plates** — the heavy one. Needs the photographs, and
    every location, date and time typed by hand (no EXIF).
 3. **Books** — 5 fields plus a description in the body. Current three are wrong.

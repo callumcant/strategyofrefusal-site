@@ -59,29 +59,56 @@ const passage = paragraphs(plate.passage);
     color: var(--ground-accent);
   }
 
-  /* A portrait frame is narrow, so the caption sits beside it rather than
-     underneath, where it would leave the right half of the page empty. */
+  /* A portrait frame is narrow, so the text sits beside it rather than
+     underneath, where it would leave the right half of the page empty.
+     Three columns: the frame, the meta and caption, then the passage. The
+     passage gets its own column so it never runs under the meta block. */
   .plate-portrait__content {
     padding: 0 40px 0 0;
     display: grid;
-    grid-template-columns: 340px 1fr;
+    grid-template-columns: 340px auto minmax(0, 1fr);
     gap: 30px;
     align-items: start;
   }
 
-  /* Mirrored: the image moves to the right and the text takes the left column,
+  /* All three sit on one row. The row has to be stated: with the frame placed
+     explicitly in column 3 on a right-aligned plate, grid's auto-placement
+     only moves forward, and would drop the meta and passage onto rows below. */
+  .plate-portrait__img,
+  .plate-portrait__body,
+  .plate-portrait__passage-col {
+    grid-row: 1;
+  }
+
+  .plate-portrait__img {
+    grid-column: 1;
+  }
+
+  .plate-portrait__body {
+    grid-column: 2;
+  }
+
+  .plate-portrait__passage-col {
+    grid-column: 3;
+  }
+
+  /* Mirrored: the image moves to the right and the text runs out to its left,
      so a pair of portraits can be set facing each other. */
   .plate-portrait__content[data-align="right"] {
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: minmax(0, 1fr) auto 340px;
   }
 
   .plate-portrait__content[data-align="right"] .plate-portrait__img {
-    order: 2;
+    grid-column: 3;
   }
 
   .plate-portrait__content[data-align="right"] .plate-portrait__body {
-    order: 1;
+    grid-column: 2;
     text-align: right;
+  }
+
+  .plate-portrait__content[data-align="right"] .plate-portrait__passage-col {
+    grid-column: 1;
   }
 
   .plate-portrait__content[data-align="right"] .plate-portrait__context {
@@ -100,19 +127,20 @@ const passage = paragraphs(plate.passage);
     color: var(--ink-60);
   }
 
+  /* Capped tighter than the other shapes so a long caption cannot widen the
+     meta column and squeeze the passage beside it. */
   .plate-portrait__context {
     margin-top: 10px;
-    max-width: 26em;
+    max-width: 20em;
     font: 400 15px/1.55 Archivo, sans-serif;
     color: var(--ink);
   }
 
-  /* A passage is long-form prose, so it runs below both columns rather than
-     squeezing into the one beside the frame. order keeps it last whichever
-     side the image is aligned to. */
-  .plate-portrait__passage-col {
-    grid-column: 1 / -1;
-    order: 3;
+  /* Prose stays ragged-right whichever side the frame is on; when the text
+     runs to the left of the frame it is the block that moves, not the lines. */
+  .plate-portrait__content[data-align="right"] .plate-portrait__passage {
+    text-align: left;
+    margin-left: auto;
   }
 
   .plate-portrait__passage {
@@ -137,7 +165,7 @@ const passage = paragraphs(plate.passage);
       padding: 0 20px 8px;
     }
 
-    /* Both alignments collapse to image-then-text on a narrow screen. */
+    /* Both alignments collapse to one column, frame then meta then passage. */
     .plate-portrait__content,
     .plate-portrait__content[data-align="right"] {
       padding: 0 20px;
@@ -145,13 +173,23 @@ const passage = paragraphs(plate.passage);
       row-gap: 14px;
     }
 
-    .plate-portrait__content[data-align="right"] .plate-portrait__img {
-      order: 0;
+    .plate-portrait__img,
+    .plate-portrait__body,
+    .plate-portrait__passage-col,
+    .plate-portrait__content[data-align="right"] .plate-portrait__img,
+    .plate-portrait__content[data-align="right"] .plate-portrait__body,
+    .plate-portrait__content[data-align="right"] .plate-portrait__passage-col {
+      grid-column: 1;
+      grid-row: auto;
     }
 
     .plate-portrait__content[data-align="right"] .plate-portrait__body {
-      order: 0;
       text-align: left;
+    }
+
+    .plate-portrait__content[data-align="right"] .plate-portrait__context,
+    .plate-portrait__content[data-align="right"] .plate-portrait__passage {
+      margin-left: 0;
     }
 
     .plate-portrait__img {

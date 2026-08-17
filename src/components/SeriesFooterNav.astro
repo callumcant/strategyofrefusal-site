@@ -1,18 +1,22 @@
 ---
+// Used by both series and audio record pages. The second link points back to
+// whichever index the record belongs to; it defaults to series.
 interface Props {
   nextRef: string;
   nextTitle: string;
   nextHref: string;
+  indexHref?: string;
+  indexLabel?: string;
 }
 
-const { nextRef, nextTitle, nextHref } = Astro.props;
+const { nextRef, nextTitle, nextHref, indexHref = "/series", indexLabel = "Series index" } = Astro.props;
 ---
 
 <div class="footer-nav">
   <div class="footer-nav__label">NEXT</div>
   <div class="footer-nav__content">
     <a href={nextHref}>{nextRef} {nextTitle}</a>
-    <a href="/series">Series index</a>
+    <a href={indexHref}>{indexLabel}</a>
   </div>
 </div>
 

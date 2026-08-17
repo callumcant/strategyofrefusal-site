@@ -45,6 +45,8 @@ Astro content collections: `series`, `books`, `journal`, `audio`, `writing` and
 `frames`.
 Adding a record means adding a file. The filename is the id, so
 `series/s-02.md` is served at `/series/s-02` — there is no separate slug field.
+Two collections have a page per record, `series` and `audio`; the rest are
+listed on an index only.
 
 Every collection has a schema in `src/content.config.ts` declaring its fields.
 A record that doesn't match fails the build with the file, the field and the
@@ -135,8 +137,18 @@ Things that will catch you out:
    is why none are there. They live in one shared folder rather than beside the
    markdown because several records reuse the same frame.
 7. **The types in `src/data/schema.ts` are derived from the schemas**, not
-   written by hand. Components import `SeriesEntry`, `Plate`, `BookEntry` and so
-   on from there. Change `content.config.ts` and the types follow.
+   written by hand. Components import `SeriesEntry`, `Plate`, `BookEntry`,
+   `AudioData` and so on from there. Change `content.config.ts` and the types
+   follow.
+8. **`audio` is every episode of one podcast**, Workers' Inquiry by Notes from
+   Below, so the show's name and URL live in `src/data/archive.ts` as
+   `PODCAST_NAME` and `PODCAST_URL` rather than in 22 frontmatter blocks. Each
+   record carries `dateLabel`, `duration`, optional `voices` and `listenUrl`, and
+   a `reading` list of `{ label, href }`. **There is no `factsLine`** — the index
+   row's facts column is derived from `duration`, so it cannot go stale. As with
+   a series, the markdown body is the lead prose and an empty body falls back to
+   the one-line `description`. See INVENTORY.md for how the refs were assigned;
+   the podcast's own numbering is unreliable and the last five are inferred.
 
 ## Adding a series
 
@@ -251,15 +263,14 @@ Netlify builds on push to `main`.
 - **Three of the six nav items go nowhere.** `TopBar.astro` lists Journal,
   Writing and Index with no `href`, so they render as dead text. Journal and
   Writing have collections but no page; Index has neither.
-- **Most of the content is still placeholder.** `S-01`, `S-05` and `S-06` are
-  real. `S-02` to `S-04` are sample data and are due to be replaced, as are the
-  books, journal and writing records; `audio` is empty.
-  `INVENTORY.md` in the repo root tracks what is real and what is still
+- **Most of the content is still placeholder.** `audio` is the only complete
+  collection. `S-01`, `S-05` and `S-06` are real. `S-02` to `S-04` are sample
+  data and are due to be replaced, as are the books, journal and writing
+  records. `INVENTORY.md` in the repo root tracks what is real and what is still
   sample data — keep it current, it is what survives between sessions.
-- **`getCollection("audio")` warns on every build** while the collection is
-  empty ("does not exist or is empty"). The build still succeeds and the page
-  renders a "still being catalogued" line. The warning goes when the first
-  episode lands.
+- `S-02` cross-references `EP-64`, which does not exist — the podcast run only
+  reaches `EP-22`. Sample data inside a sample series, so it goes when S-02 does.
+  A real series links an episode by giving the `related` entry an `href`.
 - `tokens.css` cites `design_handoff_strategy_of_refusal/README.md` as the
   source of the design. That folder is not in the repo.
 - **Plate captions, the record note and the journal descriptions are still

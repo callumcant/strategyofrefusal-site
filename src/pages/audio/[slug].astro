@@ -1,0 +1,54 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TopBar from "../../components/TopBar.astro";
+import SeriesTitleBlock from "../../components/SeriesTitleBlock.astro";
+import AudioRecordBlock from "../../components/AudioRecordBlock.astro";
+import SeriesFooterNav from "../../components/SeriesFooterNav.astro";
+import { PODCAST_NAME } from "../../data/archive";
+
+export async function getStaticPaths() {
+  // Newest first, matching the index. The NEXT link therefore walks backwards
+  // through the run and wraps at the oldest episode.
+  const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
+
+  return audio.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: audio[(i + 1) % audio.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const e = entry.data;
+
+// The episode's lead prose is the markdown body, as with a series standfirst.
+// An episode with an empty body falls back to its one-line index description.
+const { Content } = await render(entry);
+const hasLead = Boolean(entry.body?.trim());
+---
+
+<BaseLayout title={`${e.title} — Strategy of Refusal`}>
+  <div class="episode-page">
+    <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / AUDIO / ${e.ref}`} labelHref="/audio" active="audio" />
+
+    <SeriesTitleBlock title={e.title}>
+      {hasLead ? <Content /> : <p>{e.description}</p>}
+    </SeriesTitleBlock>
+
+    <AudioRecordBlock episode={e} podcast={PODCAST_NAME} />
+
+    <SeriesFooterNav
+      nextRef={next.data.ref}
+      nextTitle={next.data.title}
+      nextHref={`/audio/${next.id}`}
+      indexHref="/audio"
+      indexLabel="Audio index"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .episode-page {
+    background: var(--paper);
+  }
+</style>

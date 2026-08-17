@@ -1,0 +1,119 @@
+---
+import FieldRow from "./FieldRow.astro";
+import type { AudioData } from "../data/schema";
+
+// The episode equivalent of SeriesRecordBlock: the same label column and field
+// grid, with the podcast's own fields instead of a dispute's. The reading list
+// sits where the series note sits, because it plays the same part — the prose
+// that hangs off the record rather than another field of it.
+interface Props {
+  episode: AudioData;
+  podcast: string;
+}
+
+const { episode, podcast } = Astro.props;
+---
+
+<div class="record-block">
+  <div class="record-block__label">RECORD</div>
+  <div class="record-block__content">
+    <div class="record-block__fields">
+      <FieldRow label="PODCAST">{podcast}</FieldRow>
+      <FieldRow label="PUBLISHED">{episode.dateLabel}</FieldRow>
+      <FieldRow label="LENGTH">{episode.duration}</FieldRow>
+      {episode.voices && <FieldRow label="VOICES">{episode.voices}</FieldRow>}
+      {
+        episode.listenUrl && (
+          <FieldRow label="LISTEN" accent href={episode.listenUrl}>
+            Spotify →
+          </FieldRow>
+        )
+      }
+    </div>
+
+    {
+      episode.reading.length > 0 && (
+        <div class="record-block__reading">
+          <div class="record-block__reading-label">READING</div>
+          <ul class="record-block__reading-list">
+            {episode.reading.map((r) => (
+              <li>
+                <a href={r.href}>{r.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .record-block {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    border-bottom: 1px solid var(--rule-ink);
+  }
+
+  .record-block__label {
+    padding: 22px 0 26px 20px;
+    font: 500 11px/1.6 "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .record-block__content {
+    padding: 22px 40px 26px 0;
+  }
+
+  .record-block__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+  }
+
+  .record-block__reading {
+    margin-top: 22px;
+  }
+
+  .record-block__reading-label {
+    font: 400 11.5px "IBM Plex Mono", monospace;
+    color: var(--ink-40);
+  }
+
+  .record-block__reading-list {
+    margin: 8px 0 0;
+    padding: 0;
+    max-width: 40em;
+    list-style: none;
+  }
+
+  .record-block__reading-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule-ink);
+    font: 400 15px/1.45 "Source Serif 4", serif;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .record-block__reading-list a:hover {
+    color: var(--ground-accent);
+  }
+
+  @media (max-width: 700px) {
+    .record-block {
+      grid-template-columns: 1fr;
+    }
+
+    .record-block__label {
+      padding: 20px 20px 8px;
+    }
+
+    .record-block__content {
+      padding: 0 20px 24px;
+    }
+
+    .record-block__fields {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,20 +1,23 @@
 ---
+// href is optional: a collection with record pages of its own (audio) links its
+// titles, a collection without them (books, journal) renders the row as text.
 interface Props {
   ref: string;
   title: string;
   description: string;
   factsLine: string;
   year: string;
+  href?: string;
   last?: boolean;
 }
 
-const { ref, title, description, factsLine, year, last } = Astro.props;
+const { ref, title, description, factsLine, year, href, last } = Astro.props;
 ---
 
 <div class="pub-row" data-last={last ? "true" : undefined}>
   <div class="pub-row__ref">{ref}</div>
   <div>
-    <div class="pub-row__title">{title}</div>
+    <div class="pub-row__title">{href ? <a href={href}>{title}</a> : title}</div>
     <div class="pub-row__desc">{description}</div>
   </div>
   <div class="pub-row__facts">{factsLine}</div>
@@ -45,6 +48,12 @@ const { ref, title, description, factsLine, year, last } = Astro.props;
     font-stretch: 70%;
     text-transform: uppercase;
     color: var(--cream);
+  }
+
+  .pub-row__title a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
   }
 
   .pub-row__desc {

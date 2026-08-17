@@ -16,3 +16,6 @@ export type DiptychPlate = Extract<Plate, { kind: "diptych" }>;
 
 export type BookEntry = CollectionEntry<"books">;
 export type FrameEntry = CollectionEntry<"frames">;
+
+export type AudioEntry = CollectionEntry<"audio">;
+export type AudioData = AudioEntry["data"];

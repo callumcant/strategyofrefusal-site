@@ -5,6 +5,7 @@ import ShellFrame from "../../components/ShellFrame.astro";
 import TopBar from "../../components/TopBar.astro";
 import DisplayHeading from "../../components/DisplayHeading.astro";
 import PublicationRow from "../../components/PublicationRow.astro";
+import { PODCAST_NAME, PODCAST_URL } from "../../data/archive";
 
 const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
 ---
@@ -16,7 +17,9 @@ const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCom
     <div class="intro">
       <DisplayHeading lines={["Audio"]} size={100} lineHeight=".88" />
       <p class="intro__para">
-        Conversations recorded at gates, in cabs and on picket lines. Newest first.
+        Every episode of <a href={PODCAST_URL}>{PODCAST_NAME}</a> — a worker
+        interviewed each time about the job and what organising it taught them.
+        Newest first.
       </p>
     </div>
 
@@ -28,8 +31,9 @@ const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCom
               ref={e.data.ref}
               title={e.data.title}
               description={e.data.description}
-              factsLine={e.data.factsLine}
+              factsLine={e.data.duration.toUpperCase()}
               year={e.data.year}
+              href={`/audio/${e.id}`}
               last={i === audio.length - 1}
             />
           ))
@@ -48,9 +52,14 @@ const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCom
 
   .intro__para {
     margin: 24px 0 0;
-    max-width: 30em;
+    max-width: 34em;
     font: 400 19px/1.45 Archivo, sans-serif;
     color: var(--cream);
+  }
+
+  .intro__para a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .episode-list {

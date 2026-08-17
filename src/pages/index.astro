@@ -23,6 +23,15 @@ const journal = (await getCollection("journal")).sort(byRefDesc);
 const writing = (await getCollection("writing")).sort(byRefDesc);
 const homeFeaturedFrame = (await getEntry("frames", "home"))!.data;
 
+// Audio is the one complete collection, so all 22 episodes are here and the
+// count is real rather than stated. Listing all 22 would swamp a page whose
+// other sections run to two or three rows, so the home page shows the newest
+// few and the count carries the true size — the same bargain the journal and
+// writing sections make. Change audioShown to show more or fewer.
+const audioShown = 4;
+const audioAll = (await getCollection("audio")).sort(byRefDesc);
+const audio = audioAll.slice(0, audioShown);
+
 const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
 ---
 
@@ -33,7 +42,7 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     <div class="masthead">
       <DisplayHeading lines={["Strategy", "of refusal"]} size={96} />
       <ScopeLine
-        left="AN ARCHIVE OF BRITISH LABOUR DISPUTES — PHOTOGRAPHS, BOOKS, JOURNAL, WRITING"
+        left="AN ARCHIVE OF BRITISH LABOUR DISPUTES — PHOTOGRAPHS, BOOKS, PODCASTS, JOURNAL, WRITING"
         right={`${scopeRecordTotal} RECORDS · ${scopeSince} —`}
       />
     </div>
@@ -66,6 +75,23 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
             factsLine={b.data.factsLine}
             year={b.data.year}
             last={i === books.length - 1}
+          />
+        ))
+      }
+    </section>
+
+    <section class="section section--audio">
+      <ShellSectionHead title="Audio" countLabel={`${pad(audioAll.length)} EPISODES →`} />
+      {
+        audio.map((e, i) => (
+          <PublicationRow
+            ref={e.data.ref}
+            title={e.data.title}
+            description={e.data.description}
+            factsLine={e.data.duration.toUpperCase()}
+            year={e.data.year}
+            href={`/audio/${e.id}`}
+            last={i === audio.length - 1}
           />
         ))
       }
@@ -119,6 +145,10 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     padding: 34px var(--page-pad) 20px;
   }
 
+  .section--audio {
+    padding: 14px var(--page-pad) 20px;
+  }
+
   .section--journal {
     padding: 14px var(--page-pad) 20px;
   }
@@ -134,6 +164,7 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
 
     .section,
     .section--books,
+    .section--audio,
     .section--journal,
     .section--writing {
       padding-left: 20px;

@@ -156,16 +156,32 @@ const journal = defineCollection({
   }),
 });
 
-// Podcast episodes. Same shape as journal, and rendered with the same row.
-// Refs are EP-nn; S-02 already cross-references EP-64.
+// Podcast episodes — Workers' Inquiry, published by Notes from Below.
+// Refs are EP-nn, assigned in broadcast order, so EP-01 is the oldest.
+// The episode's lead prose is the markdown body; description is the one line
+// the index row shows. The facts column on the index is derived from duration,
+// so there is no factsLine to keep in step by hand.
 const audio = defineCollection({
   loader: glob({ base: "./src/content/audio", pattern: "**/*.md" }),
   schema: z.object({
     ref: z.string(),
     year: z.string(),
     title: z.string(),
-    description: z.string(),
-    factsLine: z.string(), // e.g. "48 MIN · RECORDED AT THE GATE"
+    description: z.string(), // one line, for the index row
+    dateLabel: z.string(), // "3 January 2025"
+    duration: z.string(), // "57 min"
+    voices: z.string().optional(), // who is speaking, besides the hosts
+    listenUrl: z.string().optional(), // the episode on Spotify
+    // Reading the episode points at: the article it is drawn from, books,
+    // campaigns. Labels and hrefs both come from the episode's own notes.
+    reading: z
+      .array(
+        z.object({
+          label: z.string(),
+          href: z.string(),
+        }),
+      )
+      .default([]),
   }),
 });
 

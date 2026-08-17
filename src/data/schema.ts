@@ -11,6 +11,8 @@ export type Plate = SeriesDetail["plates"][number];
 export type FullBleedPlate = Extract<Plate, { kind: "full" }>;
 export type PairedPlate = Extract<Plate, { kind: "paired" }>;
 export type SmallPlate = Extract<Plate, { kind: "small" }>;
+export type PortraitPlate = Extract<Plate, { kind: "portrait" }>;
+export type DiptychPlate = Extract<Plate, { kind: "diptych" }>;
 
 export type BookEntry = CollectionEntry<"books">;
 export type FrameEntry = CollectionEntry<"frames">;

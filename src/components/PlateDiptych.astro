@@ -1,0 +1,133 @@
+---
+import { Image } from "astro:assets";
+import type { DiptychPlate } from "../data/schema";
+
+interface Props {
+  plate: DiptychPlate;
+}
+
+const { plate } = Astro.props;
+
+const metaLines = [plate.location, plate.date].filter(Boolean);
+const hasBody = metaLines.length > 0 || Boolean(plate.caption);
+---
+
+<div class="plate-diptych">
+  <div class="plate-diptych__ref">{plate.ref}</div>
+  <div class="plate-diptych__content">
+    <div class="plate-diptych__pair">
+      {plate.images.map((frame) => (
+        <Image
+          src={frame.image}
+          alt={frame.alt}
+          inferSize
+          class="plate-diptych__img"
+          style={frame.objectPosition ? `object-position:${frame.objectPosition}` : undefined}
+        />
+      ))}
+    </div>
+    {
+      hasBody ? (
+        <div class="plate-diptych__body">
+          <div class="plate-diptych__meta">
+            {metaLines.map((line, i) => (
+              <>
+                {i > 0 ? <br /> : null}
+                {line}
+              </>
+            ))}
+          </div>
+          {plate.caption ? <div class="plate-diptych__context">{plate.caption}</div> : null}
+        </div>
+      ) : null
+    }
+    {plate.passage ? <p class="plate-diptych__passage">{plate.passage}</p> : null}
+  </div>
+</div>
+
+<style>
+  .plate-diptych {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    margin-top: 38px;
+  }
+
+  .plate-diptych__ref {
+    padding-left: 20px;
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .plate-diptych__content {
+    padding: 0 40px 0 0;
+  }
+
+  /* Two frames set side by side and read as one plate. Capped rather than
+     stretched to the full column, so a pair of portraits stays portrait
+     instead of being cropped square. */
+  .plate-diptych__pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 380px));
+    gap: 30px;
+  }
+
+  .plate-diptych__img {
+    display: block;
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+  }
+
+  .plate-diptych__body {
+    margin-top: 16px;
+  }
+
+  .plate-diptych__meta {
+    font: 400 12.5px/1.7 "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+  }
+
+  .plate-diptych__context {
+    margin-top: 10px;
+    max-width: 26em;
+    font: 400 15px/1.55 Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  .plate-diptych__passage {
+    margin: 16px 0 0;
+    max-width: 34em;
+    font: 400 21px/1.55 "Source Serif 4", serif;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 700px) {
+    .plate-diptych {
+      grid-template-columns: 1fr;
+      margin-top: 30px;
+    }
+
+    .plate-diptych__ref {
+      padding: 0 20px 8px;
+    }
+
+    .plate-diptych__content {
+      padding: 0 20px;
+    }
+
+    /* Side by side would leave each frame too narrow to read on a phone. */
+    .plate-diptych__pair {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .plate-diptych__img {
+      height: 420px;
+    }
+
+    .plate-diptych__passage {
+      font-size: 18px;
+    }
+  }
+</style>

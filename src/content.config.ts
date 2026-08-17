@@ -44,6 +44,8 @@ const series = defineCollection({
             related: z.array(relatedRef).default([]),
           }),
           note: z.string(),
+          // location and date are optional on every shape: a sequence shot in
+          // one place on one morning states them on the first plate only.
           plates: z.array(
             z.discriminatedUnion("kind", [
               z.object({
@@ -53,19 +55,21 @@ const series = defineCollection({
                 alt: z.string(),
                 height: z.number(),
                 objectPosition: z.string().optional(),
-                location: z.string(),
-                date: z.string(),
+                location: z.string().optional(),
+                date: z.string().optional(),
                 time: z.string().optional(),
-                caption: z.string(),
+                caption: z.string().optional(),
+                // A full-bleed frame can carry a passage too, set below it.
+                passage: z.string().optional(),
               }),
               z.object({
                 kind: z.literal("paired"),
                 ref: z.string(),
                 image: image(),
                 alt: z.string(),
-                location: z.string(),
-                date: z.string(),
-                caption: z.string(),
+                location: z.string().optional(),
+                date: z.string().optional(),
+                caption: z.string().optional(),
                 passage: z.string(),
               }),
               z.object({
@@ -74,9 +78,45 @@ const series = defineCollection({
                 image: image(),
                 alt: z.string(),
                 objectPosition: z.string().optional(),
-                location: z.string(),
-                date: z.string(),
-                caption: z.string(),
+                location: z.string().optional(),
+                date: z.string().optional(),
+                caption: z.string().optional(),
+                // Set below the image, spanning the full content width.
+                passage: z.string().optional(),
+              }),
+              // For frames taller than they are wide. The other three shapes
+              // are landscape boxes and would crop a portrait to a letterbox.
+              z.object({
+                kind: z.literal("portrait"),
+                ref: z.string(),
+                image: image(),
+                alt: z.string(),
+                objectPosition: z.string().optional(),
+                location: z.string().optional(),
+                date: z.string().optional(),
+                caption: z.string().optional(),
+                // Which side the image sits on. Defaults to left.
+                align: z.enum(["left", "right"]).default("left"),
+              }),
+              // Two frames set side by side, read as one plate. The way to
+              // pair portraits: mirroring a single portrait across two plates
+              // does not read as a pair.
+              z.object({
+                kind: z.literal("diptych"),
+                ref: z.string(),
+                images: z
+                  .array(
+                    z.object({
+                      image: image(),
+                      alt: z.string(),
+                      objectPosition: z.string().optional(),
+                    }),
+                  )
+                  .length(2),
+                location: z.string().optional(),
+                date: z.string().optional(),
+                caption: z.string().optional(),
+                passage: z.string().optional(),
               }),
             ]),
           ),

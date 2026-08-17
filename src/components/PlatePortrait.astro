@@ -1,0 +1,130 @@
+---
+import { Image } from "astro:assets";
+import type { PortraitPlate } from "../data/schema";
+
+interface Props {
+  plate: PortraitPlate;
+}
+
+const { plate } = Astro.props;
+
+const metaLines = [plate.location, plate.date].filter(Boolean);
+---
+
+<div class="plate-portrait">
+  <div class="plate-portrait__ref">{plate.ref}</div>
+  <div class="plate-portrait__content" data-align={plate.align}>
+    <Image
+      src={plate.image}
+      alt={plate.alt}
+      inferSize
+      class="plate-portrait__img"
+      style={plate.objectPosition ? `object-position:${plate.objectPosition}` : undefined}
+    />
+    <div class="plate-portrait__body">
+      <div class="plate-portrait__meta">
+        {metaLines.map((line, i) => (
+          <>
+            {i > 0 ? <br /> : null}
+            {line}
+          </>
+        ))}
+      </div>
+      {plate.caption ? <div class="plate-portrait__context">{plate.caption}</div> : null}
+    </div>
+  </div>
+</div>
+
+<style>
+  .plate-portrait {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    margin-top: 38px;
+  }
+
+  .plate-portrait__ref {
+    padding-left: 20px;
+    font: 500 11px "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  /* A portrait frame is narrow, so the caption sits beside it rather than
+     underneath, where it would leave the right half of the page empty. */
+  .plate-portrait__content {
+    padding: 0 40px 0 0;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  /* Mirrored: the image moves to the right and the text takes the left column,
+     so a pair of portraits can be set facing each other. */
+  .plate-portrait__content[data-align="right"] {
+    grid-template-columns: 1fr 340px;
+  }
+
+  .plate-portrait__content[data-align="right"] .plate-portrait__img {
+    order: 2;
+  }
+
+  .plate-portrait__content[data-align="right"] .plate-portrait__body {
+    order: 1;
+    text-align: right;
+  }
+
+  .plate-portrait__content[data-align="right"] .plate-portrait__context {
+    margin-left: auto;
+  }
+
+  .plate-portrait__img {
+    display: block;
+    width: 100%;
+    height: 460px;
+    object-fit: cover;
+  }
+
+  .plate-portrait__meta {
+    font: 400 12.5px/1.7 "IBM Plex Mono", monospace;
+    color: var(--ink-60);
+  }
+
+  .plate-portrait__context {
+    margin-top: 10px;
+    max-width: 26em;
+    font: 400 15px/1.55 Archivo, sans-serif;
+    color: var(--ink);
+  }
+
+  @media (max-width: 700px) {
+    .plate-portrait {
+      grid-template-columns: 1fr;
+      margin-top: 30px;
+    }
+
+    .plate-portrait__ref {
+      padding: 0 20px 8px;
+    }
+
+    /* Both alignments collapse to image-then-text on a narrow screen. */
+    .plate-portrait__content,
+    .plate-portrait__content[data-align="right"] {
+      padding: 0 20px;
+      grid-template-columns: 1fr;
+      row-gap: 14px;
+    }
+
+    .plate-portrait__content[data-align="right"] .plate-portrait__img {
+      order: 0;
+    }
+
+    .plate-portrait__content[data-align="right"] .plate-portrait__body {
+      order: 0;
+      text-align: left;
+    }
+
+    .plate-portrait__img {
+      height: 420px;
+    }
+  }
+</style>

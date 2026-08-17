@@ -8,7 +8,7 @@ Target sizes given by Callum, August 2026.
 
 | Collection | Target | Landed | Real? | Status |
 | --- | --- | --- | --- | --- |
-| Series   | 15 | 4 | no  | Placeholder records; all four need replacing |
+| Series   | 15 | 5 | 1 real | S-05 Too Hot to Work is real and complete: 10 plates, standfirst, stripped photographs. S-01 to S-04 are placeholder and need replacing |
 | Books    | 3  | 3 | no  | Right number, wrong books — replace all three |
 | Journal  | 11 | 2 | no  | Placeholder records |
 | Audio    | 22 | 0 | —   | Collection and page built, empty |
@@ -46,9 +46,14 @@ trip, small enough to check before moving on.
 
 ## Photographs
 
-- Go in `src/assets/photographs/`, referenced from frontmatter by relative path.
-- **EXIF must be stripped before a photograph enters the repo.** This is a
-  safety requirement, not a preference — see CLAUDE.md.
+- Go in `src/assets/photographs/`, named `s05-01.jpg` and so on, referenced from
+  frontmatter by relative path.
+- **Run `npm run photos` before committing any new batch.** It strips every
+  metadata tag and downscales to 2560px. This is a safety requirement, not an
+  optimisation — see CLAUDE.md. The script is safe to re-run and skips files
+  that are already done.
+- Straight-from-camera files carry around 54 tags including the camera body
+  serial number. Check the script's output says `clean` for every file.
 - Because there is no EXIF, **every location, date and time is typed by hand**
   from Callum's notes. Budget for that: it is the slowest part of the job.
 

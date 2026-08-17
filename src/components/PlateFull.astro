@@ -8,6 +8,10 @@ interface Props {
 }
 
 const { plate, marginTop = "30px" } = Astro.props;
+
+// A sequence shot in one place states location and date on the first plate
+// only, so any of these may be absent.
+const metaLines = [plate.location, plate.date, plate.time].filter(Boolean);
 ---
 
 <div class="plate-full" style={`margin-top:${marginTop}`}>
@@ -22,13 +26,24 @@ const { plate, marginTop = "30px" } = Astro.props;
     <div class="plate-full__ref">{plate.ref}</div>
     <div class="plate-full__body">
       <div class="plate-full__meta">
-        {plate.location}<br />
-        {plate.date}
-        {plate.time ? <><br />{plate.time}</> : null}
+        {metaLines.map((line, i) => (
+          <>
+            {i > 0 ? <br /> : null}
+            {line}
+          </>
+        ))}
       </div>
-      <div class="plate-full__context">{plate.caption}</div>
+      {plate.caption ? <div class="plate-full__context">{plate.caption}</div> : null}
     </div>
   </div>
+  {
+    plate.passage ? (
+      <div class="plate-full__passage-row">
+        <div />
+        <p class="plate-full__passage">{plate.passage}</p>
+      </div>
+    ) : null
+  }
 </div>
 
 <style>
@@ -66,11 +81,35 @@ const { plate, marginTop = "30px" } = Astro.props;
     color: var(--ink);
   }
 
+  /* Aligns the passage with the caption body rather than the label column. */
+  .plate-full__passage-row {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    padding: 0 40px 0 0;
+  }
+
+  .plate-full__passage {
+    margin: 16px 0 0;
+    max-width: 34em;
+    font: 400 21px/1.55 "Source Serif 4", serif;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
   @media (max-width: 700px) {
     .plate-full__caption {
       grid-template-columns: 1fr;
       padding: 10px 20px 0;
       row-gap: 8px;
+    }
+
+    .plate-full__passage-row {
+      grid-template-columns: 1fr;
+      padding: 0 20px;
+    }
+
+    .plate-full__passage {
+      font-size: 18px;
     }
 
     .plate-full__ref {

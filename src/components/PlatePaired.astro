@@ -7,6 +7,8 @@ interface Props {
 }
 
 const { plate } = Astro.props;
+
+const metaLines = [plate.location, plate.date].filter(Boolean);
 ---
 
 <div class="plate-paired">
@@ -15,10 +17,14 @@ const { plate } = Astro.props;
     <div class="plate-paired__image-col">
       <Image src={plate.image} alt={plate.alt} inferSize class="plate-paired__img" />
       <div class="plate-paired__meta">
-        {plate.location}<br />
-        {plate.date}
+        {metaLines.map((line, i) => (
+          <>
+            {i > 0 ? <br /> : null}
+            {line}
+          </>
+        ))}
       </div>
-      <div class="plate-paired__caption">{plate.caption}</div>
+      {plate.caption ? <div class="plate-paired__caption">{plate.caption}</div> : null}
     </div>
     <p class="plate-paired__passage">{plate.passage}</p>
   </div>

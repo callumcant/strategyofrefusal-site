@@ -68,11 +68,33 @@ Things that will catch you out:
    block and plates; without, it falls back to `indexDescription` and a "still
    being catalogued" note. So a new series is one file and it gets a working
    page immediately — fill in `detail` later.
-4. **Plates are a tagged union.** `kind: "full" | "paired" | "small"`, expressed
-   as a Zod `discriminatedUnion` in the schema, and `Plate.astro` dispatches on
-   `kind` to `PlateFull` / `PlatePaired` / `PlateSmall`. Adding a plate shape
-   means a new branch in the schema, a new component and a new branch in the
-   dispatcher.
+4. **Plates are a tagged union.** `kind: "full" | "paired" | "small" |
+   "portrait" | "diptych"`, expressed as a Zod `discriminatedUnion` in the
+   schema, and `Plate.astro` dispatches on `kind` to the five `Plate*`
+   components. Adding a shape means a new branch in the schema, a new component
+   and a new branch in the dispatcher. Notes on the shapes:
+   - `full` is full-bleed and takes a `height`.
+   - `paired` is a 300px image with the passage beside it. `passage` required.
+   - `small` is a 520px inset with the caption beside it, not underneath.
+   - `portrait` is for a single frame taller than it is wide. The landscape
+     shapes would crop it to a letterbox. It takes `align: left | right`
+     (default left) to put the image on either side. **Nothing currently uses
+     it** — mirroring two portraits across consecutive plates was tried and
+     rejected, because they read as two plates rather than as a pair.
+   - `diptych` takes exactly two images and sets them side by side as one
+     plate, with one reference covering both (`06–07 / 10`). This is the way
+     to pair frames. The pair is capped at 380px each rather than stretched
+     across the column, so portraits stay portrait instead of cropping square.
+   - **`caption` is optional on every shape**, as are `location` and `date`. A
+     sequence shot in one place on one morning states location and date on the
+     first plate and leaves the rest blank; the meta block renders whichever of
+     location, date and time are present, and a plate with neither caption nor
+     passage renders as the photograph and its reference alone.
+   - **`full` and `small` both take an optional `passage`**, set below in the
+     same serif as a paired passage. The distinction between the shapes is the
+     size of the image, not whether prose is allowed: `caption` is the short
+     note in sans, `passage` is the long-form prose in serif, and a plate can
+     have either, both or neither.
 5. **Photographs must have their EXIF metadata stripped before they enter the
    repo.** This is a safety requirement. These are photographs of workers in
    live disputes, and EXIF carries GPS coordinates, capture times and camera
@@ -118,6 +140,17 @@ npm install
 npm run dev      # http://localhost:4321
 npm run build    # → dist/ ; currently 7 pages
 npm run preview  # serve the built dist/ as Netlify will
+```
+
+**If the page in the browser disagrees with the code, restart the dev server
+before believing the browser.** Rewriting a component's whole `<style>` block
+can leave `astro dev` serving the previous scoped CSS: the HTML and the
+stylesheet in the served page both look correct, but the browser renders the
+old layout. `npm run build` is unaffected and is the honest check. This has
+already cost one long debugging session — the layout was right the entire time.
+
+```bash
+astro dev stop && astro dev --background
 ```
 
 `npm install` reports that it declined to run esbuild's `postinstall` script —

@@ -3,6 +3,8 @@ import type { Plate } from "../data/schema";
 import PlateFull from "./PlateFull.astro";
 import PlatePaired from "./PlatePaired.astro";
 import PlateSmall from "./PlateSmall.astro";
+import PlatePortrait from "./PlatePortrait.astro";
+import PlateDiptych from "./PlateDiptych.astro";
 
 interface Props {
   plate: Plate;
@@ -15,3 +17,5 @@ const { plate, marginTop } = Astro.props;
 {plate.kind === "full" && <PlateFull plate={plate} marginTop={marginTop} />}
 {plate.kind === "paired" && <PlatePaired plate={plate} />}
 {plate.kind === "small" && <PlateSmall plate={plate} />}
+{plate.kind === "portrait" && <PlatePortrait plate={plate} />}
+{plate.kind === "diptych" && <PlateDiptych plate={plate} />}

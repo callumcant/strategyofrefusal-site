@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { PortraitPlate } from "../data/schema";
+import { paragraphs } from "../data/passage";
 
 interface Props {
   plate: PortraitPlate;
@@ -8,7 +9,8 @@ interface Props {
 
 const { plate } = Astro.props;
 
-const metaLines = [plate.location, plate.date].filter(Boolean);
+const metaLines = [plate.location, plate.date, plate.time].filter(Boolean);
+const passage = paragraphs(plate.passage);
 ---
 
 <div class="plate-portrait">
@@ -32,6 +34,15 @@ const metaLines = [plate.location, plate.date].filter(Boolean);
       </div>
       {plate.caption ? <div class="plate-portrait__context">{plate.caption}</div> : null}
     </div>
+    {
+      passage.length > 0 ? (
+        <div class="plate-portrait__passage-col">
+          {passage.map((para) => (
+            <p class="plate-portrait__passage">{para}</p>
+          ))}
+        </div>
+      ) : null
+    }
   </div>
 </div>
 
@@ -96,6 +107,26 @@ const metaLines = [plate.location, plate.date].filter(Boolean);
     color: var(--ink);
   }
 
+  /* A passage is long-form prose, so it runs below both columns rather than
+     squeezing into the one beside the frame. order keeps it last whichever
+     side the image is aligned to. */
+  .plate-portrait__passage-col {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+
+  .plate-portrait__passage {
+    margin: 0;
+    max-width: 34em;
+    font: 400 21px/1.55 "Source Serif 4", serif;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .plate-portrait__passage + .plate-portrait__passage {
+    margin-top: 0.7em;
+  }
+
   @media (max-width: 700px) {
     .plate-portrait {
       grid-template-columns: 1fr;
@@ -125,6 +156,10 @@ const metaLines = [plate.location, plate.date].filter(Boolean);
 
     .plate-portrait__img {
       height: 420px;
+    }
+
+    .plate-portrait__passage {
+      font-size: 18px;
     }
   }
 </style>

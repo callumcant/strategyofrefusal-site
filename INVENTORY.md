@@ -8,15 +8,15 @@ Target sizes given by Callum, August 2026.
 
 | Collection | Target | Landed | Real? | Status |
 | --- | --- | --- | --- | --- |
-| Series   | 15 | 5 | 1 real | S-05 Too Hot to Work is real and complete: 10 plates, standfirst, stripped photographs. S-01 to S-04 are placeholder and need replacing |
+| Series   | 15 | 6 | 2 real | S-05 Too Hot to Work is complete. S-06 The Death of a University has all 18 plates; 9 of them carry notes, the other 9 are still photograph-and-reference only. S-01 to S-04 are placeholder and need replacing |
 | Books    | 3  | 3 | no  | Right number, wrong books — replace all three |
 | Journal  | 11 | 2 | no  | Placeholder records |
 | Audio    | 22 | 0 | —   | Collection and page built, empty |
 | Writing  | 10 | 3 | no  | Placeholder records; target to be confirmed |
 | Frames   | 3  | 3 | no  | Featured photograph per shell page |
 
-Nothing in `src/content/` is real content yet. Every record currently in the
-repo is sample data from the original build and should be treated as disposable.
+Everything in `src/content/` other than S-05 and S-06 is sample data from the
+original build and should be treated as disposable.
 
 ## Order of work
 
@@ -70,3 +70,7 @@ trip, small enough to check before moving on.
   Deliberate for now; add one if it should appear there.
 - **Journal, Writing and Index are still dead nav items.** Journal and Writing
   have collections but no page; Index has neither.
+- **The series index headline still reads "Four disputes".** It is hardcoded in
+  `src/pages/series/index.astro`; there are now six. The frame count beside it
+  is derived and correct. Callum's copy — spelled-out numbers, so it cannot
+  simply be computed.

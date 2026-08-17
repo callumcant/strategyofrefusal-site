@@ -84,23 +84,29 @@ Things that will catch you out:
    - `small` is a 520px inset with the caption beside it, not underneath.
    - `portrait` is for a single frame taller than it is wide. The landscape
      shapes would crop it to a letterbox. It takes `align: left | right`
-     (default left) to put the image on either side. **Nothing currently uses
-     it** — mirroring two portraits across consecutive plates was tried and
-     rejected, because they read as two plates rather than as a pair.
+     (default left) to put the image on either side. `S-06` uses it twice,
+     left then right, four plates apart. Mirroring two portraits across
+     *consecutive* plates was tried and rejected, because they read as two
+     plates rather than as a pair; spaced apart it reads as variation.
    - `diptych` takes exactly two images and sets them side by side as one
      plate, with one reference covering both (`06–07 / 10`). This is the way
      to pair frames. The pair is capped at 380px each rather than stretched
      across the column, so portraits stay portrait instead of cropping square.
-   - **`caption` is optional on every shape**, as are `location` and `date`. A
+   - **`caption`, `location`, `date` and `time` are optional on every shape.** A
      sequence shot in one place on one morning states location and date on the
      first plate and leaves the rest blank; the meta block renders whichever of
      location, date and time are present, and a plate with neither caption nor
      passage renders as the photograph and its reference alone.
-   - **`full` and `small` both take an optional `passage`**, set below in the
-     same serif as a paired passage. The distinction between the shapes is the
-     size of the image, not whether prose is allowed: `caption` is the short
-     note in sans, `passage` is the long-form prose in serif, and a plate can
-     have either, both or neither.
+   - **Every shape takes a `passage`** — required on `paired`, optional on the
+     other four — set below the frame in the same serif. The distinction
+     between the shapes is the size and arrangement of the image, not whether
+     prose is allowed: `caption` is the short note in sans, `passage` is the
+     long-form prose in serif, and a plate can have either, both or neither.
+   - **A passage can run to several paragraphs.** Passages are written in
+     YAML's folded style (`>-`), where a blank line survives as a newline;
+     `src/data/passage.ts` splits on those and each component renders one `<p>`
+     per paragraph. Do not write a passage in literal style (`|`) — every line
+     would become its own paragraph.
 5. **Photographs must have their metadata stripped before they enter the repo.**
    This is a safety requirement. These are photographs of workers in live
    disputes, and a straight-from-camera JPEG carries around fifty tags: GPS

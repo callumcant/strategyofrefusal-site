@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { PairedPlate } from "../data/schema";
+import { paragraphs } from "../data/passage";
 
 interface Props {
   plate: PairedPlate;
@@ -8,7 +9,8 @@ interface Props {
 
 const { plate } = Astro.props;
 
-const metaLines = [plate.location, plate.date].filter(Boolean);
+const metaLines = [plate.location, plate.date, plate.time].filter(Boolean);
+const passage = paragraphs(plate.passage);
 ---
 
 <div class="plate-paired">
@@ -26,7 +28,11 @@ const metaLines = [plate.location, plate.date].filter(Boolean);
       </div>
       {plate.caption ? <div class="plate-paired__caption">{plate.caption}</div> : null}
     </div>
-    <p class="plate-paired__passage">{plate.passage}</p>
+    <div>
+      {passage.map((para) => (
+        <p class="plate-paired__passage">{para}</p>
+      ))}
+    </div>
   </div>
 </div>
 
@@ -75,6 +81,10 @@ const metaLines = [plate.location, plate.date].filter(Boolean);
     font: 400 21px/1.55 "Source Serif 4", serif;
     color: var(--ink);
     text-wrap: pretty;
+  }
+
+  .plate-paired__passage + .plate-paired__passage {
+    margin-top: 0.7em;
   }
 
   @media (max-width: 700px) {

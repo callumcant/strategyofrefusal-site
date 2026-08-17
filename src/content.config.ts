@@ -69,6 +69,7 @@ const series = defineCollection({
                 alt: z.string(),
                 location: z.string().optional(),
                 date: z.string().optional(),
+                time: z.string().optional(),
                 caption: z.string().optional(),
                 passage: z.string(),
               }),
@@ -80,6 +81,7 @@ const series = defineCollection({
                 objectPosition: z.string().optional(),
                 location: z.string().optional(),
                 date: z.string().optional(),
+                time: z.string().optional(),
                 caption: z.string().optional(),
                 // Set below the image, spanning the full content width.
                 passage: z.string().optional(),
@@ -94,7 +96,10 @@ const series = defineCollection({
                 objectPosition: z.string().optional(),
                 location: z.string().optional(),
                 date: z.string().optional(),
+                time: z.string().optional(),
                 caption: z.string().optional(),
+                // Set below the image, spanning the full content width.
+                passage: z.string().optional(),
                 // Which side the image sits on. Defaults to left.
                 align: z.enum(["left", "right"]).default("left"),
               }),
@@ -115,6 +120,7 @@ const series = defineCollection({
                   .length(2),
                 location: z.string().optional(),
                 date: z.string().optional(),
+                time: z.string().optional(),
                 caption: z.string().optional(),
                 passage: z.string().optional(),
               }),

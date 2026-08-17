@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { SmallPlate } from "../data/schema";
+import { paragraphs } from "../data/passage";
 
 interface Props {
   plate: SmallPlate;
@@ -8,7 +9,8 @@ interface Props {
 
 const { plate } = Astro.props;
 
-const metaLines = [plate.location, plate.date].filter(Boolean);
+const metaLines = [plate.location, plate.date, plate.time].filter(Boolean);
+const passage = paragraphs(plate.passage);
 ---
 
 <div class="plate-small">
@@ -32,7 +34,9 @@ const metaLines = [plate.location, plate.date].filter(Boolean);
       </div>
       {plate.caption ? <div class="plate-small__context">{plate.caption}</div> : null}
     </div>
-    {plate.passage ? <p class="plate-small__passage">{plate.passage}</p> : null}
+    {passage.map((para) => (
+      <p class="plate-small__passage">{para}</p>
+    ))}
   </div>
 </div>
 

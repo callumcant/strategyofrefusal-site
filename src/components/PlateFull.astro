@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { FullBleedPlate } from "../data/schema";
+import { paragraphs } from "../data/passage";
 
 interface Props {
   plate: FullBleedPlate;
@@ -12,6 +13,7 @@ const { plate, marginTop = "30px" } = Astro.props;
 // A sequence shot in one place states location and date on the first plate
 // only, so any of these may be absent.
 const metaLines = [plate.location, plate.date, plate.time].filter(Boolean);
+const passage = paragraphs(plate.passage);
 ---
 
 <div class="plate-full" style={`margin-top:${marginTop}`}>
@@ -37,10 +39,14 @@ const metaLines = [plate.location, plate.date, plate.time].filter(Boolean);
     </div>
   </div>
   {
-    plate.passage ? (
+    passage.length > 0 ? (
       <div class="plate-full__passage-row">
         <div />
-        <p class="plate-full__passage">{plate.passage}</p>
+        <div>
+          {passage.map((para) => (
+            <p class="plate-full__passage">{para}</p>
+          ))}
+        </div>
       </div>
     ) : null
   }

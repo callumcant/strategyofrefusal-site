@@ -18,6 +18,11 @@ language as you go** — he has asked for this explicitly and wants to learn fro
 the work. Name the concept, say what it does, move on. Don't pad, and don't skip
 the explanation either.
 
+He works by looking at the page and reacting, so **get something on screen
+early and expect to revise it**. When he asks for a change that would silently
+lose text he wrote, make the change he asked for and say plainly what went, so
+he can put it back — don't quietly reinterpret the instruction to preserve it.
+
 ## Layout
 
 ```
@@ -53,17 +58,18 @@ with an empty body falls back to its one-line `indexDescription`, which is what
 
 Things that will catch you out:
 
-1. **Two counts are still stated by hand, on purpose.** `src/data/archive.ts`
-   holds `journalTotal = 7`, `writingTotal = 11` and `scopeRecordTotal = 68`.
+1. **Three counts are still stated by hand, on purpose.** `src/data/archive.ts`
+   holds `journalTotal = 11`, `writingTotal = 10` and `scopeRecordTotal = 61`.
    The archive is bigger than what is published, so these cannot be counted from
    the files — the home page lists a selection but states the true size. They
    are the numbers that go stale. Everything countable (series and books counts,
-   the frame total) is derived at build time.
+   the frame total) is derived at build time. **Delete each one the moment its
+   collection holds every real record** and count the files instead.
 2. **Order is derived from `ref`, not from file order.** Series sort ascending
    (S-01 first); books, journal and writing sort descending (newest first). A
    record's position comes from its `ref`, so refs must stay well-formed and
    zero-padded.
-3. **`detail` on a series is optional.** Only `S-02` has one. `[slug].astro`
+3. **`detail` on a series is optional.** `S-02` and `S-05` have one. `[slug].astro`
    builds a page either way: with `detail` it renders the standfirst, record
    block and plates; without, it falls back to `indexDescription` and a "still
    being catalogued" note. So a new series is one file and it gets a working
@@ -95,23 +101,58 @@ Things that will catch you out:
      size of the image, not whether prose is allowed: `caption` is the short
      note in sans, `passage` is the long-form prose in serif, and a plate can
      have either, both or neither.
-5. **Photographs must have their EXIF metadata stripped before they enter the
-   repo.** This is a safety requirement. These are photographs of workers in
-   live disputes, and EXIF carries GPS coordinates, capture times and camera
-   serial numbers — enough to place a person at a workplace on a date. The four
-   sample images have been stripped already. **Never add a step that preserves
-   or restores EXIF**, and don't propose reading capture dates out of the files
-   to save typing: the dates are typed by hand on purpose.
+5. **Photographs must have their metadata stripped before they enter the repo.**
+   This is a safety requirement. These are photographs of workers in live
+   disputes, and a straight-from-camera JPEG carries around fifty tags: GPS
+   where present, capture times to the second, and the camera **body serial
+   number**, which ties every photograph ever published to one camera and so to
+   Callum. **Run `npm run photos` on any new batch before committing** — it
+   strips everything and downscales to 2560px, and every line of its output
+   must say `clean`. It is safe to re-run and skips files already done.
+   **Never add a step that preserves or restores metadata**, and don't propose
+   reading capture dates out of the files to save typing: the dates are typed
+   by hand on purpose. The ten S-05 frames arrived with 54 tags each.
 6. **Photographs are referenced by relative path from the markdown file** —
    `image: ../../assets/photographs/4-DSCF8458.jpg` — and resolved by the
    schema's `image()` helper. That is what lets Astro optimise them; the build
-   converts the four JPEGs to WebP at roughly half the file size. A photograph
+   converts the JPEGs to WebP at roughly two thirds the file size. A photograph
    dropped into `public/` would be served exactly as-is, at full weight, which
    is why none are there. They live in one shared folder rather than beside the
    markdown because several records reuse the same frame.
 7. **The types in `src/data/schema.ts` are derived from the schemas**, not
    written by hand. Components import `SeriesEntry`, `Plate`, `BookEntry` and so
    on from there. Change `content.config.ts` and the types follow.
+
+## Adding a series
+
+This is the live work: fourteen more series to go. `S-05` is the worked
+example — read `src/content/series/s-05.md` before starting a new one.
+`INVENTORY.md` tracks what has landed.
+
+1. **Photographs first.** They go in `src/assets/photographs/` named
+   `s06-01.jpg` upward, in the order Callum gives them. **Run `npm run photos`
+   and check every line says `clean` before anything is committed.**
+2. **Write the alt text by looking at the photographs.** Read the image files;
+   don't paraphrase the caption. The alt describes the frame, the caption says
+   what is happening.
+3. **`ref` is positional, not the frame's identity** — `03 / 10` means the
+   third plate of ten shown, so the numbers stay ascending down the page even
+   when the sequence is reordered. `S-02` follows the same convention with four
+   plates selected from forty-one. A diptych takes both numbers: `06–07 / 10`.
+4. **A single-day sequence states `location` and `date` on plate 01 only.**
+   Repeating them down the page is noise.
+5. **Expect several rounds on the shapes.** Callum reads the page and comes
+   back with "02 should be small", "swap 03 and 04", "delete all captions". The
+   shapes are cheap to change — it is one field — so build it, let him look,
+   change it. Don't try to get the rhythm right first time.
+6. **Say which words are yours.** Alt text, any caption you drafted, any
+   location or date you inferred. He needs to know what to check.
+7. **Update `INVENTORY.md` in the same commit.**
+
+Things only Callum can supply, so ask rather than invent: the standfirst, the
+one-line `indexDescription`, the record `note` (his `S-02` draft used it for a
+consent line, which matters when a plate shows an identifiable worker), and
+anything naming a person or an employer.
 
 ## Design rules
 
@@ -138,9 +179,22 @@ looking at it.
 ```bash
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # → dist/ ; currently 7 pages
+npm run build    # → dist/ ; currently 9 pages
 npm run preview  # serve the built dist/ as Netlify will
+npm run photos   # strip metadata + downscale new photographs
 ```
+
+**There is no browser driver installed.** For a screenshot — worth taking when
+a layout question is easier to see than to reason about — headless Chrome
+works without one:
+
+```bash
+chrome --headless=new --hide-scrollbars --virtual-time-budget=12000 \
+  --window-size=1400,7000 --screenshot=out.png http://localhost:4321/series/s-05
+```
+
+Crop it with `sharp` (already a dependency, via Astro) to look at one plate
+closely. Run any such script from the repo root so `sharp` resolves.
 
 **If the page in the browser disagrees with the code, restart the dev server
 before believing the browser.** Rewriting a component's whole `<style>` block
@@ -174,8 +228,9 @@ Netlify builds on push to `main`.
 - **Three of the six nav items go nowhere.** `TopBar.astro` lists Journal,
   Writing and Index with no `href`, so they render as dead text. Journal and
   Writing have collections but no page; Index has neither.
-- **The content is placeholder.** Four photographs, one series with plates,
-  sample records in every collection, and the `audio` collection is empty.
+- **Almost all the content is still placeholder.** `S-05` is the only real
+  record in the archive. `S-01` to `S-04` are sample data and are due to be
+  replaced, as are the books, journal and writing records; `audio` is empty.
   `INVENTORY.md` in the repo root tracks what is real and what is still
   sample data — keep it current, it is what survives between sessions.
 - **`getCollection("audio")` warns on every build** while the collection is
@@ -189,8 +244,12 @@ Netlify builds on push to `main`.
   a standalone paragraph — the home page's featured caption, for instance, runs
   straight into an accented series reference. Only the lead prose moved to the
   body.
-- The series index and books page still hardcode their headline word count —
-  `["Four", "disputes,"]` and `["Three", "books"]`. Nothing computes them.
+- **The series index headline is now wrong.** `series/index.astro` hardcodes
+  `["Four", "disputes,"]` and there are five series since `S-05` landed, so the
+  page reads "Four disputes" above a list of five. The books page has the same
+  hardcoded `["Three", "books"]`. Nothing computes either. This needs a
+  number-to-word helper before the next series is added, or it will be wrong
+  again immediately.
 - The masthead scope line lists "PHOTOGRAPHS, BOOKS, JOURNAL, WRITING" and does
   not mention audio, now that audio exists. Callum's copy to change.
 - No custom domain, no analytics, no sitemap or RSS.

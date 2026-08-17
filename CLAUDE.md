@@ -262,7 +262,11 @@ Netlify builds on push to `main`.
 
 - **Three of the six nav items go nowhere.** `TopBar.astro` lists Journal,
   Writing and Index with no `href`, so they render as dead text. Journal and
-  Writing have collections but no page; Index has neither.
+  Writing have collections but no page; Index has neither. The home page's
+  section headings work the same way: `ShellSectionHead` takes an optional
+  `href` that makes the count and its `→` a link, and Series, Books and Audio
+  have one while Journal and Writing do not. Give those two a page and the
+  arrows can be wired up in the same line.
 - **Most of the content is still placeholder.** `audio` is the only complete
   collection. `S-01`, `S-05` and `S-06` are real. `S-02` to `S-04` are sample
   data and are due to be replaced, as are the books, journal and writing

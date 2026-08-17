@@ -1,15 +1,20 @@
 ---
+// href is optional because not every section has an index page yet: Journal and
+// Writing have collections but nowhere to go, so their count renders as plain
+// text and the arrow does not pretend to be a link. Same bargain TopBar makes
+// with its dead nav items.
 interface Props {
   title: string;
   countLabel: string;
+  href?: string;
 }
 
-const { title, countLabel } = Astro.props;
+const { title, countLabel, href } = Astro.props;
 ---
 
 <div class="section-head">
   <div class="section-head__title">{title}</div>
-  <div class="section-head__count">{countLabel}</div>
+  <div class="section-head__count">{href ? <a href={href}>{countLabel}</a> : countLabel}</div>
 </div>
 
 <style>
@@ -32,6 +37,11 @@ const { title, countLabel } = Astro.props;
     font: 500 12px "IBM Plex Mono", monospace;
     color: var(--cream);
     white-space: nowrap;
+  }
+
+  .section-head__count a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   @media (max-width: 700px) {

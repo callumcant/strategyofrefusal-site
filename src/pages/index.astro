@@ -48,7 +48,11 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     </div>
 
     <section class="section section--series">
-      <ShellSectionHead title="Series" countLabel={`${pad(series.length)} RECORDS · ${totalFrames} FRAMES →`} />
+      <ShellSectionHead
+        title="Series"
+        countLabel={`${pad(series.length)} RECORDS · ${totalFrames} FRAMES →`}
+        href="/series"
+      />
       {series.map((item, i) => <SeriesRow item={item} last={i === series.length - 1} />)}
     </section>
 
@@ -65,7 +69,7 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     />
 
     <section class="section section--books">
-      <ShellSectionHead title="Books" countLabel={`${pad(books.length)} RECORDS →`} />
+      <ShellSectionHead title="Books" countLabel={`${pad(books.length)} RECORDS →`} href="/books" />
       {
         books.map((b, i) => (
           <PublicationRow
@@ -81,7 +85,7 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     </section>
 
     <section class="section section--audio">
-      <ShellSectionHead title="Audio" countLabel={`${pad(audioAll.length)} EPISODES →`} />
+      <ShellSectionHead title="Audio" countLabel={`${pad(audioAll.length)} EPISODES →`} href="/audio" />
       {
         audio.map((e, i) => (
           <PublicationRow

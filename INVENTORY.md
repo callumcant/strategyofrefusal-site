@@ -106,7 +106,9 @@ trip, small enough to check before moving on.
   real total, counted from the files. Listing all 22 would swamp a page whose
   other sections run to two or three rows.
 - **Journal, Writing and Index are still dead nav items.** Journal and Writing
-  have collections but no page; Index has neither.
+  have collections but no page; Index has neither. Their home page section
+  arrows are therefore unlinked too, while Series, Books and Audio point at
+  their indexes.
 - **`S-02` still cross-references `EP-64`, which does not exist** — the run only
   reaches EP-22. It is sample data inside a sample series, so it will go when
   S-02 is replaced, but a real series can now link an episode properly: a

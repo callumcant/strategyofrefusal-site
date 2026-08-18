@@ -4,7 +4,14 @@ import ShellFrame from "../components/ShellFrame.astro";
 import TopBar from "../components/TopBar.astro";
 import DisplayHeading from "../components/DisplayHeading.astro";
 import Footer from "../components/Footer.astro";
+import PhotoRecord from "../components/PhotoRecord.astro";
+import { getEntry } from "astro:content";
 import { LICENCE_NAME, LICENCE_URL, LICENCE_SUMMARY } from "../data/archive";
+
+// The featured frame at the foot, as on every index page. Plate 13 of S-01
+// carries no caption in its sequence, so this one renders as the photograph,
+// its reference and its meta alone — the same as the writing page's.
+const featuredFrame = (await getEntry("frames", "about"))!.data;
 
 // Three fields: the bio, the email, the licence. The archive totals, the
 // start year and the list of books were all here and were all cut in August
@@ -52,6 +59,17 @@ const fields = [
         </div>
       </dl>
     </div>
+
+    <PhotoRecord
+      image={featuredFrame.image}
+      alt={featuredFrame.alt}
+      height={featuredFrame.height}
+      objectPosition={featuredFrame.objectPosition}
+      plateRef={featuredFrame.ref}
+      location={featuredFrame.location}
+      date={featuredFrame.date}
+      caption={featuredFrame.caption}
+    />
 
     <Footer left="KEPT BY CALLUM CANT, ORGANISER · CALLUMCANT@GMAIL.COM" right={LICENCE_NAME} rightHref={LICENCE_URL} />
   </ShellFrame>

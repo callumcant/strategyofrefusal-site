@@ -21,7 +21,7 @@ const { image, alt, height, objectPosition, plateRef, location, date, extra, cap
   Astro.props;
 ---
 
-<div class="photo-record" style={`--plate-h:${height}px`}>
+<div class="photo-record" style={`--plate-h:${height}`}>
   <Image
     src={image}
     alt={alt}
@@ -54,10 +54,19 @@ const { image, alt, height, objectPosition, plateRef, location, date, extra, cap
     background: var(--cream);
   }
 
+  /* The stated height is the height at a 1400px window, not a fixed height:
+     past that the band grows taller in proportion so the crop stays as
+     framed instead of flattening into a slice. Below 1400px the min-height
+     holds the stated height, which is the old behaviour. */
   .photo-record__img {
     display: block;
     width: 100%;
-    height: var(--plate-h);
+    /* height: auto overrides the width/height attributes Astro puts on the
+       <img>; without it the attribute height wins and aspect-ratio is ignored. */
+    height: auto;
+    aspect-ratio: 1400 / var(--plate-h);
+    min-height: calc(var(--plate-h) * 1px);
+    max-height: 90vh;
     object-fit: cover;
   }
 

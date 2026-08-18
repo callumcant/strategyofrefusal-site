@@ -260,6 +260,24 @@ anything naming a person or an employer.
   plate reference sits against the viewport edge while every other reference on
   the page starts 330px in. `min()` makes the whole thing a no-op below 1240px,
   so the mobile breakpoints are untouched.
+- **A full-bleed photograph's `height` is its height at a 1400px window, not a
+  fixed height.** `PlateFull` (the `full` plate shape) and `PhotoRecord` (the
+  featured band on the index pages) both size the frame with
+  `aspect-ratio: 1400 / var(--plate-h)` and a `min-height` of the stated
+  number, so below 1400px nothing has changed and above it the frame grows
+  taller in proportion. It used to be a fixed pixel height with
+  `object-fit: cover`, which meant a wide monitor got a wider, flatter box and
+  `cover` cropped the frame into a letterbox slice — a `530` plate went from
+  2.6:1 to 4.8:1 across the range. Two traps if this is ever touched.
+  **The custom property is unitless** (`--plate-h:530`, turned back into a
+  length with `calc(var(--plate-h) * 1px)`), because CSS cannot divide one
+  length by another, so `100vw / 1400px` is not expressible and `aspect-ratio`
+  with two plain numbers is what gets the same result. And **`height: auto` is
+  load-bearing**: Astro's `<Image>` writes `width` and `height` attributes onto
+  the `<img>`, and a specified height makes the browser ignore `aspect-ratio`
+  entirely — leave it out and every plate renders at the source file's own
+  height at every window width. A `max-height: 90vh` stops an ultrawide getting
+  a plate taller than the screen.
 - **No rounded corners and no shadows, anywhere.** This is enforced globally
   with `border-radius: 0 !important` and `box-shadow: none !important` on `*`.
   Any component that appears to need either is fighting the design, not the CSS.
@@ -384,7 +402,9 @@ Netlify builds on push to `main`.
   names inside it. The archive totals, the start year and the list of books
   were all on this page and were all cut: the counts belong on the pages
   holding the records, and the books are named in the bio and listed on
-  `/books`.
+  `/books`. It also carries a featured photograph at the foot, added August
+  2026 — the same `PhotoRecord` the index pages use, fed by `frames/about.md`
+  (S-01.13, Callum's choice), which makes About the seventh page with a frame.
 - **Nothing in `src/content/` is sample data any more.** The three placeholder
   sequences were deleted in August 2026 and every `frames` record now points at
   a real plate from `S-01`, `S-02` or `S-03`, with the plate's own caption.

@@ -13,7 +13,7 @@ Target sizes given by Callum, August 2026.
 | Journal  | 11 | 11 | **yes** | **Complete.** Issues 17–27 of Notes from Below, scraped from their issue pages. Every one has a record page at `/journal/j-nn` |
 | Audio    | 22 | 22 | **yes** | **Complete.** All 22 episodes of Workers' Inquiry, catalogued from the podcast's RSS feed. Every one has a record page at `/audio/ep-nn` |
 | Writing  | 19 | 19 | **yes** | **Complete.** Nineteen articles, 2018-2024, scraped from Notes from Below, Novara Media, Vice, the Guardian and three academic journals |
-| Frames   | 6  | 6 | **yes** | One featured photograph per shell page — home, photos, books, journal, audio, writing. All six are real plates from S-01, S-02 and S-03 |
+| Frames   | 7  | 7 | **yes** | One featured photograph per shell page — home, photos, books, journal, audio, writing, about. All seven are real plates from S-01, S-02 and S-03 |
 
 ## The renumbering, August 2026
 
@@ -45,16 +45,22 @@ points at a real plate, with its alt text, caption, location and date intact:
 | journal | S-02.02 | An academic confronts the Vice-Chancellor… |
 | audio | S-01.02 | News of the strike spreads via short form video |
 | writing | S-02.07 | *none — the plate has no caption* |
+| about | S-01.13 | *none — the plate has no caption* |
 
-**Which six were chosen is half Callum's**: he picked S-01.01 for the photos
-page and S-02.07 for writing. The other four were picked here and each is one
-field to change. The captions are all his.
+**Which seven were chosen is half Callum's**: he picked S-01.01 for the photos
+page, S-02.07 for writing and S-01.13 for about. The other four were picked here
+and each is one field to change. The captions are all his.
 
-**The writing frame is the only one with no caption**, because plate 07 of S-02
-carries none in the sequence either. `caption` was made optional on the frames
-schema rather than invent one; `PhotoRecord` then renders the photograph, its
-reference and its meta alone. Its location and date are **inferred** — plate 07
-states neither, so it takes them from plate 06, the last plate that does.
+**Two frames carry no caption** — writing and about — because plate 07 of S-02
+and plate 13 of S-01 carry none in their sequences either. `caption` was made
+optional on the frames schema rather than invent one; `PhotoRecord` then renders
+the photograph, its reference and its meta alone. Both frames' locations and
+dates are **inferred** in the same way: neither plate states them, so each takes
+them from the last plate that does — plate 06 for writing, plate 12 for about.
+
+**The about frame landed in August 2026**, on Callum's instruction, so that the
+About page closes the way the index pages do. He chose the frame (S-01.13); the
+crop, the height and the inferred meta were picked here.
 
 Their four original photographs (`1-DSCF6025.jpg`, `2-DSCF2894.jpg`,
 `3-DSCF2021.jpg`, `4-DSCF8458.jpg`) are now referenced by nothing. The build

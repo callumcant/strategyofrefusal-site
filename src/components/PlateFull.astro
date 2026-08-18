@@ -16,13 +16,13 @@ const metaLines = [plate.location, plate.date, plate.time].filter(Boolean);
 const passage = paragraphs(plate.passage);
 ---
 
-<div class="plate-full" style={`margin-top:${marginTop}`}>
+<div class="plate-full" style={`margin-top:${marginTop};--plate-h:${plate.height}`}>
   <Image
     src={plate.image}
     alt={plate.alt}
     inferSize
     class="plate-full__img"
-    style={`height:${plate.height}px${plate.objectPosition ? `;object-position:${plate.objectPosition}` : ""}`}
+    style={plate.objectPosition ? `object-position:${plate.objectPosition}` : undefined}
   />
   <div class="plate-full__caption">
     <div class="plate-full__ref">{plate.ref}</div>
@@ -53,9 +53,19 @@ const passage = paragraphs(plate.passage);
 </div>
 
 <style>
+  /* The stated height is the height at a 1400px window, not a fixed height:
+     past that the frame grows taller in proportion so the crop stays as
+     framed instead of flattening into a slice. Below 1400px the min-height
+     holds the stated height, which is the old behaviour. */
   .plate-full__img {
     display: block;
     width: 100%;
+    /* height: auto overrides the width/height attributes Astro puts on the
+       <img>; without it the attribute height wins and aspect-ratio is ignored. */
+    height: auto;
+    aspect-ratio: 1400 / var(--plate-h);
+    min-height: calc(var(--plate-h) * 1px);
+    max-height: 90vh;
     object-fit: cover;
   }
 

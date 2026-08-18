@@ -1,17 +1,25 @@
 ---
 import type { BookEntry } from "../data/schema";
 
+// tone works as it does on PublicationRow: "shell" is cream on blue, "paper"
+// is ink on the cream archive block.
 interface Props {
   entry: BookEntry;
   first?: boolean;
   last?: boolean;
+  tone?: "shell" | "paper";
 }
 
-const { entry, first, last } = Astro.props;
+const { entry, first, last, tone = "shell" } = Astro.props;
 const book = entry.data;
 ---
 
-<div class="book-row" data-first={first ? "true" : undefined} data-last={last ? "true" : undefined}>
+<div
+  class="book-row"
+  data-tone={tone}
+  data-first={first ? "true" : undefined}
+  data-last={last ? "true" : undefined}
+>
   <div class="book-row__refyear">{book.ref}<br />{book.year}</div>
   <div>
     <div class="book-row__title">{book.title}</div>
@@ -107,6 +115,46 @@ const book = entry.data;
   a.book-row__action:hover {
     color: var(--cream);
     border-bottom-width: 2px;
+  }
+
+  /* Ink on the cream block — see PublicationRow for the same pair. */
+  .book-row[data-tone="paper"] {
+    border-top-color: var(--rule-ink);
+  }
+
+  .book-row[data-tone="paper"][data-first] {
+    border-top: 2px solid var(--ink);
+  }
+
+  .book-row[data-tone="paper"][data-last] {
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .book-row[data-tone="paper"] .book-row__refyear,
+  .book-row[data-tone="paper"] .book-row__byline {
+    color: var(--ground-accent);
+  }
+
+  .book-row[data-tone="paper"] .book-row__title {
+    color: var(--ink);
+  }
+
+  .book-row[data-tone="paper"] .book-row__subtitle,
+  .book-row[data-tone="paper"] .book-row__facts {
+    color: var(--ink-60);
+  }
+
+  .book-row[data-tone="paper"] .book-row__desc :global(p) {
+    color: var(--ink);
+  }
+
+  .book-row[data-tone="paper"] .book-row__action {
+    border-bottom-color: var(--ground-accent);
+    color: var(--ground-accent);
+  }
+
+  .book-row[data-tone="paper"] a.book-row__action:hover {
+    color: var(--ground-accent);
   }
 
   @media (max-width: 700px) {

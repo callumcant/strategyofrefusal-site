@@ -1,0 +1,27 @@
+---
+// The paper-coloured block the archive rows sit in, so every index page reads
+// the same way: blue heading block at the top, rows on paper below it, and a
+// photograph at the foot. The photo sequences index has always looked like
+// this — IndexTable is the same idea with a column header attached — and the
+// publication indexes were brought into line in August 2026.
+//
+// Rows inside must be told to switch to their ink-on-paper colours: pass
+// tone="paper" to PublicationRow or BookRow.
+---
+
+<div class="archive-block">
+  <slot />
+</div>
+
+<style>
+  .archive-block {
+    background: var(--cream);
+    padding: 26px var(--page-pad) 30px;
+  }
+
+  @media (max-width: 700px) {
+    .archive-block {
+      padding: 20px 20px 24px;
+    }
+  }
+</style>

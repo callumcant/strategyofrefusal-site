@@ -8,16 +8,57 @@ Target sizes given by Callum, August 2026.
 
 | Collection | Target | Landed | Real? | Status |
 | --- | --- | --- | --- | --- |
-| Series   | 15 | 6 | 3 real | S-05 Too Hot to Work is complete. S-06 The Death of a University has all 18 plates; 9 of them carry notes, the other 9 are still photograph-and-reference only. S-01 Chasing the Wildcat has all 17 plates but no prose at all — no standfirst and no passages. S-02 to S-04 are placeholder and need replacing |
+| Sequences | 15 | 3 | **all real** | S-01 Chasing the Wildcat: 17 plates, 12 captioned, no standfirst and no passages at all. S-02 The Death of a University: 16 plates covering 17 frames, 8 carrying a caption or a passage, 8 still photograph-and-reference only. S-03 Too Hot to Work: complete — 9 plates covering 10 frames, 6 with passages. The three placeholders were deleted in August 2026 and these three renumbered into the gap |
 | Books    | 3  | 3 | **yes** | **Complete.** Riding for Deliveroo, Feeding the Machine, The Future in Our Past — scraped from the three publishers |
 | Journal  | 11 | 11 | **yes** | **Complete.** Issues 17–27 of Notes from Below, scraped from their issue pages. Every one has a record page at `/journal/j-nn` |
 | Audio    | 22 | 22 | **yes** | **Complete.** All 22 episodes of Workers' Inquiry, catalogued from the podcast's RSS feed. Every one has a record page at `/audio/ep-nn` |
-| Writing  | 10 | 3 | no  | Placeholder records; target to be confirmed |
-| Frames   | 3  | 3 | no  | Featured photograph per shell page |
+| Writing  | 19 | 19 | **yes** | **Complete.** Nineteen articles, 2018-2024, scraped from Notes from Below, Novara Media, Vice, the Guardian and three academic journals |
+| Frames   | 6  | 6 | **yes** | One featured photograph per shell page — home, photos, books, journal, audio, writing. All six are real plates from S-01, S-02 and S-03 |
 
-Everything in `src/content/` other than S-01, S-05, S-06 and the audio, journal
-and books collections is sample data from the original build and should be
-treated as disposable.
+## The renumbering, August 2026
+
+The three placeholder sequences were deleted, and Callum then renumbered the
+three real ones into the gap they left:
+
+| Was | Now | Title |
+| --- | --- | --- |
+| S-01 | S-01 | Chasing the Wildcat |
+| S-06 | **S-02** | The Death of a University |
+| S-05 | **S-03** | Too Hot to Work |
+
+**The photographs were renamed with them** — `s06-*.jpg` became `s02-*.jpg` and
+`s05-*.jpg` became `s03-*.jpg` — so a filename still names the sequence its
+frame belongs to, which is the convention the whole folder runs on. The image
+numbering inside each sequence was left exactly as it was, including the places
+where it never matched the plate numbers (S-02's plate 09 is `s02-10.jpg`).
+**The next new sequence is `S-04`.** Anything written before this date that
+mentions S-05 or S-06 means these two.
+
+**There is no sample data left in `src/content/`.** Every `frames` record now
+points at a real plate, with its alt text, caption, location and date intact:
+
+| Page | Plate | Caption |
+| --- | --- | --- |
+| home | S-01.04 | The pickets celebrate |
+| photos | S-01.01 | A picket guards the entrance to a dark kitchen |
+| books | S-03.01 | Even this early in the morning, the sun is already hot… |
+| journal | S-02.02 | An academic confronts the Vice-Chancellor… |
+| audio | S-01.02 | News of the strike spreads via short form video |
+| writing | S-02.07 | *none — the plate has no caption* |
+
+**Which six were chosen is half Callum's**: he picked S-01.01 for the photos
+page and S-02.07 for writing. The other four were picked here and each is one
+field to change. The captions are all his.
+
+**The writing frame is the only one with no caption**, because plate 07 of S-02
+carries none in the sequence either. `caption` was made optional on the frames
+schema rather than invent one; `PhotoRecord` then renders the photograph, its
+reference and its meta alone. Its location and date are **inferred** — plate 07
+states neither, so it takes them from plate 06, the last plate that does.
+
+Their four original photographs (`1-DSCF6025.jpg`, `2-DSCF2894.jpg`,
+`3-DSCF2021.jpg`, `4-DSCF8458.jpg`) are now referenced by nothing. The build
+ignores them; they were left in `src/assets/photographs/` rather than deleted.
 
 ## Audio
 
@@ -93,6 +134,56 @@ adding J-28:
   `format` is the file type and becomes the field label, so it renders as
   "EPUB Download →".
 
+## Writing
+
+The 19 records are Callum's published articles, scraped from the seven outlets
+that published them in August 2026, from a list of URLs Callum gave. Things to
+know before adding W-20:
+
+- **Refs run oldest first**, as the books do: W-01 is January 2018 and W-19 is
+  August 2024. The index sorts them newest-first off the ref, so a new piece
+  takes the next number up.
+- **The prose is the publisher's, but the standfirsts are trimmed, not
+  quoted.** The one-line `description` starts as the outlet's own standfirst,
+  lifted from the page's `og:description` meta tag; for the three research
+  articles it is the opening sentence of the abstract. The full abstract is the
+  markdown body, which is why only W-07, W-14 and W-16 have one.
+- **Every mention of Callum has been cut out of the standfirsts, on his
+  instruction, August 2026.** Seven of them named him — the Guardian's ended
+  "says sociologist Callum Cant", Novara's "writes Callum Cant", NFB's W-19
+  opened "George and Callum critically examine". In an archive of his own
+  writing the third person read as though someone else were describing him.
+  The substance of each line is still the outlet's; only the attribution went.
+  Three needed more than a clean cut, and those three lines are part mine:
+  **W-10**, where the attribution was the whole second sentence, so "Callum
+  Cant reports on the longest strike to ever hit the UK gig economy" became an
+  em-dashed clause on the first; **W-15**, where cutting "asks the sociologist
+  and author Callum Cant" left a comma that had to become a question mark; and
+  **W-19**, reworded to "A critical examination of…" because the names were the
+  subject of the sentence. Check those three.
+- **W-04's typo was fixed, not carried.** Vice's standfirst read "have shown
+  its possible"; it now reads "it's". Same instruction, same day.
+- **Three articles are peer-reviewed research, and they carry `citation` and
+  `doi`.** Both are optional, so a piece of journalism simply leaves them off
+  and the facts column shows publication and date alone.
+- **W-16's year is contestable.** *The poverty of ethical AI* went online at
+  Springer on 20 December 2023 but was printed in AI & Society 40(2), which is
+  February 2025. The record says 2023 — first publication — and the citation
+  carries the volume. If it should be cited as 2025, that is a one-field change.
+- **How each site was read.** Novara, Vice, the Guardian and Notes from Below
+  are plain server-rendered pages: `curl` them and read `og:title` and
+  `og:description`. NFB puts the byline in the description as "by Callum Cant
+  // standfirst", so the prefix was stripped, and its date is in a
+  `<meta name="date">` tag. **The three publishers cannot be scraped the same
+  way** — Springer 303-redirects to an identity provider, and Sage returns its
+  homepage to anything that is not a browser. Their metadata and abstracts came
+  from **the Crossref API** instead: `https://api.crossref.org/works/<doi>`
+  returns title, authors, container, dates, volume, issue, pages and the
+  abstract as JSON. That is the route to use for any future journal article.
+- **The bodies are stored but not shown.** The writing index renders the
+  one-line description only, so the three abstracts sit in the repo unused.
+  Showing them is a change to `src/pages/writing/index.astro` and nothing else.
+
 ## Books
 
 The three records are Callum's own books, scraped from each publisher in August
@@ -122,33 +213,36 @@ The three records are Callum's own books, scraped from each publisher in August
 
 ## Order of work
 
-Callum's order — series first, because it is the spine of the archive.
+Callum's order — the photo sequences first, because they are the spine of
+the archive.
 
-1. **Series records** — 9 fields each. Gets all fifteen disputes onto the site
-   with working pages, before any photograph exists. Replaces S-02 to S-04.
-2. **Series detail and plates** — the heavy one. Needs the photographs, and
+1. **Sequence records** — 9 fields each. Gets all fifteen disputes onto the site
+   with working pages, before any photograph exists. Twelve to go, running on
+   from `S-04`.
+2. **Sequence detail and plates** — the heavy one. Needs the photographs, and
    every location, date and time typed by hand (no EXIF).
 3. ~~**Books**~~ — done, August 2026. Three books, scraped from their publishers.
 4. ~~**Audio**~~ — done, August 2026. All 22 episodes with a page each.
 5. ~~**Journal**~~ — done, August 2026. Issues 17-27, with a page each.
-6. **Writing** — 4 fields each, no prose. Target still to be confirmed.
+6. ~~**Writing**~~ — done, August 2026. Nineteen articles, scraped from the
+   seven outlets that published them.
 
 Batches of five to eight records per exchange: big enough to be worth the round
 trip, small enough to check before moving on.
 
 ## Conventions
 
-- Refs: `S-nn` series, `B-nn` books, `J-nn` journal, `EP-nn` audio, `W-nn`
+- Refs: `S-nn` photo sequences, `B-nn` books, `J-nn` journal, `EP-nn` audio, `W-nn`
   writing. Zero-padded — **order on the page is derived from the ref**, so a
   malformed one sorts to the wrong place.
-- Filenames are lowercase refs: `s-05.md`, `ep-64.md`. The filename is the URL.
-- Series sort ascending (S-01 first). Everything else sorts newest-first.
+- Filenames are lowercase refs: `s-03.md`, `ep-64.md`. The filename is the URL.
+- Sequences sort ascending (S-01 first). Everything else sorts newest-first.
 - Every field in the schema is required. A record that isn't ready yet should
   not be committed half-filled — it will fail the build.
 
 ## Photographs
 
-- Go in `src/assets/photographs/`, named `s05-01.jpg` and so on, referenced from
+- Go in `src/assets/photographs/`, named `s03-01.jpg` and so on, referenced from
   frontmatter by relative path.
 - **Run `npm run photos` before committing any new batch.** It strips every
   metadata tag and downscales to 2560px. This is a safety requirement, not an
@@ -161,27 +255,65 @@ trip, small enough to check before moving on.
 
 ## Open questions
 
-- **Writing target is provisional** — "probably around 10". Confirm before the
-  writing totals in `src/data/archive.ts` are trusted.
-- **The scope line reads `61 RECORDS · 2019 —`**, the sum of the five targets.
-  It becomes countable — and `archive.ts` becomes deletable — once every
-  collection holds its real records.
-- **The masthead scope line covers audio now** — "PHOTOGRAPHS, BOOKS, PODCASTS,
-  JOURNAL, WRITING". Callum's copy to change, not mine.
-- **The home page shows the newest 4 audio episodes of 22, and the newest 4
-  journal issues of 11.** `audioShown` and `journalShown` in
-  `src/pages/index.astro` set how many; the count beside each heading is the
-  real total, counted from the files. Listing all of either would swamp a page
-  whose other sections run to two or three rows.
-- **Writing and Index are still dead nav items.** Writing has a collection but
-  no page; Index has neither. Their home page section arrows are therefore
-  unlinked too, while Series, Books, Audio and Journal point at their indexes.
-- **`S-02` still cross-references `EP-64`, which does not exist** — the run only
-  reaches EP-22. It is sample data inside a sample series, so it will go when
-  S-02 is replaced, but a real series can now link an episode properly: a
-  `related` entry takes an `href`, so `{ ref: EP-11, href: /audio/ep-11 }`
-  renders as a working link.
-- **The series index headline still reads "Four disputes".** It is hardcoded in
-  `src/pages/series/index.astro`; there are now six. The frame count beside it
-  is derived and correct. Callum's copy — spelled-out numbers, so it cannot
-  simply be computed.
+- **The writing target was "probably around 10"; nineteen articles landed.**
+  The target in the table above and `scopeRecordTotal` in `src/data/archive.ts`
+  were both raised to match, and `writingTotal` was deleted — the count now
+  comes from the files. **Confirm these nineteen are the whole of it.** If more
+  are still to come, the writing count on the home page will understate itself
+  until they land, which is the situation the stated totals existed to solve.
+- **The scope line reads `70 RECORDS · 2018 —`**, the sum of the five targets:
+  15 + 3 + 11 + 22 + 19. It was 61 when writing was targeted at 10, and the
+  start year was 2019 until Callum corrected it to 2018 in August 2026 — the
+  year of the earliest record in the archive, W-01. Only the sequences are
+  still short of their target, so this becomes countable — and `archive.ts`
+  becomes deletable — once all fifteen have landed.
+- **The masthead reads "AN ARCHIVE OF CLASS STRUGGLE IN BRITAIN"**, Callum's
+  wording, August 2026. **The list of formats that used to follow it —
+  "PHOTOGRAPHS, BOOKS, PODCASTS, JOURNAL, WRITING" — went with the rewrite**,
+  and is recorded here in case it is wanted back.
+- **The home page shows three of every section.** `homeShown` in
+  `src/pages/index.astro` is a single number slicing all five; the count beside
+  each heading is the collection's real length, counted from the files.
+- **The reader sees "photo sequences", the code still says `series`.** Renamed
+  in the visible copy only, August 2026, on Callum's instruction, and the URLs
+  were deliberately left alone: `/series/s-03` and the `S-nn` refs are
+  unchanged, as is the content folder. The nav item reads "Photo", the index
+  column header reads "SEQUENCE", the footer link reads "Sequence index".
+- **Every nav item goes somewhere now.** Index was replaced by About, and
+  `/about` exists. It is three fields — bio, email, licence. **The bio is
+  Callum's own paragraph**, edited twice by him on the day it landed: "the
+  founding editor" became "a founding editor", and the publishers were struck
+  out of the book list, leaving the years. That last edit also settled a
+  disagreement — his first draft said Bloomsbury for Feeding the Machine where
+  `B-02` says Canongate, and no publisher is named on the page now.
+- **All the index headings and subheads are Callum's copy, rewritten by him in
+  August 2026.** Every one is a fragment with no closing full stop,
+  deliberately. The Photos page lost its "Three disputes, 44 frames" headline
+  for the single word "Photos", so the frame count now appears only on the home
+  page; the writing page's subhead lost the count, the date range and the list
+  of outlets, all of which had been derived from the records.
+- **`objectPosition` was being dropped on two pages.** The home and Photos
+  pages did not pass it to `PhotoRecord`, so both centred their featured
+  photograph regardless of what the record said, cutting the courier's helmet
+  off on Photos and the raised hands on the home page. Fixed August 2026 —
+  the value in the record is honoured now. It is a silent failure, so it is
+  worth eyeballing rather than trusting.
+- **The index headlines compute their own numbers.** `numberWord()` in
+  `src/data/archive.ts` spells the count out, so "Four disputes" above a list
+  of six cannot happen again; `books/index.astro` uses it too.
+- **The archive is licensed `CC BY-NC-ND 4.0`**, on Callum's instruction,
+  August 2026, replacing the "FREE TO UNIONS AND CAMPAIGNS" footer line. He
+  asked for "CC BY-NC-ND"; **the 4.0 was added here**, because a Creative
+  Commons licence without a version number does not identify its terms and the
+  link has to land on a specific deed. **Worth him knowing what ND costs:**
+  under the old line a union could do as it liked with a photograph. Under ND
+  they may reproduce it whole and credited, but may not crop it, overlay text
+  on it, or use it in a montage — which is most of what a leaflet does with a
+  picture. If that is not the intent, CC BY-NC is the same licence without
+  that restriction.
+- **All four publication indexes were rebuilt to the sequence index's shape**
+  in August 2026 — blue heading block, rows on cream, photograph at the foot.
+  **Books changed too, though Callum only named journal, writing and audio**:
+  he asked for those three to match "photo and books", and books was still all
+  blue, so matching it would have meant leaving them blue as well. Reverting
+  books alone is one prop and one component swap.

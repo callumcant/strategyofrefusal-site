@@ -22,3 +22,6 @@ export type AudioData = AudioEntry["data"];
 
 export type JournalEntry = CollectionEntry<"journal">;
 export type JournalData = JournalEntry["data"];
+
+export type WritingEntry = CollectionEntry<"writing">;
+export type WritingData = WritingEntry["data"];

@@ -1,0 +1,119 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ShellFrame from "../components/ShellFrame.astro";
+import TopBar from "../components/TopBar.astro";
+import DisplayHeading from "../components/DisplayHeading.astro";
+import Footer from "../components/Footer.astro";
+import { LICENCE_NAME, LICENCE_URL, LICENCE_SUMMARY } from "../data/archive";
+
+// Three fields: the bio, the email, the licence. The archive totals, the
+// start year and the list of books were all here and were all cut in August
+// 2026 — the counts are on the pages that hold the records, and the books are
+// in the bio and on /books. The bio is Callum's own text, verbatim.
+const bio =
+  "Callum Cant is an Industrial Organiser with the National Education Union and " +
+  "a founding editor of Notes from Below, a workers' inquiry journal. He is the author of " +
+  "Riding for Deliveroo (2019), Feeding the Machine (2024), and " +
+  "The Future in Our Past (2026), a history of the 1926 General Strike. His work " +
+  "focuses on labour organising, platform work, and working-class history. He lives in " +
+  "South London.";
+
+const fields = [
+  { label: "BIO", value: bio },
+  { label: "EMAIL", value: "callumcant@gmail.com", href: "mailto:callumcant@gmail.com" },
+];
+---
+
+<BaseLayout title="About — Strategy of Refusal">
+  <ShellFrame>
+    <TopBar variant="shell" label="STRATEGY OF REFUSAL / ABOUT" labelHref="/" active="about" />
+
+    <div class="intro">
+      <DisplayHeading lines={["About"]} size={100} lineHeight=".88" />
+    </div>
+
+    <div class="about">
+      <dl class="about__fields">
+        {
+          fields.map((f) => (
+            <div class="about__field">
+              <dt>{f.label}</dt>
+              <dd>{f.href ? <a href={f.href}>{f.value}</a> : f.value}</dd>
+            </div>
+          ))
+        }
+
+        <div class="about__field">
+          <dt>LICENCE</dt>
+          <dd>
+            <a href={LICENCE_URL}>{LICENCE_NAME}</a>
+            <div class="about__licence-note">{LICENCE_SUMMARY}</div>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <Footer left="KEPT BY CALLUM CANT, ORGANISER · CALLUMCANT@GMAIL.COM" right={LICENCE_NAME} rightHref={LICENCE_URL} />
+  </ShellFrame>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding: 40px var(--page-pad) 30px;
+  }
+
+  .about {
+    padding: 0 var(--page-pad) 44px;
+  }
+
+  .about__fields {
+    margin: 0;
+    border-top: 2px solid var(--cream);
+  }
+
+  .about__field {
+    display: grid;
+    grid-template-columns: var(--label-col, 130px) 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule-cream-40);
+  }
+
+  .about__field dt {
+    font: 500 12px "IBM Plex Mono", monospace;
+    color: var(--cream-70);
+  }
+
+  .about__field dd {
+    margin: 0;
+    font: 400 17px/1.4 Archivo, sans-serif;
+    color: var(--cream);
+  }
+
+  .about__field dd a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .about__licence-note {
+    margin-top: 6px;
+    max-width: 36em;
+    font: 400 14px/1.5 Archivo, sans-serif;
+    color: var(--cream-80);
+  }
+
+  @media (max-width: 700px) {
+    .intro {
+      padding: 24px 20px 20px;
+    }
+
+    .about {
+      padding: 0 20px 30px;
+    }
+
+    .about__field {
+      grid-template-columns: 1fr;
+      row-gap: 4px;
+    }
+  }
+</style>

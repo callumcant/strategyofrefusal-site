@@ -11,50 +11,56 @@ import WritingRow from "../components/WritingRow.astro";
 import PhotoRecord from "../components/PhotoRecord.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection, getEntry } from "astro:content";
-import { writingTotal, scopeRecordTotal, scopeSince, pad } from "../data/archive";
+import { scopeRecordTotal, scopeSince, pad, LICENCE_NAME, LICENCE_URL } from "../data/archive";
 
 // Series read low-to-high (S-01 first); publications read newest-first.
 const byRefAsc = (a: { data: { ref: string } }, b: { data: { ref: string } }) => a.data.ref.localeCompare(b.data.ref);
 const byRefDesc = (a: { data: { ref: string } }, b: { data: { ref: string } }) => b.data.ref.localeCompare(a.data.ref);
 
-const series = (await getCollection("series")).sort(byRefAsc);
-const books = (await getCollection("books")).sort(byRefDesc);
-const writing = (await getCollection("writing")).sort(byRefDesc);
 const homeFeaturedFrame = (await getEntry("frames", "home"))!.data;
 
-// Audio and journal are the complete collections, so their counts are real
-// rather than stated. Listing all 22 episodes or all 11 issues would swamp a
-// page whose other sections run to two or three rows, so the home page shows
-// the newest few and the count beside the heading carries the true size — the
-// same bargain the writing section makes with a stated total. Change the
-// Shown numbers to show more or fewer.
-const audioShown = 4;
+// The home page shows the same number of every section — three — and states
+// the true total beside each heading, counted from the files. Listing all 22
+// episodes or all 19 articles would swamp the page, and letting each section
+// run to its own length made the columns read as unequal in importance rather
+// than as different sizes of collection. One number changes all six.
+const homeShown = 3;
+
+const seriesAll = (await getCollection("series")).sort(byRefAsc);
+const series = seriesAll.slice(0, homeShown);
+
+const booksAll = (await getCollection("books")).sort(byRefDesc);
+const books = booksAll.slice(0, homeShown);
+
 const audioAll = (await getCollection("audio")).sort(byRefDesc);
-const audio = audioAll.slice(0, audioShown);
+const audio = audioAll.slice(0, homeShown);
 
-const journalShown = 4;
 const journalAll = (await getCollection("journal")).sort(byRefDesc);
-const journal = journalAll.slice(0, journalShown);
+const journal = journalAll.slice(0, homeShown);
 
-const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
+const writingAll = (await getCollection("writing")).sort(byRefDesc);
+const writing = writingAll.slice(0, homeShown);
+
+// Counted across every sequence, not just the three shown.
+const totalFrames = seriesAll.reduce((sum, s) => sum + s.data.frames, 0);
 ---
 
-<BaseLayout title="Strategy of Refusal — an archive of British labour disputes">
+<BaseLayout title="Strategy of Refusal — an archive of class struggle in Britain">
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGYOFREFUSAL.COM" labelHref="/" />
 
     <div class="masthead">
       <DisplayHeading lines={["Strategy", "of refusal"]} size={96} />
       <ScopeLine
-        left="AN ARCHIVE OF BRITISH LABOUR DISPUTES — PHOTOGRAPHS, BOOKS, PODCASTS, JOURNAL, WRITING"
+        left="AN ARCHIVE OF CLASS STRUGGLE IN BRITAIN"
         right={`${scopeRecordTotal} RECORDS · ${scopeSince} —`}
       />
     </div>
 
     <section class="section section--series">
       <ShellSectionHead
-        title="Series"
-        countLabel={`${pad(series.length)} RECORDS · ${totalFrames} FRAMES →`}
+        title="Photo sequences"
+        countLabel={`${pad(seriesAll.length)} SEQUENCES · ${totalFrames} FRAMES →`}
         href="/series"
       />
       {series.map((item, i) => <SeriesRow item={item} last={i === series.length - 1} />)}
@@ -64,6 +70,7 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
       image={homeFeaturedFrame.image}
       alt={homeFeaturedFrame.alt}
       height={homeFeaturedFrame.height}
+      objectPosition={homeFeaturedFrame.objectPosition}
       plateRef={homeFeaturedFrame.ref}
       location={homeFeaturedFrame.location}
       date={homeFeaturedFrame.date}
@@ -73,7 +80,7 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     />
 
     <section class="section section--books">
-      <ShellSectionHead title="Books" countLabel={`${pad(books.length)} RECORDS →`} href="/books" />
+      <ShellSectionHead title="Books" countLabel={`${pad(booksAll.length)} RECORDS →`} href="/books" />
       {
         books.map((b, i) => (
           <PublicationRow
@@ -123,21 +130,22 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     </section>
 
     <section class="section section--writing">
-      <ShellSectionHead title="Writing" countLabel={`${pad(writingTotal)} RECORDS →`} />
+      <ShellSectionHead title="Writing" countLabel={`${pad(writingAll.length)} RECORDS →`} href="/writing" />
       {
         writing.map((w, i) => (
           <WritingRow
             ref={w.data.ref}
             title={w.data.title}
-            form={w.data.form}
+            publication={w.data.publication}
             year={w.data.year}
+            href={w.data.href}
             last={i === writing.length - 1}
           />
         ))
       }
     </section>
 
-    <Footer left="KEPT BY CALLUM CANT, ORGANISER · CALLUMCANT@GMAIL.COM" right="FREE TO UNIONS AND CAMPAIGNS" />
+    <Footer left="KEPT BY CALLUM CANT, ORGANISER · CALLUMCANT@GMAIL.COM" right={LICENCE_NAME} rightHref={LICENCE_URL} />
   </ShellFrame>
 </BaseLayout>
 

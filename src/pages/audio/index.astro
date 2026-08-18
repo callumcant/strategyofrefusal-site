@@ -1,13 +1,16 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ShellFrame from "../../components/ShellFrame.astro";
 import TopBar from "../../components/TopBar.astro";
 import DisplayHeading from "../../components/DisplayHeading.astro";
 import PublicationRow from "../../components/PublicationRow.astro";
-import { PODCAST_NAME, PODCAST_URL } from "../../data/archive";
+import ArchiveBlock from "../../components/ArchiveBlock.astro";
+import PhotoRecord from "../../components/PhotoRecord.astro";
+import { PODCAST_NAME, PODCAST_URL, JOURNAL_NAME, JOURNAL_URL } from "../../data/archive";
 
 const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
+const featuredFrame = (await getEntry("frames", "audio"))!.data;
 ---
 
 <BaseLayout title="Audio — Strategy of Refusal">
@@ -17,17 +20,17 @@ const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCom
     <div class="intro">
       <DisplayHeading lines={["Audio"]} size={100} lineHeight=".88" />
       <p class="intro__para">
-        Every episode of <a href={PODCAST_URL}>{PODCAST_NAME}</a> — a worker
-        interviewed each time about the job and what organising it taught them.
-        Newest first.
+        Every episode of <a href={PODCAST_URL}>{PODCAST_NAME}</a>, a podcast
+        about work, struggle and revolution by <a href={JOURNAL_URL}>{JOURNAL_NAME}</a>
       </p>
     </div>
 
-    <div class="episode-list">
+    <ArchiveBlock>
       {
         audio.length > 0 ? (
           audio.map((e, i) => (
             <PublicationRow
+              tone="paper"
               ref={e.data.ref}
               title={e.data.title}
               description={e.data.description}
@@ -41,7 +44,18 @@ const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCom
           <p class="episode-list__empty">Episodes are still being catalogued and will be added shortly.</p>
         )
       }
-    </div>
+    </ArchiveBlock>
+
+    <PhotoRecord
+      image={featuredFrame.image}
+      alt={featuredFrame.alt}
+      height={featuredFrame.height}
+      objectPosition={featuredFrame.objectPosition}
+      plateRef={featuredFrame.ref}
+      location={featuredFrame.location}
+      date={featuredFrame.date}
+      caption={featuredFrame.caption}
+    />
   </ShellFrame>
 </BaseLayout>
 
@@ -62,25 +76,17 @@ const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCom
     text-underline-offset: 3px;
   }
 
-  .episode-list {
-    padding: 0 var(--page-pad) 44px;
-  }
 
   .episode-list__empty {
     margin: 0;
     padding: 20px 0;
-    border-top: 2px solid var(--cream);
+    border-top: 2px solid var(--ink);
     font: 400 17px/1.5 Archivo, sans-serif;
-    color: var(--cream-80);
+    color: var(--ink-60);
   }
-
   @media (max-width: 700px) {
     .intro {
       padding: 24px 20px 20px;
-    }
-
-    .episode-list {
-      padding: 0 20px 30px;
     }
   }
 </style>

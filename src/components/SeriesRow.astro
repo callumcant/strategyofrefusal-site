@@ -12,7 +12,10 @@ const s = item.data;
 
 <a href={`/series/${item.id}`} class="series-row" data-last={last ? "true" : undefined}>
   <div class="series-row__ref">{s.ref}</div>
-  <div class="series-row__title">{s.title}</div>
+  <div>
+    <div class="series-row__title">{s.title}</div>
+    <div class="series-row__desc">{s.indexDescription}</div>
+  </div>
   <div class="series-row__place">{s.place} · {s.employer}</div>
   <div class="series-row__date">{s.dateLabel} · {s.frames}</div>
 </a>
@@ -22,7 +25,9 @@ const s = item.data;
     display: grid;
     grid-template-columns: 44px 1fr 150px 90px;
     gap: 16px;
-    align-items: baseline;
+    /* start, not baseline: the title and its description are one block now,
+       and baseline would hang the place and date off the description. */
+    align-items: start;
     padding: 16px 0;
     border-bottom: 1px solid var(--rule-cream-40);
   }
@@ -48,6 +53,12 @@ const s = item.data;
     text-underline-offset: 3px;
   }
 
+  .series-row__desc {
+    margin-top: 4px;
+    font: 400 14px/1.45 Archivo, sans-serif;
+    color: var(--cream-80);
+  }
+
   .series-row__place {
     font: 400 13.5px/1.4 Archivo, sans-serif;
     color: var(--cream-80);
@@ -70,8 +81,13 @@ const s = item.data;
       grid-area: ref;
     }
 
-    .series-row__title {
+    /* The title and its description share a wrapper, so the area goes on
+       that rather than on the title itself. */
+    .series-row > div:nth-child(2) {
       grid-area: title;
+    }
+
+    .series-row__title {
       font-size: 22px;
     }
 

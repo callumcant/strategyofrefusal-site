@@ -29,7 +29,7 @@ const hasStandfirst = Boolean(entry.body?.trim());
 
 <BaseLayout title={`${s.title} — Strategy of Refusal`}>
   <div class="series-page">
-    <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / SERIES / ${s.ref}`} labelHref="/series" active="series" />
+    <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / PHOTO / ${s.ref}`} labelHref="/series" active="series" />
 
     <SeriesTitleBlock title={s.title}>
       {hasStandfirst ? <Content /> : <p>{s.indexDescription}</p>}
@@ -54,7 +54,7 @@ const hasStandfirst = Boolean(entry.body?.trim());
             framesNote: `${s.frames}`,
             related: [],
           }}
-          note="Plates for this series are still being catalogued and will be added shortly."
+          note="Plates for this sequence are still being catalogued and will be added shortly."
         />
       )
     }

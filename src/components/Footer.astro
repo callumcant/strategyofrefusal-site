@@ -1,14 +1,19 @@
 ---
+// rightHref makes the right-hand mark a link — it carries the licence, and a
+// licence mark that cannot be clicked through to its terms is no use.
 interface Props {
   left: string;
   right: string;
+  rightHref?: string;
 }
 
-const { left, right } = Astro.props;
+const { left, right, rightHref } = Astro.props;
 ---
 
 <div class="shell-footer">
-  <span>{left}</span><span class="shell-footer__right">{right}</span>
+  <span>{left}</span><span class="shell-footer__right">
+    {rightHref ? <a href={rightHref}>{right}</a> : right}
+  </span>
 </div>
 
 <style>
@@ -24,6 +29,12 @@ const { left, right } = Astro.props;
 
   .shell-footer__right {
     white-space: nowrap;
+  }
+
+  .shell-footer__right a:hover {
+    color: var(--cream);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   @media (max-width: 700px) {

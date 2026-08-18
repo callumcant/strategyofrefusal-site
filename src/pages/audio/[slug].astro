@@ -5,7 +5,7 @@ import TopBar from "../../components/TopBar.astro";
 import SeriesTitleBlock from "../../components/SeriesTitleBlock.astro";
 import AudioRecordBlock from "../../components/AudioRecordBlock.astro";
 import SeriesFooterNav from "../../components/SeriesFooterNav.astro";
-import { PODCAST_NAME } from "../../data/archive";
+import { PODCAST_NAME, JOURNAL_NAME } from "../../data/archive";
 
 export async function getStaticPaths() {
   // Newest first, matching the index. The NEXT link therefore walks backwards
@@ -35,7 +35,7 @@ const hasLead = Boolean(entry.body?.trim());
       {hasLead ? <Content /> : <p>{e.description}</p>}
     </SeriesTitleBlock>
 
-    <AudioRecordBlock episode={e} podcast={PODCAST_NAME} />
+    <AudioRecordBlock episode={e} podcast={`${PODCAST_NAME}, ${JOURNAL_NAME}`} />
 
     <SeriesFooterNav
       nextRef={next.data.ref}

@@ -11,7 +11,9 @@ interface Props {
   location: string;
   date: string;
   extra?: string;
-  caption: string;
+  // Optional: a frame whose plate carries no caption renders as the
+  // photograph, its reference and its meta alone.
+  caption?: string;
   captionAccentRef?: string;
 }
 
@@ -35,10 +37,14 @@ const { image, alt, height, objectPosition, plateRef, location, date, extra, cap
         {date}
         {extra ? <><br />{extra}</> : null}
       </div>
-      <div class="photo-record__context">
-        {caption}
-        {captionAccentRef ? <> <span class="photo-record__accent">{captionAccentRef}</span>.</> : null}
-      </div>
+      {
+        caption ? (
+          <div class="photo-record__context">
+            {caption}
+            {captionAccentRef ? <> <span class="photo-record__accent">{captionAccentRef}</span>.</> : null}
+          </div>
+        ) : null
+      }
     </div>
   </div>
 </div>

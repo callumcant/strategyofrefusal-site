@@ -219,18 +219,36 @@ const audio = defineCollection({
   }),
 });
 
+// Callum's published articles — journalism and peer-reviewed research. Every
+// one is hosted by whoever published it, so a record links out rather than
+// having a page of its own here: href is required, unlike on books.
+// As with the journal and the books, the prose is the publisher's, not ours —
+// description is the outlet's own standfirst, and on the research articles the
+// opening sentence of the abstract, so nothing in this collection is invented.
+// The markdown body is the full abstract, which only the research articles have.
 const writing = defineCollection({
   loader: glob({ base: "./src/content/writing", pattern: "**/*.md" }),
   schema: z.object({
     ref: z.string(),
     year: z.string(),
     title: z.string(),
-    form: z.string(),
+    // Required, as on books: five of the nineteen are co-authored.
+    authors: z.string(),
+    publication: z.string(), // "The Guardian", "Notes from Below"
+    dateLabel: z.string(), // "3 September 2020"
+    description: z.string(), // one line, for the index row
+    href: z.string(), // the article where it was published
+    // Research articles only: the volume, issue and pages, and the DOI, which
+    // is the citable identifier a journal article is looked up by.
+    citation: z.string().optional(), // "44(4), 513–521"
+    doi: z.string().optional(),
   }),
 });
 
-// The single photograph that heads each of the three shell pages.
-// Ids: home, series-index, books.
+// The single photograph that closes each shell page — one per page, and the id
+// is the page it belongs to: home, series-index, books, journal, audio,
+// writing. All six are real plates lifted from S-01, S-02 and S-03, captions
+// and all, so nothing here is written twice or invented.
 const frames = defineCollection({
   loader: glob({ base: "./src/content/frames", pattern: "**/*.md" }),
   schema: ({ image }) =>
@@ -243,7 +261,10 @@ const frames = defineCollection({
       location: z.string(),
       date: z.string(),
       extra: z.string().optional(),
-      caption: z.string(),
+      // Optional, as it is on a plate: some frames carry no caption in the
+      // sequence they come from, and inventing one here would be writing
+      // words about a photograph that its own record does not have.
+      caption: z.string().optional(),
       captionAccentRef: z.string().optional(),
     }),
 });

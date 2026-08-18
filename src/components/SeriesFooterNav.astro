@@ -1,6 +1,7 @@
 ---
-// Used by both series and audio record pages. The second link points back to
-// whichever index the record belongs to; it defaults to series.
+// Used by the photo sequence, audio and journal record pages. The second link
+// points back to whichever index the record belongs to; it defaults to the
+// sequences, which still live at /series — only the wording changed.
 interface Props {
   nextRef: string;
   nextTitle: string;
@@ -9,7 +10,7 @@ interface Props {
   indexLabel?: string;
 }
 
-const { nextRef, nextTitle, nextHref, indexHref = "/series", indexLabel = "Series index" } = Astro.props;
+const { nextRef, nextTitle, nextHref, indexHref = "/series", indexLabel = "Sequence index" } = Astro.props;
 ---
 
 <div class="footer-nav">

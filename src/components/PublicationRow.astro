@@ -1,6 +1,10 @@
 ---
 // href is optional: a collection with record pages of its own (audio) links its
 // titles, a collection without them (books, journal) renders the row as text.
+//
+// tone says which ground the row is sitting on. "shell" is cream on blue, for
+// the home page; "paper" is ink on the cream block the index pages use. The
+// two are the same row in different colours — nothing else changes.
 interface Props {
   ref: string;
   title: string;
@@ -9,12 +13,13 @@ interface Props {
   year: string;
   href?: string;
   last?: boolean;
+  tone?: "shell" | "paper";
 }
 
-const { ref, title, description, factsLine, year, href, last } = Astro.props;
+const { ref, title, description, factsLine, year, href, last, tone = "shell" } = Astro.props;
 ---
 
-<div class="pub-row" data-last={last ? "true" : undefined}>
+<div class="pub-row" data-tone={tone} data-last={last ? "true" : undefined}>
   <div class="pub-row__ref">{ref}</div>
   <div>
     <div class="pub-row__title">{href ? <a href={href}>{title}</a> : title}</div>
@@ -71,6 +76,34 @@ const { ref, title, description, factsLine, year, href, last } = Astro.props;
     font: 500 12px "IBM Plex Mono", monospace;
     color: var(--cream-80);
     text-align: right;
+  }
+
+  /* Ink on the cream block. Same row, same grid — only the colours differ,
+     and the ref turns blue, which is how the sequence index marks a link. */
+  .pub-row[data-tone="paper"] {
+    border-bottom-color: var(--rule-ink);
+  }
+
+  .pub-row[data-tone="paper"][data-last] {
+    border-bottom: none;
+  }
+
+  .pub-row[data-tone="paper"] .pub-row__ref {
+    color: var(--ground-accent);
+  }
+
+  .pub-row[data-tone="paper"] .pub-row__title {
+    color: var(--ink);
+  }
+
+  .pub-row[data-tone="paper"] .pub-row__title a:hover {
+    color: var(--ground-accent);
+  }
+
+  .pub-row[data-tone="paper"] .pub-row__desc,
+  .pub-row[data-tone="paper"] .pub-row__facts,
+  .pub-row[data-tone="paper"] .pub-row__year {
+    color: var(--ink-60);
   }
 
   @media (max-width: 700px) {

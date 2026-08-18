@@ -1,0 +1,77 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShellFrame from "../../components/ShellFrame.astro";
+import TopBar from "../../components/TopBar.astro";
+import DisplayHeading from "../../components/DisplayHeading.astro";
+import PublicationRow from "../../components/PublicationRow.astro";
+import ArchiveBlock from "../../components/ArchiveBlock.astro";
+import PhotoRecord from "../../components/PhotoRecord.astro";
+
+// Newest first, off the ref — W-01 is the earliest piece.
+const writing = (await getCollection("writing")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
+
+// The facts column: who published it, the citation where there is one, and
+// when. All three are fields on the record, so the column cannot go stale.
+const factsLine = (w: (typeof writing)[number]) =>
+  [w.data.publication, w.data.citation, w.data.dateLabel].filter(Boolean).join(" · ");
+const featuredFrame = (await getEntry("frames", "writing"))!.data;
+---
+
+<BaseLayout title="Writing — Strategy of Refusal">
+  <ShellFrame>
+    <TopBar variant="shell" label="STRATEGY OF REFUSAL / WRITING" labelHref="/" active="writing" />
+
+    <div class="intro">
+      <DisplayHeading lines={["Writing"]} size={100} lineHeight=".88" />
+      <p class="intro__para">Articles on strikes, platform work and the labour movement</p>
+    </div>
+
+    <ArchiveBlock>
+      {
+        writing.map((w, i) => (
+          <PublicationRow
+            tone="paper"
+            ref={w.data.ref}
+            title={w.data.title}
+            description={w.data.description}
+            factsLine={factsLine(w)}
+            year={w.data.year}
+            href={w.data.href}
+            last={i === writing.length - 1}
+          />
+        ))
+      }
+    </ArchiveBlock>
+
+    <PhotoRecord
+      image={featuredFrame.image}
+      alt={featuredFrame.alt}
+      height={featuredFrame.height}
+      objectPosition={featuredFrame.objectPosition}
+      plateRef={featuredFrame.ref}
+      location={featuredFrame.location}
+      date={featuredFrame.date}
+      caption={featuredFrame.caption}
+    />
+  </ShellFrame>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding: 40px var(--page-pad) 30px;
+  }
+
+  .intro__para {
+    margin: 24px 0 0;
+    max-width: 34em;
+    font: 400 19px/1.45 Archivo, sans-serif;
+    color: var(--cream);
+  }
+
+  @media (max-width: 700px) {
+    .intro {
+      padding: 24px 20px 20px;
+    }
+  }
+</style>

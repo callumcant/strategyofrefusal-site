@@ -1,21 +1,24 @@
 ---
+// href is the article on the publisher's own site — writing has no record
+// pages here, so the row links straight out.
 interface Props {
   ref: string;
   title: string;
-  form: string;
+  publication: string;
   year: string;
+  href: string;
   last?: boolean;
 }
 
-const { ref, title, form, year, last } = Astro.props;
+const { ref, title, publication, year, href, last } = Astro.props;
 ---
 
-<div class="writing-row" data-last={last ? "true" : undefined}>
+<a href={href} class="writing-row" data-last={last ? "true" : undefined}>
   <div class="writing-row__ref">{ref}</div>
   <div class="writing-row__title">{title}</div>
-  <div class="writing-row__form">{form}</div>
+  <div class="writing-row__publication">{publication}</div>
   <div class="writing-row__year">{year}</div>
-</div>
+</a>
 
 <style>
   .writing-row {
@@ -41,7 +44,12 @@ const { ref, title, form, year, last } = Astro.props;
     color: var(--cream);
   }
 
-  .writing-row__form {
+  .writing-row:hover .writing-row__title {
+    text-decoration: 1px underline var(--cream);
+    text-underline-offset: 3px;
+  }
+
+  .writing-row__publication {
     font: 400 13px Archivo, sans-serif;
     color: var(--cream-80);
   }
@@ -55,7 +63,7 @@ const { ref, title, form, year, last } = Astro.props;
   @media (max-width: 700px) {
     .writing-row {
       grid-template-columns: 1fr auto;
-      grid-template-areas: "title title" "ref year" "form form";
+      grid-template-areas: "title title" "ref year" "publication publication";
       row-gap: 4px;
     }
 
@@ -67,8 +75,8 @@ const { ref, title, form, year, last } = Astro.props;
       grid-area: title;
     }
 
-    .writing-row__form {
-      grid-area: form;
+    .writing-row__publication {
+      grid-area: publication;
     }
 
     .writing-row__year {

@@ -10,20 +10,15 @@ import { getCollection, getEntry } from "astro:content";
 
 const series = (await getCollection("series")).sort((a, b) => a.data.ref.localeCompare(b.data.ref));
 const seriesIndexFeaturedFrame = (await getEntry("frames", "series-index"))!.data;
-
-const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
 ---
 
-<BaseLayout title="Series — Strategy of Refusal">
+<BaseLayout title="Photo sequences — Strategy of Refusal">
   <ShellFrame>
-    <TopBar variant="shell" label="STRATEGY OF REFUSAL / SERIES" labelHref="/" active="series" />
+    <TopBar variant="shell" label="STRATEGY OF REFUSAL / PHOTO" labelHref="/" active="series" />
 
     <div class="intro">
-      <DisplayHeading lines={["Four", "disputes,", `${totalFrames} frames`]} size={96} lineHeight=".88" />
-      <p class="intro__para">
-        Each series covers one employer and one dispute. Sequences run in the order the frames were made. Sort by
-        place, employer or union.
-      </p>
+      <DisplayHeading lines={["Photos"]} size={100} lineHeight=".88" />
+      <p class="intro__para">Images as a form of inquiry</p>
     </div>
 
     <IndexTable>
@@ -34,6 +29,7 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
       image={seriesIndexFeaturedFrame.image}
       alt={seriesIndexFeaturedFrame.alt}
       height={seriesIndexFeaturedFrame.height}
+      objectPosition={seriesIndexFeaturedFrame.objectPosition}
       plateRef={seriesIndexFeaturedFrame.ref}
       location={seriesIndexFeaturedFrame.location}
       date={seriesIndexFeaturedFrame.date}

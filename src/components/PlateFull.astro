@@ -59,10 +59,14 @@ const passage = paragraphs(plate.passage);
     object-fit: cover;
   }
 
+  /* The image runs edge to edge, but the caption and passage under it line up
+     with the rest of the page rather than starting at the viewport edge. */
   .plate-full__caption {
     display: grid;
     grid-template-columns: var(--label-col) 1fr;
     padding: 12px 40px 0 0;
+    max-width: var(--page-max);
+    margin-inline: auto;
   }
 
   .plate-full__ref {
@@ -92,6 +96,8 @@ const passage = paragraphs(plate.passage);
     display: grid;
     grid-template-columns: var(--label-col) 1fr;
     padding: 0 40px 0 0;
+    max-width: var(--page-max);
+    margin-inline: auto;
   }
 
   .plate-full__passage {

@@ -61,10 +61,14 @@ const { image, alt, height, objectPosition, plateRef, location, date, extra, cap
     object-fit: cover;
   }
 
+  /* The photograph runs edge to edge, but its caption lines up with the rest
+     of the page rather than starting at the viewport edge. */
   .photo-record__caption {
     display: grid;
     grid-template-columns: var(--label-col) 1fr;
     padding: 12px var(--page-pad) 26px 0;
+    max-width: var(--page-max);
+    margin-inline: auto;
   }
 
   .photo-record__ref {

@@ -243,6 +243,23 @@ anything naming a person or an employer.
 - **Tokens in `src/styles/tokens.css` are the whole palette.** Cream on a blue
   ground for the shell, ink on paper for the record pages. Don't introduce a
   new colour; add a token if something genuinely new is needed.
+- **The type sits in a centred column, the grounds and the photographs do not.**
+  `--page-max: 1240px` in `tokens.css` is the one number; added August 2026,
+  because on a wide monitor every row stretched to the viewport and left a lane
+  of empty blue between the description and the date. `ShellFrame` and the three
+  record-page wrappers (`.series-page`, `.episode-page`, `.issue-page`) are
+  three-column grids — `1fr min(var(--page-max), 100%) 1fr` — where children land
+  in the middle column by default and anything full-bleed opts out with
+  `grid-column: 1 / -1`. Only two things opt out: `.photo-record` on the index
+  pages and `.plate-full` on a series page. Two traps. **Slotted children carry
+  the *page's* scope id, not the wrapper's**, so the child selector has to be
+  `.wrapper > :global(*)` or it silently matches nothing. And **a full-bleed
+  image's caption still has to line up with the column**, which is why
+  `.photo-record__caption`, `.plate-full__caption` and `.plate-full__passage-row`
+  each carry `max-width: var(--page-max); margin-inline: auto` — without it the
+  plate reference sits against the viewport edge while every other reference on
+  the page starts 330px in. `min()` makes the whole thing a no-op below 1240px,
+  so the mobile breakpoints are untouched.
 - **No rounded corners and no shadows, anywhere.** This is enforced globally
   with `border-radius: 0 !important` and `box-shadow: none !important` on `*`.
   Any component that appears to need either is fighting the design, not the CSS.
@@ -277,6 +294,21 @@ anything naming a person or an employer.
   overlay text on it or edit it.
 - Fonts (Archivo, Source Serif 4, IBM Plex Mono) load from Google Fonts in
   `BaseLayout.astro`. That is the site's only external dependency at runtime.
+- **The condensed headlines use `font-variation-settings: "wdth" N`, never
+  `font-stretch: N%`.** This is not a style preference and must not be tidied
+  back. Astro's CSS minifier folds a trailing `font-stretch` percentage into the
+  preceding `font` shorthand — `font: 800 62% 30px/1 Archivo` — and a percentage
+  is not legal there, so the browser discards the *whole* declaration and the
+  heading falls back to body type at body size. **It only happens in a production
+  build**, because `astro dev` does not minify, so the dev server will look
+  correct while the deployed site is wrong. This shipped to Netlify for some time
+  before anyone spotted it, and was found by comparing a wide screenshot against
+  an old wireframe. `DisplayHeading` was the only one unaffected, because the
+  `var()`s in its shorthand stop the minifier folding it — which is why the
+  masthead alone looked right. Archivo's `wdth` axis is 62–125 and is already
+  requested in the Google Fonts URL, so the two spellings render identically.
+  Guard it after any build with:
+  `grep -o 'font:[^;}]*%' dist/_astro/*.css dist/*.html` — that must find nothing.
 
 ## Running and building
 

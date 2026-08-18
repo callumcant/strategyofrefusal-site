@@ -23,7 +23,9 @@ const s = item.data;
 <style>
   .series-row {
     display: grid;
-    grid-template-columns: 44px 1fr 150px 90px;
+    /* The place column is 230px so an employer list — "London · Deliveroo,
+       Uber, Just Eat" — fits on one line. */
+    grid-template-columns: 44px 1fr 230px 90px;
     gap: 16px;
     /* start, not baseline: the title and its description are one block now,
        and baseline would hang the place and date off the description. */
@@ -43,7 +45,8 @@ const s = item.data;
 
   .series-row__title {
     font: 800 30px/1.02 Archivo, sans-serif;
-    font-stretch: 62%;
+    /* Not font-stretch — see ShellSectionHead. */
+    font-variation-settings: "wdth" 62;
     text-transform: uppercase;
     color: var(--cream);
   }
@@ -55,6 +58,7 @@ const s = item.data;
 
   .series-row__desc {
     margin-top: 4px;
+    max-width: 34em;
     font: 400 14px/1.45 Archivo, sans-serif;
     color: var(--cream-80);
   }

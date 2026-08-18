@@ -16,6 +16,9 @@
 
   --page-pad: 40px;
   --label-col: 112px;
+  /* The type sits in a centred column this wide. The blue and paper grounds
+     still run edge to edge, and so do the photograph bands — see ShellFrame. */
+  --page-max: 1240px;
 }
 
 * {

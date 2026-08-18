@@ -50,7 +50,8 @@ const { ref, title, description, factsLine, year, href, last, tone = "shell" } =
 
   .pub-row__title {
     font: 700 24px/1.06 Archivo, sans-serif;
-    font-stretch: 70%;
+    /* Not font-stretch — see ShellSectionHead. */
+    font-variation-settings: "wdth" 70;
     text-transform: uppercase;
     color: var(--cream);
   }

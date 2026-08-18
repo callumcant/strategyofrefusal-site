@@ -63,7 +63,20 @@ const hasStandfirst = Boolean(entry.body?.trim());
 </BaseLayout>
 
 <style>
+  /* Same full-bleed grid as ShellFrame — see the note there. */
   .series-page {
     background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr min(var(--page-max), 100%) 1fr;
+  }
+
+  .series-page > :global(*) {
+    grid-column: 2;
+  }
+
+  /* full is the full-bleed plate shape; the other four are sized in px and
+     stay in the content column. */
+  .series-page > :global(.plate-full) {
+    grid-column: 1 / -1;
   }
 </style>

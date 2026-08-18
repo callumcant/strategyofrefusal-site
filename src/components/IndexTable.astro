@@ -19,7 +19,10 @@
 
   .index-table__head {
     display: grid;
-    grid-template-columns: 60px 1fr 130px 120px;
+    /* Must stay identical to .index-row in IndexTableRow, or the column
+       header stops lining up with the rows under it. The employer column is
+       190px so "Deliveroo, Uber, Just Eat" fits on one line. */
+    grid-template-columns: 60px 1fr 130px 190px;
     gap: 14px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--ink);

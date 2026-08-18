@@ -66,7 +66,8 @@ const book = entry.data;
 
   .book-row__title {
     font: 800 40px/1 Archivo, sans-serif;
-    font-stretch: 62%;
+    /* Not font-stretch — see ShellSectionHead. */
+    font-variation-settings: "wdth" 62;
     text-transform: uppercase;
     color: var(--cream);
   }
@@ -74,7 +75,8 @@ const book = entry.data;
   .book-row__subtitle {
     margin-top: 6px;
     font: 400 17px/1.25 Archivo, sans-serif;
-    font-stretch: 85%;
+    /* Not font-stretch — see ShellSectionHead. */
+    font-variation-settings: "wdth" 85;
     text-transform: uppercase;
     color: var(--cream-80);
   }

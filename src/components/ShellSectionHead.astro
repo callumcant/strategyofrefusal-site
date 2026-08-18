@@ -28,7 +28,10 @@ const { title, countLabel, href } = Astro.props;
 
   .section-head__title {
     font: 800 30px/1 Archivo, sans-serif;
-    font-stretch: 62%;
+    /* Not font-stretch: the CSS minifier folds a percentage into the font
+       shorthand, which is invalid there, so the browser drops the whole rule
+       and the heading falls back to body type. Production builds only. */
+    font-variation-settings: "wdth" 62;
     text-transform: uppercase;
     color: var(--cream);
   }

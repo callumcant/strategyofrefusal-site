@@ -6,7 +6,26 @@
 </div>
 
 <style>
+  /* The full-bleed grid: three columns, where the middle one is the capped
+     content column and the outer two absorb whatever is left over on a wide
+     monitor. Children sit in the middle column by default; a child that should
+     still run edge to edge opts out with grid-column: 1 / -1.
+
+     Slotted children carry the *page's* scope id rather than this component's,
+     so the child selector has to be :global() to reach them — the same reason
+     SeriesTitleBlock uses it for its markdown paragraphs. */
   .shell-frame {
     background: var(--ground-accent);
+    display: grid;
+    grid-template-columns: 1fr min(var(--page-max), 100%) 1fr;
+  }
+
+  .shell-frame > :global(*) {
+    grid-column: 2;
+  }
+
+  /* The featured photograph stays full-bleed on every index page. */
+  .shell-frame > :global(.photo-record) {
+    grid-column: 1 / -1;
   }
 </style>

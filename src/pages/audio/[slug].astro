@@ -48,7 +48,14 @@ const hasLead = Boolean(entry.body?.trim());
 </BaseLayout>
 
 <style>
+  /* Same full-bleed grid as ShellFrame — see the note there. */
   .episode-page {
     background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr min(var(--page-max), 100%) 1fr;
+  }
+
+  .episode-page > :global(*) {
+    grid-column: 2;
   }
 </style>

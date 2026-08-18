@@ -14,7 +14,10 @@ const html = lines.join("<br />");
 <style>
   .display-heading {
     font: 800 var(--dh-size) / var(--dh-lh) Archivo, sans-serif;
-    font-stretch: 62%;
+    /* Not font-stretch — see ShellSectionHead. This one happens to survive
+       minification today, because the var()s stop the minifier folding the
+       shorthand, but it is one refactor away from breaking the same way. */
+    font-variation-settings: "wdth" 62;
     text-transform: uppercase;
     letter-spacing: -0.015em;
     color: var(--cream);

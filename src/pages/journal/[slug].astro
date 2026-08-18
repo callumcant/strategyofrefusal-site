@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TopBar from "../../components/TopBar.astro";
+import SeriesTitleBlock from "../../components/SeriesTitleBlock.astro";
+import JournalRecordBlock from "../../components/JournalRecordBlock.astro";
+import SeriesFooterNav from "../../components/SeriesFooterNav.astro";
+import { JOURNAL_NAME } from "../../data/archive";
+
+export async function getStaticPaths() {
+  // Newest first, matching the index. The NEXT link therefore walks backwards
+  // through the run and wraps at the oldest issue.
+  const journal = (await getCollection("journal")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
+
+  return journal.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: journal[(i + 1) % journal.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const j = entry.data;
+
+// The issue's lead prose is the markdown body — here it is the publisher's own
+// introduction to the issue, quoted. An issue with an empty body falls back to
+// its one-line index description.
+const { Content } = await render(entry);
+const hasLead = Boolean(entry.body?.trim());
+---
+
+<BaseLayout title={`${j.title} — Strategy of Refusal`}>
+  <div class="issue-page">
+    <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / JOURNAL / ${j.ref}`} labelHref="/journal" active="journal" />
+
+    <SeriesTitleBlock title={j.title}>
+      {hasLead ? <Content /> : <p>{j.description}</p>}
+    </SeriesTitleBlock>
+
+    <JournalRecordBlock issue={j} publisher={JOURNAL_NAME} />
+
+    <SeriesFooterNav
+      nextRef={next.data.ref}
+      nextTitle={next.data.title}
+      nextHref={`/journal/${next.id}`}
+      indexHref="/journal"
+      indexLabel="Journal index"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .issue-page {
+    background: var(--paper);
+  }
+</style>

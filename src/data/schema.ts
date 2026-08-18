@@ -19,3 +19,6 @@ export type FrameEntry = CollectionEntry<"frames">;
 
 export type AudioEntry = CollectionEntry<"audio">;
 export type AudioData = AudioEntry["data"];
+
+export type JournalEntry = CollectionEntry<"journal">;
+export type JournalData = JournalEntry["data"];

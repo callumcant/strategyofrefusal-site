@@ -1,0 +1,90 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShellFrame from "../../components/ShellFrame.astro";
+import TopBar from "../../components/TopBar.astro";
+import DisplayHeading from "../../components/DisplayHeading.astro";
+import PublicationRow from "../../components/PublicationRow.astro";
+import { JOURNAL_NAME, JOURNAL_URL, pad } from "../../data/archive";
+
+// Newest first, off the ref — which carries the issue's own printed number.
+const journal = (await getCollection("journal")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
+
+const totalArticles = journal.reduce((sum, j) => sum + j.data.contents.length, 0);
+---
+
+<BaseLayout title="Journal — Strategy of Refusal">
+  <ShellFrame>
+    <TopBar variant="shell" label="STRATEGY OF REFUSAL / JOURNAL" labelHref="/" active="journal" />
+
+    <div class="intro">
+      <DisplayHeading lines={["Journal"]} size={100} lineHeight=".88" />
+      <p class="intro__para">
+        Issues of <a href={JOURNAL_URL}>{JOURNAL_NAME}</a> — a journal of worker
+        writing and workers' inquiry, one theme an issue. {
+          `${pad(journal.length)} issues here, ${totalArticles} articles between them.`
+        } Newest first.
+      </p>
+    </div>
+
+    <div class="issue-list">
+      {
+        journal.length > 0 ? (
+          journal.map((j, i) => (
+            <PublicationRow
+              ref={j.data.ref}
+              title={j.data.title}
+              description={j.data.description}
+              factsLine={`${pad(j.data.contents.length)} ARTICLES`}
+              year={j.data.year}
+              href={`/journal/${j.id}`}
+              last={i === journal.length - 1}
+            />
+          ))
+        ) : (
+          <p class="issue-list__empty">Issues are still being catalogued and will be added shortly.</p>
+        )
+      }
+    </div>
+  </ShellFrame>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding: 40px var(--page-pad) 30px;
+  }
+
+  .intro__para {
+    margin: 24px 0 0;
+    max-width: 34em;
+    font: 400 19px/1.45 Archivo, sans-serif;
+    color: var(--cream);
+  }
+
+  .intro__para a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .issue-list {
+    padding: 0 var(--page-pad) 44px;
+  }
+
+  .issue-list__empty {
+    margin: 0;
+    padding: 20px 0;
+    border-top: 2px solid var(--cream);
+    font: 400 17px/1.5 Archivo, sans-serif;
+    color: var(--cream-80);
+  }
+
+  @media (max-width: 700px) {
+    .intro {
+      padding: 24px 20px 20px;
+    }
+
+    .issue-list {
+      padding: 0 20px 30px;
+    }
+  }
+</style>

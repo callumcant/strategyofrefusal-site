@@ -15,11 +15,21 @@ const book = entry.data;
   <div class="book-row__refyear">{book.ref}<br />{book.year}</div>
   <div>
     <div class="book-row__title">{book.title}</div>
+    {book.subtitle && <div class="book-row__subtitle">{book.subtitle}</div>}
+    <div class="book-row__byline">{book.authors}</div>
     <div class="book-row__desc"><slot /></div>
   </div>
   <div class="book-row__facts">
     {book.facts.map((line) => <>{line}<br /></>)}
-    <span class="book-row__action">{book.action}</span>
+    {
+      book.href ? (
+        <a class="book-row__action" href={book.href}>
+          {book.action} →
+        </a>
+      ) : (
+        <span class="book-row__action">{book.action}</span>
+      )
+    }
   </div>
 </div>
 
@@ -53,6 +63,21 @@ const book = entry.data;
     color: var(--cream);
   }
 
+  .book-row__subtitle {
+    margin-top: 6px;
+    font: 400 17px/1.25 Archivo, sans-serif;
+    font-stretch: 85%;
+    text-transform: uppercase;
+    color: var(--cream-80);
+  }
+
+  .book-row__byline {
+    margin-top: 8px;
+    font: 400 12px "IBM Plex Mono", monospace;
+    text-transform: uppercase;
+    color: var(--cream-70);
+  }
+
   .book-row__desc {
     margin: 10px 0 0;
     max-width: 28em;
@@ -75,7 +100,13 @@ const book = entry.data;
   }
 
   .book-row__action {
+    display: inline-block;
     border-bottom: 1px solid var(--cream);
+  }
+
+  a.book-row__action:hover {
+    color: var(--cream);
+    border-bottom-width: 2px;
   }
 
   @media (max-width: 700px) {

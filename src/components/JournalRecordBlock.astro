@@ -1,0 +1,146 @@
+---
+import FieldRow from "./FieldRow.astro";
+import type { JournalData } from "../data/schema";
+
+// The issue equivalent of AudioRecordBlock: the same label column and field
+// grid, with the journal's fields instead of a podcast's. The table of
+// contents sits where the audio reading list sits, because it plays the same
+// part — the prose that hangs off the record rather than another field of it.
+interface Props {
+  issue: JournalData;
+  publisher: string;
+}
+
+const { issue, publisher } = Astro.props;
+---
+
+<div class="record-block">
+  <div class="record-block__label">RECORD</div>
+  <div class="record-block__content">
+    <div class="record-block__fields">
+      <FieldRow label="PUBLICATION">{publisher}</FieldRow>
+      <FieldRow label="ISSUE">{`No. ${issue.issueNumber}`}</FieldRow>
+      <FieldRow label="PUBLISHED">{issue.dateLabel}</FieldRow>
+      <FieldRow label="READ" accent href={issue.issueUrl}>
+        notesfrombelow.org →
+      </FieldRow>
+      {
+        issue.downloads.map((d) => (
+          <FieldRow label={d.format} accent href={d.href}>
+            Download →
+          </FieldRow>
+        ))
+      }
+    </div>
+
+    {
+      issue.contents.length > 0 && (
+        <div class="record-block__contents">
+          <div class="record-block__contents-label">CONTENTS</div>
+          <ol class="record-block__contents-list">
+            {issue.contents.map((c) => (
+              <li>
+                <div class="record-block__entry">
+                  <a href={c.href}>{c.title}</a>
+                  <div class="record-block__author">{c.authors}</div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .record-block {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    border-bottom: 1px solid var(--rule-ink);
+  }
+
+  .record-block__label {
+    padding: 22px 0 26px 20px;
+    font: 500 11px/1.6 "IBM Plex Mono", monospace;
+    color: var(--ground-accent);
+  }
+
+  .record-block__content {
+    padding: 22px 40px 26px 0;
+  }
+
+  .record-block__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+  }
+
+  .record-block__contents {
+    margin-top: 22px;
+  }
+
+  .record-block__contents-label {
+    font: 400 11.5px "IBM Plex Mono", monospace;
+    color: var(--ink-40);
+  }
+
+  .record-block__contents-list {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: contents;
+  }
+
+  /* Two grid items per row, not three: the author sits inside the entry, or
+     grid auto-placement drops it into the 34px number column and it wraps to
+     one word a line. */
+  .record-block__contents-list li {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 0 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule-ink);
+    counter-increment: contents;
+  }
+
+  .record-block__contents-list li::before {
+    content: counter(contents, decimal-leading-zero);
+    font: 400 11.5px/1.6 "IBM Plex Mono", monospace;
+    color: var(--ink-40);
+  }
+
+  .record-block__entry a {
+    font: 400 15px/1.4 "Source Serif 4", serif;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .record-block__entry a:hover {
+    color: var(--ground-accent);
+  }
+
+  .record-block__author {
+    margin-top: 3px;
+    font: 400 12.5px/1.4 Archivo, sans-serif;
+    color: var(--ink-60);
+  }
+
+  @media (max-width: 700px) {
+    .record-block {
+      grid-template-columns: 1fr;
+    }
+
+    .record-block__label {
+      padding: 20px 20px 8px;
+    }
+
+    .record-block__content {
+      padding: 0 20px 24px;
+    }
+
+    .record-block__fields {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

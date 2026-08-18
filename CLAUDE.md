@@ -45,8 +45,8 @@ Astro content collections: `series`, `books`, `journal`, `audio`, `writing` and
 `frames`.
 Adding a record means adding a file. The filename is the id, so
 `series/s-02.md` is served at `/series/s-02` — there is no separate slug field.
-Two collections have a page per record, `series` and `audio`; the rest are
-listed on an index only.
+Three collections have a page per record — `series`, `audio` and `journal`;
+the rest are listed on an index only.
 
 Every collection has a schema in `src/content.config.ts` declaring its fields.
 A record that doesn't match fails the build with the file, the field and the
@@ -60,22 +60,23 @@ with an empty body falls back to its one-line `indexDescription`, which is what
 
 Things that will catch you out:
 
-1. **Three counts are still stated by hand, on purpose.** `src/data/archive.ts`
-   holds `journalTotal = 11`, `writingTotal = 10` and `scopeRecordTotal = 61`.
-   The archive is bigger than what is published, so these cannot be counted from
-   the files — the home page lists a selection but states the true size. They
-   are the numbers that go stale. Everything countable (series and books counts,
-   the frame total) is derived at build time. **Delete each one the moment its
-   collection holds every real record** and count the files instead.
+1. **Two counts are still stated by hand, on purpose.** `src/data/archive.ts`
+   holds `writingTotal = 10` and `scopeRecordTotal = 61`. The archive is bigger
+   than what is published, so these cannot be counted from the files — the home
+   page lists a selection but states the true size. They are the numbers that go
+   stale. Everything countable (the series, books, audio and journal counts, the
+   frame total) is derived at build time. **Delete each one the moment its
+   collection holds every real record** and count the files instead — that is
+   what happened to `journalTotal` when issues 17–27 landed.
 2. **Order is derived from `ref`, not from file order.** Series sort ascending
    (S-01 first); books, journal and writing sort descending (newest first). A
    record's position comes from its `ref`, so refs must stay well-formed and
    zero-padded.
-3. **`detail` on a series is optional.** `S-02` and `S-05` have one. `[slug].astro`
-   builds a page either way: with `detail` it renders the standfirst, record
-   block and plates; without, it falls back to `indexDescription` and a "still
-   being catalogued" note. So a new series is one file and it gets a working
-   page immediately — fill in `detail` later.
+3. **`detail` on a series is optional.** Only `S-03` and `S-04` still lack one.
+   `[slug].astro` builds a page either way: with `detail` it renders the
+   standfirst, record block and plates; without, it falls back to
+   `indexDescription` and a "still being catalogued" note. So a new series is
+   one file and it gets a working page immediately — fill in `detail` later.
 4. **Plates are a tagged union.** `kind: "full" | "paired" | "small" |
    "portrait" | "diptych"`, expressed as a Zod `discriminatedUnion` in the
    schema, and `Plate.astro` dispatches on `kind` to the five `Plate*`
@@ -149,6 +150,27 @@ Things that will catch you out:
    a series, the markdown body is the lead prose and an empty body falls back to
    the one-line `description`. See INVENTORY.md for how the refs were assigned;
    the podcast's own numbering is unreliable and the last five are inferred.
+9. **`journal` is issues 17–27 of one journal**, Notes from Below, and follows
+   audio's shape exactly: `JOURNAL_NAME` and `JOURNAL_URL` in
+   `src/data/archive.ts` rather than in 11 frontmatter blocks, no `factsLine`
+   (the index row's facts column is derived from the length of `contents`), and
+   the markdown body as the lead prose. Two things differ from audio.
+   **The ref carries the publisher's own printed number** — `J-17` is issue 17,
+   so the run starts at 17 and there is no `J-01`; `issueNumber` restates it as
+   a number so the refs could be renumbered without losing it. And **the body
+   prose is Notes from Below's own editorial, quoted verbatim**, not written
+   here — the only invented text in the collection is the one-line
+   `description` on each record. `contents` is the issue's table of contents
+   (`title`, `authors`, `href`), `downloads` is the whole issue as a file where
+   they offer one, and its `format` field doubles as the field label.
+10. **`books` is Callum's three books**, scraped from Polity, Canongate and
+    Verso. Same bargain again: the body is the publisher's blurb verbatim and
+    the one-line `summary` is the only invented text. **`authors` is required**
+    because two of the three are co-authored — assume nothing about the byline.
+    `subtitle` and `href` are optional; `href` turns the `action` label into a
+    link, and leaving it off renders the action as plain text, which is what an
+    out-of-print book wants. See INVENTORY.md for how each publisher's page had
+    to be read — Polity's is a JavaScript app with a WordPress API behind it.
 
 ## Adding a series
 
@@ -214,7 +236,7 @@ looking at it.
 ```bash
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # → dist/ ; currently 9 pages
+npm run build    # → dist/ ; currently 44 pages
 npm run preview  # serve the built dist/ as Netlify will
 npm run photos   # strip metadata + downscale new photographs
 ```
@@ -238,6 +260,17 @@ stylesheet in the served page both look correct, but the browser renders the
 old layout. `npm run build` is unaffected and is the honest check. This has
 already cost one long debugging session — the layout was right the entire time.
 
+**The same staleness hides records, and that is harder to spot.** `astro dev`
+validates the collections against `content.config.ts` when it starts and caches
+the result, so **editing the schema and the records together makes every record
+that depends on the change vanish** — the running server checks the new
+frontmatter against the old schema, fails it, and drops it from the collection.
+There is no error in the log: the index is just short and the record's route
+404s. This is what happened when `downloads` changed from `label` to `format`
+and J-26 and J-27 disappeared while J-17 to J-25 stayed. **Restart the dev
+server after any change to `content.config.ts`**, and check the record count on
+the index rather than trusting that a page you did not open still works.
+
 ```bash
 astro dev stop && astro dev --background
 ```
@@ -260,18 +293,17 @@ Netlify builds on push to `main`.
 
 ## Known gaps
 
-- **Three of the six nav items go nowhere.** `TopBar.astro` lists Journal,
-  Writing and Index with no `href`, so they render as dead text. Journal and
-  Writing have collections but no page; Index has neither. The home page's
-  section headings work the same way: `ShellSectionHead` takes an optional
-  `href` that makes the count and its `→` a link, and Series, Books and Audio
-  have one while Journal and Writing do not. Give those two a page and the
-  arrows can be wired up in the same line.
-- **Most of the content is still placeholder.** `audio` is the only complete
-  collection. `S-01`, `S-05` and `S-06` are real. `S-02` to `S-04` are sample
-  data and are due to be replaced, as are the books, journal and writing
-  records. `INVENTORY.md` in the repo root tracks what is real and what is still
-  sample data — keep it current, it is what survives between sessions.
+- **Two of the six nav items go nowhere.** `TopBar.astro` lists Writing and
+  Index with no `href`, so they render as dead text. Writing has a collection
+  but no page; Index has neither. The home page's section headings work the same
+  way: `ShellSectionHead` takes an optional `href` that makes the count and its
+  `→` a link, and Series, Books, Audio and Journal have one while Writing does
+  not. Give Writing a page and the arrow can be wired up in the same line.
+- **Series and writing are the placeholders left.** `audio`, `journal` and
+  `books` are complete. `S-01`, `S-05` and `S-06` are real; `S-02` to `S-04` are
+  sample data and are due to be replaced, as are the writing records.
+  `INVENTORY.md` in the repo root tracks what is real and what is still sample
+  data — keep it current, it is what survives between sessions.
 - `S-02` cross-references `EP-64`, which does not exist — the podcast run only
   reaches `EP-22`. Sample data inside a sample series, so it goes when S-02 does.
   A real series links an episode by giving the `related` entry an `href`.
@@ -282,12 +314,14 @@ Netlify builds on push to `main`.
   a standalone paragraph — the home page's featured caption, for instance, runs
   straight into an accented series reference. Only the lead prose moved to the
   body.
-- **The series index headline is now wrong.** `series/index.astro` hardcodes
-  `["Four", "disputes,"]` and there are five series since `S-05` landed, so the
-  page reads "Four disputes" above a list of five. The books page has the same
-  hardcoded `["Three", "books"]`. Nothing computes either. This needs a
-  number-to-word helper before the next series is added, or it will be wrong
-  again immediately.
-- The masthead scope line lists "PHOTOGRAPHS, BOOKS, JOURNAL, WRITING" and does
-  not mention audio, now that audio exists. Callum's copy to change.
+- **The series index headline is wrong; the books one is right by luck.**
+  `series/index.astro` hardcodes `["Four", "disputes,"]` and there are six
+  series, so the page reads "Four disputes" above a list of six. The frame
+  count beside it is derived and correct. `books/index.astro` hardcodes
+  `["Three", "books"]`, which matches the three books today and goes wrong the
+  moment a fourth lands. Neither computes. Both want a number-to-word helper:
+  the design spells the numeral out, so `pad()` is no use here.
+- The masthead scope line now reads "PHOTOGRAPHS, BOOKS, PODCASTS, JOURNAL,
+  WRITING", so audio is covered. It is hardcoded in `src/pages/index.astro` and
+  is Callum's copy to change.
 - No custom domain, no analytics, no sitemap or RSS.

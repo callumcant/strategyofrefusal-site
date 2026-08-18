@@ -137,22 +137,56 @@ const books = defineCollection({
     ref: z.string(),
     year: z.string(),
     title: z.string(),
+    // Two of the three are co-authored, so the byline cannot be assumed.
+    authors: z.string(),
+    subtitle: z.string().optional(),
     summary: z.string(), // short row description, used on the home page
     // The longer description shown on the books page is the markdown body.
     factsLine: z.string(), // e.g. "Verso · 288pp · £14.99" — used on the home page
     facts: z.array(z.string()), // multi-line mono block used on the books page
     action: z.string(), // "ORDER" | "DOWNLOAD PDF"
+    // Makes the action a link. Without it the action renders as plain text,
+    // which is what an out-of-print book wants.
+    href: z.string().optional(),
   }),
 });
 
+// Issues of Notes from Below. The ref carries the issue's own printed number,
+// so J-17 is issue 17 — issueNumber restates it as a number for display, and
+// survives if the refs are ever renumbered. As with audio, the publisher's
+// name and URL live in src/data/archive.ts rather than in every record, the
+// lead prose is the markdown body, and there is no factsLine: the index row's
+// facts column is derived from the length of the contents list.
 const journal = defineCollection({
   loader: glob({ base: "./src/content/journal", pattern: "**/*.md" }),
   schema: z.object({
     ref: z.string(),
+    issueNumber: z.number(),
     year: z.string(),
     title: z.string(),
-    description: z.string(),
-    factsLine: z.string(),
+    description: z.string(), // one line, for the index row
+    dateLabel: z.string(), // "19 April 2023"
+    issueUrl: z.string(), // the issue on notesfrombelow.org
+    // The whole issue as a file, where the publisher offers one. format is
+    // the file type, used as the field label: "EPUB", "PDF".
+    downloads: z
+      .array(
+        z.object({
+          format: z.string(),
+          href: z.string(),
+        }),
+      )
+      .default([]),
+    // The issue's table of contents, in the order it is published in.
+    contents: z
+      .array(
+        z.object({
+          title: z.string(),
+          authors: z.string(),
+          href: z.string(),
+        }),
+      )
+      .default([]),
   }),
 });
 

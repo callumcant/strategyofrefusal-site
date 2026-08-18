@@ -11,7 +11,7 @@ import WritingRow from "../components/WritingRow.astro";
 import PhotoRecord from "../components/PhotoRecord.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection, getEntry } from "astro:content";
-import { journalTotal, writingTotal, scopeRecordTotal, scopeSince, pad } from "../data/archive";
+import { writingTotal, scopeRecordTotal, scopeSince, pad } from "../data/archive";
 
 // Series read low-to-high (S-01 first); publications read newest-first.
 const byRefAsc = (a: { data: { ref: string } }, b: { data: { ref: string } }) => a.data.ref.localeCompare(b.data.ref);
@@ -19,18 +19,22 @@ const byRefDesc = (a: { data: { ref: string } }, b: { data: { ref: string } }) =
 
 const series = (await getCollection("series")).sort(byRefAsc);
 const books = (await getCollection("books")).sort(byRefDesc);
-const journal = (await getCollection("journal")).sort(byRefDesc);
 const writing = (await getCollection("writing")).sort(byRefDesc);
 const homeFeaturedFrame = (await getEntry("frames", "home"))!.data;
 
-// Audio is the one complete collection, so all 22 episodes are here and the
-// count is real rather than stated. Listing all 22 would swamp a page whose
-// other sections run to two or three rows, so the home page shows the newest
-// few and the count carries the true size — the same bargain the journal and
-// writing sections make. Change audioShown to show more or fewer.
+// Audio and journal are the complete collections, so their counts are real
+// rather than stated. Listing all 22 episodes or all 11 issues would swamp a
+// page whose other sections run to two or three rows, so the home page shows
+// the newest few and the count beside the heading carries the true size — the
+// same bargain the writing section makes with a stated total. Change the
+// Shown numbers to show more or fewer.
 const audioShown = 4;
 const audioAll = (await getCollection("audio")).sort(byRefDesc);
 const audio = audioAll.slice(0, audioShown);
+
+const journalShown = 4;
+const journalAll = (await getCollection("journal")).sort(byRefDesc);
+const journal = journalAll.slice(0, journalShown);
 
 const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
 ---
@@ -102,15 +106,16 @@ const totalFrames = series.reduce((sum, s) => sum + s.data.frames, 0);
     </section>
 
     <section class="section section--journal">
-      <ShellSectionHead title="Journal" countLabel={`${pad(journalTotal)} ISSUES →`} />
+      <ShellSectionHead title="Journal" countLabel={`${pad(journalAll.length)} ISSUES →`} href="/journal" />
       {
         journal.map((j, i) => (
           <PublicationRow
             ref={j.data.ref}
             title={j.data.title}
             description={j.data.description}
-            factsLine={j.data.factsLine}
+            factsLine={`${pad(j.data.contents.length)} ARTICLES`}
             year={j.data.year}
+            href={`/journal/${j.id}`}
             last={i === journal.length - 1}
           />
         ))

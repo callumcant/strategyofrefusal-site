@@ -8,7 +8,7 @@ Target sizes given by Callum, August 2026.
 
 | Collection | Target | Landed | Real? | Status |
 | --- | --- | --- | --- | --- |
-| Sequences | 15 | 3 | **all real** | S-01 Chasing the Wildcat: 17 plates, 12 captioned, no standfirst and no passages at all. S-02 The Death of a University: 16 plates covering 17 frames, 8 carrying a caption or a passage, 8 still photograph-and-reference only. S-03 Too Hot to Work: complete — 9 plates covering 10 frames, 6 with passages. The three placeholders were deleted in August 2026 and these three renumbered into the gap |
+| Sequences | 15 | 4 | **all real** | S-01 Chasing the Wildcat: 17 plates, 12 captioned, no standfirst and no passages at all. S-02 The Death of a University: 16 plates covering 17 frames, 8 carrying a caption or a passage, 8 still photograph-and-reference only. S-03 Too Hot to Work: complete — 9 plates covering 10 frames, 6 with passages. S-04 After the Blast: 13 plates, one per frame, **in file order on Callum's instruction — `s04-01` is plate 01 and so on down to 13**; alt text and shapes only, no standfirst, no captions, no passages yet. The three placeholders were deleted in August 2026 and the first three renumbered into the gap |
 | Books    | 3  | 3 | **yes** | **Complete.** Riding for Deliveroo, Feeding the Machine, The Future in Our Past — scraped from the three publishers |
 | Journal  | 11 | 11 | **yes** | **Complete.** Issues 17–27 of Notes from Below, scraped from their issue pages. Every one has a record page at `/journal/j-nn` |
 | Audio    | 22 | 22 | **yes** | **Complete.** All 22 episodes of Workers' Inquiry, catalogued from the podcast's RSS feed. Every one has a record page at `/audio/ep-nn` |
@@ -31,7 +31,7 @@ three real ones into the gap they left:
 frame belongs to, which is the convention the whole folder runs on. The image
 numbering inside each sequence was left exactly as it was, including the places
 where it never matched the plate numbers (S-02's plate 09 is `s02-10.jpg`).
-**The next new sequence is `S-04`.** Anything written before this date that
+**The next new sequence is `S-05`.** Anything written before this date that
 mentions S-05 or S-06 means these two.
 
 **There is no sample data left in `src/content/`.** Every `frames` record now
@@ -223,8 +223,8 @@ Callum's order — the photo sequences first, because they are the spine of
 the archive.
 
 1. **Sequence records** — 9 fields each. Gets all fifteen disputes onto the site
-   with working pages, before any photograph exists. Twelve to go, running on
-   from `S-04`.
+   with working pages, before any photograph exists. Eleven to go, running on
+   from `S-05`.
 2. **Sequence detail and plates** — the heavy one. Needs the photographs, and
    every location, date and time typed by hand (no EXIF).
 3. ~~**Books**~~ — done, August 2026. Three books, scraped from their publishers.

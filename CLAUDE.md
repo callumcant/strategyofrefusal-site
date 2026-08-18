@@ -200,7 +200,7 @@ Things that will catch you out:
 
 ## Adding a series
 
-This is the live work: twelve more series to go. `S-03` is the worked
+This is the live work: eleven more series to go. `S-03` is the worked
 example — read `src/content/series/s-03.md` before starting a new one.
 `INVENTORY.md` tracks what has landed.
 
@@ -416,7 +416,7 @@ Netlify builds on push to `main`.
   to `S-03`. Chasing the Wildcat kept `S-01`. **The photographs were renamed to
   match** — `s06-*.jpg` to `s02-*.jpg`, `s05-*.jpg` to `s03-*.jpg` — so the
   filename prefix still names the sequence a frame belongs to. The next new
-  sequence is `S-04`. Anything written before that date referring to `S-05` or
+  sequence is `S-05`. Anything written before that date referring to `S-05` or
   `S-06` means these two.
 - **Four sample photographs are now unreferenced**: `1-DSCF6025.jpg`,
   `2-DSCF2894.jpg`, `3-DSCF2021.jpg` and `4-DSCF8458.jpg` in

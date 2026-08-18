@@ -95,23 +95,6 @@ const totalFrames = seriesAll.reduce((sum, s) => sum + s.data.frames, 0);
       }
     </section>
 
-    <section class="section section--audio">
-      <ShellSectionHead title="Audio" countLabel={`${pad(audioAll.length)} EPISODES →`} href="/audio" />
-      {
-        audio.map((e, i) => (
-          <PublicationRow
-            ref={e.data.ref}
-            title={e.data.title}
-            description={e.data.description}
-            factsLine={e.data.duration.toUpperCase()}
-            year={e.data.year}
-            href={`/audio/${e.id}`}
-            last={i === audio.length - 1}
-          />
-        ))
-      }
-    </section>
-
     <section class="section section--journal">
       <ShellSectionHead title="Journal" countLabel={`${pad(journalAll.length)} ISSUES →`} href="/journal" />
       {
@@ -145,6 +128,23 @@ const totalFrames = seriesAll.reduce((sum, s) => sum + s.data.frames, 0);
       }
     </section>
 
+    <section class="section section--audio">
+      <ShellSectionHead title="Audio" countLabel={`${pad(audioAll.length)} EPISODES →`} href="/audio" />
+      {
+        audio.map((e, i) => (
+          <PublicationRow
+            ref={e.data.ref}
+            title={e.data.title}
+            description={e.data.description}
+            factsLine={e.data.duration.toUpperCase()}
+            year={e.data.year}
+            href={`/audio/${e.id}`}
+            last={i === audio.length - 1}
+          />
+        ))
+      }
+    </section>
+
     <Footer left="KEPT BY CALLUM CANT, ORGANISER · CALLUMCANT@GMAIL.COM" right={LICENCE_NAME} rightHref={LICENCE_URL} />
   </ShellFrame>
 </BaseLayout>
@@ -163,7 +163,7 @@ const totalFrames = seriesAll.reduce((sum, s) => sum + s.data.frames, 0);
   }
 
   .section--audio {
-    padding: 14px var(--page-pad) 20px;
+    padding: 14px var(--page-pad) 34px;
   }
 
   .section--journal {
@@ -171,7 +171,7 @@ const totalFrames = seriesAll.reduce((sum, s) => sum + s.data.frames, 0);
   }
 
   .section--writing {
-    padding: 14px var(--page-pad) 34px;
+    padding: 14px var(--page-pad) 20px;
   }
 
   @media (max-width: 700px) {

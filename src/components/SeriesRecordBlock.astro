@@ -20,14 +20,6 @@ const { record, note } = Astro.props;
       <FieldRow label="UNION">{record.union}</FieldRow>
       <FieldRow label="DISPUTE">{record.dispute}</FieldRow>
       <FieldRow label="FRAMES">{record.framesNote}</FieldRow>
-      <FieldRow label="RELATED" accent>
-        {record.related.map((r, i) => (
-          <>
-            {i > 0 ? " · " : ""}
-            {r.href ? <a href={r.href}>{r.ref}</a> : r.ref}
-          </>
-        ))}
-      </FieldRow>
     </div>
     <p class="record-block__note">{note}</p>
   </div>

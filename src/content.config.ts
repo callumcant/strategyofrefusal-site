@@ -12,11 +12,6 @@ import { z } from "astro/zod";
 // Photographs are referenced by a path relative to the markdown file and
 // resolved by image(), which is what hands them to Astro's optimiser.
 
-const relatedRef = z.object({
-  ref: z.string(),
-  href: z.string().optional(),
-});
-
 const series = defineCollection({
   loader: glob({ base: "./src/content/series", pattern: "**/*.md" }),
   schema: ({ image }) =>
@@ -41,7 +36,6 @@ const series = defineCollection({
             union: z.string(),
             dispute: z.string(),
             framesNote: z.string(),
-            related: z.array(relatedRef).default([]),
           }),
           note: z.string(),
           // location and date are optional on every shape: a sequence shot in

@@ -14,9 +14,13 @@ interface Props {
 
 const { variant, label, labelHref, active } = Astro.props;
 
-const shellNav: NavItem[] = [
-  // The key stays "series" — it matches the collection, the route and the S-nn
-  // refs, none of which changed. Only the label the reader sees is "Photo".
+// One list, both variants. The nav reads the same on every page, in the same
+// order — a record page used to drop "Writing", which made the site look like
+// it changed shape depending where you stood.
+//
+// The key stays "series" — it matches the collection, the route and the S-nn
+// refs, none of which changed. Only the label the reader sees is "Photo".
+const nav: NavItem[] = [
   { key: "series", label: "Photo", href: "/series" },
   { key: "books", label: "Books", href: "/books" },
   { key: "journal", label: "Journal", href: "/journal" },
@@ -24,16 +28,6 @@ const shellNav: NavItem[] = [
   { key: "audio", label: "Audio", href: "/audio" },
   { key: "about", label: "About", href: "/about" },
 ];
-
-const quietNav: NavItem[] = [
-  { key: "series", label: "Photo", href: "/series" },
-  { key: "books", label: "Books", href: "/books" },
-  { key: "journal", label: "Journal", href: "/journal" },
-  { key: "audio", label: "Audio", href: "/audio" },
-  { key: "about", label: "About", href: "/about" },
-];
-
-const nav = variant === "shell" ? shellNav : quietNav;
 ---
 
 <div class:list={["topbar", `topbar--${variant}`]}>

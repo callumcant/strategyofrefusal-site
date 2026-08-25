@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://strategyofrefusal.com/sitemap-index.xml

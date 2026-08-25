@@ -27,7 +27,7 @@ const { Content } = await render(entry);
 const hasStandfirst = Boolean(entry.body?.trim());
 ---
 
-<BaseLayout title={`${s.title} — Strategy of Refusal`}>
+<BaseLayout title={`${s.title} — Strategy of Refusal`} description={s.indexDescription}>
   <div class="series-page">
     <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / PHOTO / ${s.ref}`} labelHref="/series" active="series" />
 

@@ -28,7 +28,7 @@ const { Content } = await render(entry);
 const hasLead = Boolean(entry.body?.trim());
 ---
 
-<BaseLayout title={`${j.title} — Strategy of Refusal`}>
+<BaseLayout title={`${j.title} — Strategy of Refusal`} description={j.description}>
   <div class="issue-page">
     <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / JOURNAL / ${j.ref}`} labelHref="/journal" active="journal" />
 

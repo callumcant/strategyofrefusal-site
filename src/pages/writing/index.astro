@@ -18,7 +18,11 @@ const factsLine = (w: (typeof writing)[number]) =>
 const featuredFrame = (await getEntry("frames", "writing"))!.data;
 ---
 
-<BaseLayout title="Writing — Strategy of Refusal">
+<BaseLayout
+  title="Writing — Strategy of Refusal"
+  description="Articles on strikes, platform work and the labour movement."
+  image={featuredFrame.image}
+>
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGY OF REFUSAL / WRITING" labelHref="/" active="writing" />
 

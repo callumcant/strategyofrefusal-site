@@ -12,7 +12,11 @@ const series = (await getCollection("series")).sort((a, b) => a.data.ref.localeC
 const seriesIndexFeaturedFrame = (await getEntry("frames", "series-index"))!.data;
 ---
 
-<BaseLayout title="Photo sequences — Strategy of Refusal">
+<BaseLayout
+  title="Photo sequences — Strategy of Refusal"
+  description="Images as a form of inquiry — photo sequences from picket lines and disputes across Britain."
+  image={seriesIndexFeaturedFrame.image}
+>
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGY OF REFUSAL / PHOTO" labelHref="/" active="series" />
 

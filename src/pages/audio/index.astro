@@ -13,7 +13,11 @@ const audio = (await getCollection("audio")).sort((a, b) => b.data.ref.localeCom
 const featuredFrame = (await getEntry("frames", "audio"))!.data;
 ---
 
-<BaseLayout title="Audio — Strategy of Refusal">
+<BaseLayout
+  title="Audio — Strategy of Refusal"
+  description={`Every episode of ${PODCAST_NAME}, a podcast about work, struggle and revolution by ${JOURNAL_NAME}.`}
+  image={featuredFrame.image}
+>
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGY OF REFUSAL / AUDIO" labelHref="/" active="audio" />
 

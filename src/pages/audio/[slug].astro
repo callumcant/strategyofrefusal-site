@@ -27,7 +27,7 @@ const { Content } = await render(entry);
 const hasLead = Boolean(entry.body?.trim());
 ---
 
-<BaseLayout title={`${e.title} — Strategy of Refusal`}>
+<BaseLayout title={`${e.title} — Strategy of Refusal`} description={e.description}>
   <div class="episode-page">
     <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / AUDIO / ${e.ref}`} labelHref="/audio" active="audio" />
 

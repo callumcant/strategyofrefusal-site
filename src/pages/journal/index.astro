@@ -15,7 +15,11 @@ const journal = (await getCollection("journal")).sort((a, b) => b.data.ref.local
 const featuredFrame = (await getEntry("frames", "journal"))!.data;
 ---
 
-<BaseLayout title="Journal — Strategy of Refusal">
+<BaseLayout
+  title="Journal — Strategy of Refusal"
+  description={`Issues of ${JOURNAL_NAME}, a journal of worker writing and workers' inquiry.`}
+  image={featuredFrame.image}
+>
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGY OF REFUSAL / JOURNAL" labelHref="/" active="journal" />
 

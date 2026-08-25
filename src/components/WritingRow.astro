@@ -40,12 +40,16 @@ const { ref, title, publication, year, href, last } = Astro.props;
   }
 
   .writing-row__title {
-    font: 400 17px/1.35 Archivo, sans-serif;
+    font: 700 24px/1.06 Archivo, sans-serif;
+    /* Not font-stretch — see ShellSectionHead. */
+    font-variation-settings: "wdth" 70;
+    text-transform: uppercase;
     color: var(--cream);
   }
 
   .writing-row:hover .writing-row__title {
-    text-decoration: 1px underline var(--cream);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
     text-underline-offset: 3px;
   }
 

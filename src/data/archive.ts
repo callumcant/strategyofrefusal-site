@@ -6,14 +6,14 @@
 // books totals, the frame count — is derived at build time instead.
 //
 // Target sizes as of August 2026, from Callum:
-//   series 15 · books 3 · journal 11 · audio 22 · writing 19
+//   series 15 · books 3 · journal 11 · audio 22 · writing 20
 // Delete each of these the moment its collection holds every real record, and
 // count the files instead. See INVENTORY.md for what has actually landed.
-// journalTotal and writingTotal are both gone: all 11 issues and all 19
+// journalTotal and writingTotal are both gone: all 11 issues and all 20
 // articles are now records, so those counts come from the files like series,
 // books and audio. Only the series are still short of their target, which is
 // why the scope line below is the last stated number left.
-export const scopeRecordTotal = 70; // sum of the five collection targets above
+export const scopeRecordTotal = 71; // sum of the five collection targets above
 export const scopeSince = "2018";
 
 // Every audio record is an episode of the same show, so the show's name lives

@@ -142,9 +142,19 @@ adding J-28:
 
 ## Writing
 
-The 19 records are Callum's published articles, scraped from the seven outlets
-that published them in August 2026, from a list of URLs Callum gave. Things to
-know before adding W-20:
+The 20 records are Callum's published articles, scraped from the outlets that
+published them. The first 19 came from a list of URLs Callum gave in August
+2026; W-20 was added separately. Things to know before adding W-21:
+
+- **W-20** is an interview at Prometheus Magazine, 18 August 2026 — "The
+  Future in Our Past – Interview on the General Strike", byline Harry Holmes,
+  Callum Cant and Matthew Lee, on Cant and Lee's book of (almost) the same
+  name. Prometheus 403s a plain fetch; `curl` with a browser user-agent got
+  the page. The description is the page's own excerpt
+  ("We interviewed Callum Cant and Matthew Lee on their recent book...")
+  trimmed of Callum's name, the same cut made across W-01 to W-19. **The URL
+  slug says "our-future-in-our-past" but the page itself titles the book "The
+  Future in Our Past" — check which is correct if this ever needs restating.**
 
 - **Refs run oldest first**, as the books do: W-01 is January 2018 and W-19 is
   August 2024. The index sorts them newest-first off the ref, so a new piece
@@ -230,8 +240,8 @@ the archive.
 3. ~~**Books**~~ — done, August 2026. Three books, scraped from their publishers.
 4. ~~**Audio**~~ — done, August 2026. All 22 episodes with a page each.
 5. ~~**Journal**~~ — done, August 2026. Issues 17-27, with a page each.
-6. ~~**Writing**~~ — done, August 2026. Nineteen articles, scraped from the
-   seven outlets that published them.
+6. ~~**Writing**~~ — done, August 2026. Twenty articles, scraped from the
+   outlets that published them.
 
 Batches of five to eight records per exchange: big enough to be worth the round
 trip, small enough to check before moving on.
@@ -267,12 +277,13 @@ trip, small enough to check before moving on.
   comes from the files. **Confirm these nineteen are the whole of it.** If more
   are still to come, the writing count on the home page will understate itself
   until they land, which is the situation the stated totals existed to solve.
-- **The scope line reads `70 RECORDS · 2018 —`**, the sum of the five targets:
-  15 + 3 + 11 + 22 + 19. It was 61 when writing was targeted at 10, and the
-  start year was 2019 until Callum corrected it to 2018 in August 2026 — the
-  year of the earliest record in the archive, W-01. Only the sequences are
-  still short of their target, so this becomes countable — and `archive.ts`
-  becomes deletable — once all fifteen have landed.
+- **The scope line reads `71 RECORDS · 2018 —`**, the sum of the five targets:
+  15 + 3 + 11 + 22 + 20. It was 61 when writing was targeted at 10, 70 once
+  the first 19 articles landed, and rose to 71 when W-20 was added. The start
+  year was 2019 until Callum corrected it to 2018 in August 2026 — the year of
+  the earliest record in the archive, W-01. Only the sequences are still short
+  of their target, so this becomes countable — and `archive.ts` becomes
+  deletable — once all fifteen have landed.
 - **The masthead reads "AN ARCHIVE OF CLASS STRUGGLE IN BRITAIN"**, Callum's
   wording, August 2026. **The list of formats that used to follow it —
   "PHOTOGRAPHS, BOOKS, PODCASTS, JOURNAL, WRITING" — went with the rewrite**,

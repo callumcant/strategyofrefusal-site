@@ -41,7 +41,10 @@ const s = item.data;
   }
 
   .index-row__title {
-    font: 600 18px/1.25 Archivo, sans-serif;
+    font: 800 18px/1.25 Archivo, sans-serif;
+    /* Not font-stretch — see ShellSectionHead. */
+    font-variation-settings: "wdth" 62;
+    text-transform: uppercase;
     color: var(--ink);
   }
 

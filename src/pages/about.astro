@@ -29,12 +29,24 @@ const fields = [
   { label: "BIO", value: bio },
   { label: "EMAIL", value: "callumcant@gmail.com", href: "mailto:callumcant@gmail.com" },
 ];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Callum Cant",
+  url: new URL("/about", Astro.site).toString(),
+  email: "mailto:callumcant@gmail.com",
+  jobTitle: "Industrial Organiser",
+  worksFor: { "@type": "Organization", name: "National Education Union" },
+  affiliation: { "@type": "Organization", name: "Notes from Below" },
+};
 ---
 
 <BaseLayout
   title="About — Strategy of Refusal"
   description="Callum Cant is an Industrial Organiser with the National Education Union and a founding editor of Notes from Below, a workers' inquiry journal."
   image={featuredFrame.image}
+  jsonLd={jsonLd}
 >
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGY OF REFUSAL / ABOUT" labelHref="/" active="about" />

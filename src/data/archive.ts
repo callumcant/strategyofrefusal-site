@@ -61,3 +61,23 @@ const NUMBER_WORDS = [
 export function numberWord(n: number): string {
   return NUMBER_WORDS[n] ?? String(n);
 }
+
+const MONTHS: Record<string, string> = {
+  january: "01", february: "02", march: "03", april: "04", may: "05", june: "06",
+  july: "07", august: "08", september: "09", october: "10", november: "11", december: "12",
+};
+
+// Every dateLabel in the archive is typed by hand as "D Month YYYY" —
+// "19 April 2023" — for display. Structured data (JSON-LD) wants ISO 8601,
+// so this is a fixed parse of that one format, not a general date parser.
+export function toISODate(dateLabel: string): string {
+  const [day, month, year] = dateLabel.split(" ");
+  return `${year}-${MONTHS[month.toLowerCase()]}-${day.padStart(2, "0")}`;
+}
+
+// Every audio duration is typed as "N min" — "57 min" — converted to ISO
+// 8601 duration ("PT57M") for the same reason.
+export function toISODuration(duration: string): string {
+  const minutes = duration.match(/\d+/)?.[0] ?? "0";
+  return `PT${minutes}M`;
+}

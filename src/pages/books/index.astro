@@ -16,12 +16,30 @@ const booksFeaturedFrame = (await getEntry("frames", "books"))!.data;
 const bookRows = await Promise.all(
   books.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
 );
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: books.map((b, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: {
+      "@type": "Book",
+      name: b.data.title,
+      author: b.data.authors,
+      datePublished: b.data.year,
+      description: b.data.summary,
+      ...(b.data.href ? { url: b.data.href } : {}),
+    },
+  })),
+};
 ---
 
 <BaseLayout
   title="Books — Strategy of Refusal"
   description="On platform capitalism, artificial intelligence, and the 1926 general strike — Callum Cant's three books."
   image={booksFeaturedFrame.image}
+  jsonLd={jsonLd}
 >
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGY OF REFUSAL / BOOKS" labelHref="/" active="books" />

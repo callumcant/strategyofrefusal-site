@@ -25,9 +25,25 @@ const s = entry.data;
 // yet has an empty body, and falls back to its one-line index description.
 const { Content } = await render(entry);
 const hasStandfirst = Boolean(entry.body?.trim());
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  name: s.title,
+  description: s.indexDescription,
+  creator: { "@type": "Person", name: "Callum Cant" },
+  about: s.dispute,
+  contentLocation: s.place,
+  numberOfItems: s.frames,
+  url: new URL(Astro.url.pathname, Astro.site).toString(),
+};
 ---
 
-<BaseLayout title={`${s.title} — Strategy of Refusal`} description={s.indexDescription}>
+<BaseLayout
+  title={`${s.title} — Strategy of Refusal`}
+  description={s.indexDescription}
+  jsonLd={jsonLd}
+>
   <div class="series-page">
     <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / PHOTO / ${s.ref}`} labelHref="/series" active="series" />
 

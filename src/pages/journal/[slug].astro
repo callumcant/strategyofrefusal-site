@@ -5,7 +5,7 @@ import TopBar from "../../components/TopBar.astro";
 import SeriesTitleBlock from "../../components/SeriesTitleBlock.astro";
 import JournalRecordBlock from "../../components/JournalRecordBlock.astro";
 import SeriesFooterNav from "../../components/SeriesFooterNav.astro";
-import { JOURNAL_NAME } from "../../data/archive";
+import { JOURNAL_NAME, JOURNAL_URL, toISODate } from "../../data/archive";
 
 export async function getStaticPaths() {
   // Newest first, matching the index. The NEXT link therefore walks backwards
@@ -26,9 +26,24 @@ const j = entry.data;
 // its one-line index description.
 const { Content } = await render(entry);
 const hasLead = Boolean(entry.body?.trim());
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "PublicationIssue",
+  issueNumber: j.issueNumber,
+  name: j.title,
+  description: j.description,
+  datePublished: toISODate(j.dateLabel),
+  isPartOf: { "@type": "Periodical", name: JOURNAL_NAME, url: JOURNAL_URL },
+  url: new URL(Astro.url.pathname, Astro.site).toString(),
+};
 ---
 
-<BaseLayout title={`${j.title} — Strategy of Refusal`} description={j.description}>
+<BaseLayout
+  title={`${j.title} — Strategy of Refusal`}
+  description={j.description}
+  jsonLd={jsonLd}
+>
   <div class="issue-page">
     <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / JOURNAL / ${j.ref}`} labelHref="/journal" active="journal" />
 

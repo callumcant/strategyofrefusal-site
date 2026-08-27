@@ -7,6 +7,7 @@ import DisplayHeading from "../../components/DisplayHeading.astro";
 import PublicationRow from "../../components/PublicationRow.astro";
 import ArchiveBlock from "../../components/ArchiveBlock.astro";
 import PhotoRecord from "../../components/PhotoRecord.astro";
+import { toISODate } from "../../data/archive";
 
 // Newest first, off the ref — W-01 is the earliest piece.
 const writing = (await getCollection("writing")).sort((a, b) => b.data.ref.localeCompare(a.data.ref));
@@ -16,12 +17,32 @@ const writing = (await getCollection("writing")).sort((a, b) => b.data.ref.local
 const factsLine = (w: (typeof writing)[number]) =>
   [w.data.publication, w.data.citation, w.data.dateLabel].filter(Boolean).join(" · ");
 const featuredFrame = (await getEntry("frames", "writing"))!.data;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: writing.map((w, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: {
+      "@type": "Article",
+      headline: w.data.title,
+      author: w.data.authors,
+      publisher: { "@type": "Organization", name: w.data.publication },
+      datePublished: toISODate(w.data.dateLabel),
+      description: w.data.description,
+      url: w.data.href,
+      ...(w.data.doi ? { sameAs: `https://doi.org/${w.data.doi}` } : {}),
+    },
+  })),
+};
 ---
 
 <BaseLayout
   title="Writing — Strategy of Refusal"
   description="Articles on strikes, platform work and the labour movement."
   image={featuredFrame.image}
+  jsonLd={jsonLd}
 >
   <ShellFrame>
     <TopBar variant="shell" label="STRATEGY OF REFUSAL / WRITING" labelHref="/" active="writing" />

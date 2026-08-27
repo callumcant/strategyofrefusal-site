@@ -5,7 +5,7 @@ import TopBar from "../../components/TopBar.astro";
 import SeriesTitleBlock from "../../components/SeriesTitleBlock.astro";
 import AudioRecordBlock from "../../components/AudioRecordBlock.astro";
 import SeriesFooterNav from "../../components/SeriesFooterNav.astro";
-import { PODCAST_NAME, JOURNAL_NAME } from "../../data/archive";
+import { PODCAST_NAME, PODCAST_URL, JOURNAL_NAME, JOURNAL_URL, toISODate, toISODuration } from "../../data/archive";
 
 export async function getStaticPaths() {
   // Newest first, matching the index. The NEXT link therefore walks backwards
@@ -25,9 +25,26 @@ const e = entry.data;
 // An episode with an empty body falls back to its one-line index description.
 const { Content } = await render(entry);
 const hasLead = Boolean(entry.body?.trim());
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "PodcastEpisode",
+  name: e.title,
+  description: e.description,
+  datePublished: toISODate(e.dateLabel),
+  duration: toISODuration(e.duration),
+  partOfSeries: { "@type": "PodcastSeries", name: PODCAST_NAME, url: PODCAST_URL },
+  publisher: { "@type": "Organization", name: JOURNAL_NAME, url: JOURNAL_URL },
+  url: new URL(Astro.url.pathname, Astro.site).toString(),
+  ...(e.listenUrl ? { sameAs: e.listenUrl } : {}),
+};
 ---
 
-<BaseLayout title={`${e.title} — Strategy of Refusal`} description={e.description}>
+<BaseLayout
+  title={`${e.title} — Strategy of Refusal`}
+  description={e.description}
+  jsonLd={jsonLd}
+>
   <div class="episode-page">
     <TopBar variant="quiet" label={`STRATEGY OF REFUSAL / AUDIO / ${e.ref}`} labelHref="/audio" active="audio" />
 

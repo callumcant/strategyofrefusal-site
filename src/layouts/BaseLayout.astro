@@ -7,9 +7,13 @@ interface Props {
   title: string;
   description: string;
   image?: ImageMetadata;
+  // Schema.org structured data for the page — one object, or several where a
+  // page describes more than one thing (an ItemList of Books, say). Each
+  // caller builds its own, typed to what that page actually is.
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, jsonLd } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
@@ -41,6 +45,8 @@ const ogImage = image
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

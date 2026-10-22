@@ -1,12 +1,12 @@
 ---
-ref: S-02.07
-image: ../../assets/photographs/s02-07.jpg
+ref: S-04.01
+image: ../../assets/photographs/s04-01.jpg
 alt: >-
-  Students hold a hand-painted banner reading STUDENTS SUPPORT STAFF
-  STRIKES beneath a forest of UCU No Job Cuts! Save our campus! placards,
-  a phone raised to film them.
+  The valley from high on the hillside at dusk, a motorway curving past a
+  reservoir towards the coast, industrial sheds and works stretching
+  along the shoreline into haze.
 height: 400
-objectPosition: 50% 45%
-location: University of Essex, Southend-on-Sea
-date: "5 December 2025"
+objectPosition: 50% 50%
+location: Port Talbot
+date: "15 February 2024"
 ---

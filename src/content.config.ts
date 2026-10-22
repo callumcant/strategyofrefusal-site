@@ -13,7 +13,9 @@ import { z } from "astro/zod";
 // resolved by image(), which is what hands them to Astro's optimiser.
 
 const series = defineCollection({
-  loader: glob({ base: "./src/content/series", pattern: "**/*.md" }),
+  // A file whose name starts with an underscore is unpublished: it stays in
+  // the repo but gets no page and no index row. Rename it to bring it back.
+  loader: glob({ base: "./src/content/series", pattern: ["**/*.md", "!**/_*.md"] }),
   schema: ({ image }) =>
     z.object({
       ref: z.string(),
